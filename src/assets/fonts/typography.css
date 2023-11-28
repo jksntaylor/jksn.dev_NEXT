@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Formula Condensed';
+  src: url('./FormulaCondensed-Variable.ttf') format('truetype');
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  font-weight: 400;
+  src: url('./NeueMontreal400.woff2') format('woff2-variations');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  font-weight: 600;
+  font-style: italic;
+  src: url('./NeueMontreal600-I.woff2') format('woff2-variations');
+  font-display: swap;
+}
