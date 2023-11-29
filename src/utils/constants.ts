@@ -48,9 +48,9 @@ export const sNoise = `
     // Permutations
     i = mod289(i);
     vec4 p = permute( permute( permute(
-              i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
-            + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
-            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+        i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+      + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))
+      + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
 
     // Gradients: 7x7 points over a square, mapped onto an octahedron.
     // The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)

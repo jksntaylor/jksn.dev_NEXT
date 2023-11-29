@@ -1,33 +1,38 @@
 import { Canvas, useThree } from '@react-three/fiber'
-import { OrbitControls, Scroll, ScrollControls } from '@react-three/drei'
+import { OrbitControls, ScrollControls } from '@react-three/drei'
 import './App.scss'
 import BorderedPlane from './components/BorderedPlane'
 import { colors } from './utils/constants'
 import Menu from './components/Menu'
+import Landing from './sections/Landing'
 
-const Scene = () => {
-  const { viewport } = useThree()
-  const { width, height } = viewport.getCurrentViewport()
+// const Scene = () => {
+//   const { viewport } = useThree()
+//   const { width, height } = viewport.getCurrentViewport()
 
-  return <BorderedPlane
-    width={width}
-    height={height}
-    factor={viewport.factor}
-    background={colors.fadedBlack}
-    border={colors.dirtyWhite}
-  />
-}
+//   return <BorderedPlane
+//     width={width}
+//     height={height}
+//     factor={viewport.factor}
+//     background={colors.fadedBlack}
+//     border={colors.dirtyWhite}
+//   />
+// }
 
 function App() {
   return <main>
-    <Canvas gl={{ antialias: true }}>
+    <Canvas gl={{ antialias: true }} dpr={[1, 1.5]}>
       <color attach="background" args={[colors.darkModeAccent]} />
-      {/* <OrbitControls enableZoom={false} /> */}
-      <ScrollControls pages={3} damping={0.2}>
+      {/* <OrbitControls /> */}
+      <ScrollControls pages={6} damping={0.25}>
         <Menu />
-        <Scroll>
-          <Scene />
-        </Scroll>
+        {/* <Scene /> */}
+        <Landing />
+        {/* <Welcome /> */}
+        {/* <SelectedWorks /> */}
+        {/* <Experiments /> */}
+        {/* <CallToAction /> */}
+        {/* <Credits /> */}
       </ScrollControls>
     </Canvas>
   </main>

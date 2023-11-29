@@ -9,8 +9,7 @@ type Props = {
 }
 
 const BorderedPlane: React.FC<Props> = ({width, height, factor, background, border}) => {
-  // const r_text = useRef()
-  const scrollData = useScroll()
+  // const scrollData = useScroll()
   return <group>
     <mesh position={[0, 0, -0.001]}>
       <planeGeometry args={[width, height, 1, 1]} />
@@ -20,7 +19,7 @@ const BorderedPlane: React.FC<Props> = ({width, height, factor, background, bord
       <planeGeometry args={[width - 2/factor, height - 2/factor, 1, 1]} />
       <meshBasicMaterial color={background} />
     </mesh>
-    <Html transform portal={{ current: scrollData.fixed }}><div>VARIABLE TEST</div></Html>
+    {/* <Html transform portal={{ current: scrollData.fixed }}><div>VARIABLE TEST</div></Html> */}
   </group>
 }
 
