@@ -6,14 +6,10 @@ main {
   height: 100dvh;
   width: 100vw;
   overflow: hidden;
-}
-
-div {
   color: white;
-  font: 50px 'Formula Condensed';
-  transition: font-weight 400ms ease;
-  font-weight: 100;
-  &:hover {
-    font-weight: 800;
+  font-family: 'Formula Condensed';
+  text-transform: uppercase;
+  em {
+    font-feature-settings: 'ss01';
   }
 }

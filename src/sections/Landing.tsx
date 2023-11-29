@@ -1,8 +1,10 @@
 import { ReactThreeFiber, extend, useFrame, useThree } from "@react-three/fiber"
 import { colors, sNoise } from "../utils/constants.ts"
-import { RenderTexture, Text, shaderMaterial } from "@react-three/drei"
+import { Html, PerspectiveCamera, RenderTexture, Text, shaderMaterial, useScroll } from "@react-three/drei"
 import { Texture, Vector3 } from 'three'
 import { useRef } from "react"
+import BorderedPlane from "../components/BorderedPlane.tsx"
+import { split } from "../utils/functions.tsx"
 
 const LandingMaterial = shaderMaterial({
   u_texture: new Texture,
@@ -20,7 +22,7 @@ const LandingMaterial = shaderMaterial({
   varying vec2 v_uv;
 
   vec2 distortUV(vec2 uv, vec2 uv2, float intensity) {
-    float scale = 20.;
+    float scale = 10.;
     float speed = 0.03;
 
     uv2.x += u_time * speed;
@@ -70,48 +72,86 @@ declare global {
 extend({ LandingMaterial })
 
 const Landing = () => {
-  const { width, height } = useThree(state => state.viewport.getCurrentViewport())
+  const scrollData = useScroll()
+  const { viewport } = useThree()
+  const { factor } = viewport
+  const { width, height } = viewport.getCurrentViewport()
+  // distorted text material
   const r_material = useRef<t_LandingMaterial>(null!)
+  // distorted text lines
+  const r_text1 = useRef<typeof Text>(null!)
+  const r_text2 = useRef<typeof Text>(null!)
+  const r_text3 = useRef<typeof Text>(null!)
+  // "lets build something new" slices
+  // const r_slice1 = useRef(null!)
+  // const r_slice2 = useRef(null!)
+  // const r_slice3 = useRef(null!)
 
-  const textOptions = {
+  const textOptions: {
+    fillOpacity: number
+    color: string
+    lineHeight: number
+    letterSpacing: number
+    maxWidth: number
+    font: string
+    scale: Vector3
+    anchorX: "left"
+    anchorY: "bottom"
+  } = {
     fillOpacity: 1,
     color: colors.dirtyWhite,
     lineHeight: 1,
     letterSpacing: -0.03,
     maxWidth: 12,
     font: '/fonts/NeueMontreal400.woff',
+    scale: new Vector3(width / 15, width / 15, 1),
     anchorX: 'left',
-    anchorY: 'bottom',
-    scale: new Vector3(width / 15, width / 15, 1)
+    anchorY: 'bottom'
+  }
+
+  const renderText = () => {
+    return <>
+      <Text ref={r_text1} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 15) * 2 + 0.1, 0]}>JACKSON TAYLOR IS A</Text>
+      <Text ref={r_text2} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 15) + 0.1, 0]}>CREATIVE DEVELOPER</Text>
+      <Text ref={r_text3} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + 0.1, 0]}>BASED IN SALT LAKE CITY</Text>
+    </>
+  }
+
+  const renderSlices = (strings: string[]) => {
+    return strings.map((string, i) => <BorderedPlane
+      key={i}
+      width={width}
+      height={height/4}
+      factor={factor}
+      position={new Vector3(0, height/2 - height/8 - (i * height/4), 0)}
+      background={colors.fadedBlack}
+      border={colors.dirtyWhite}
+    >
+      <Html transform occlude portal={{ current: scrollData.fixed }}>{split(string)}</Html>
+      {/* <Text>
+        {string}
+        <meshBasicMaterial color="red" />
+      </Text> */}
+    </BorderedPlane>)
   }
 
   useFrame((_s, delta) => {
     r_material.current.u_time += delta
   })
+
   return <group>
     <mesh>
       <planeGeometry args={[width, height, 64, 64]} />
-      {/* <meshBasicMaterial color={colors.dirtyWhite} /> */}
       <landingMaterial ref={r_material}>
         <RenderTexture attach="u_texture">
+          <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
           <color attach="background" args={[colors.fadedBlack]} />
-          <Text {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 15) * 2 + 0.1, 0]}>JACKSON TAYLOR IS A</Text>
-          <Text {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 15) + 0.1, 0]}>CREATIVE DEVELOPER</Text>
-          <Text {...textOptions} position={[-width / 2 + 0.1, -height / 2 + 0.1, 0]}>BASED IN SALT LAKE CITY</Text>
+          {renderText()}
         </RenderTexture>
       </landingMaterial>
-      {/* white background plane */}
     </mesh>
-    <group>
-      <mesh>
-        {/* slice 1 */}
-      </mesh>
-      <mesh>
-        {/* slice 2 */}
-      </mesh>
-      <mesh>
-        {/* slice 3 */}
-      </mesh>
+    <group position={[0, 0, 0.0001]}>
+      {renderSlices([`lEt'S bUild`, `something`, `neW`])}
     </group>
   </group>
 }

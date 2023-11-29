@@ -1,6 +1,5 @@
 const Menu = () => {
   return <mesh>
-
   </mesh>
 }
 
