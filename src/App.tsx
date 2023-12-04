@@ -16,7 +16,7 @@ function App() {
       <Canvas gl={{ antialias: true }} dpr={[1, 1.5]}>
         <color attach="background" args={[colors.darkModeAccent]} />
         <OrbitControls enableZoom={false}/>
-        <ScrollControls pages={10} damping={0.3}>
+        <ScrollControls pages={10} damping={0.25}>
           <Menu />
           {/* <Scene /> */}
           <Landing />

@@ -121,9 +121,9 @@ const Landing = () => {
   const renderSlices = (slices: React.ReactNode[]) => slices.map((slice, i) => <BorderedPlane
     key={i}
     width={width}
-    height={height/4}
+    height={width/6}
     factor={viewport.factor}
-    position={new Vector3(width * (i + 1), height/2 - height/8 - (i * height/4), 0)}
+    position={new Vector3(width * (i + 1), height/2 - width/12 - (i * width/6), 0)}
     background={colors.fadedBlack}
     border={colors.dirtyWhite}
     groupRef={r_slices[i]}
