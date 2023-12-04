@@ -50,8 +50,15 @@ table {
 	border-spacing: 0;
 }
 
+html {
+	font-size: calc(100vw / 1440 * 10);
+	line-height: 1;
+	overflow: hidden;
+}
+
 #root {
 	width: 100vw;
+	height: 100vh;
 	height: 100dvh;
 	overflow: hidden;
 }

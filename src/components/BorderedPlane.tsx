@@ -8,6 +8,7 @@ type Props = {
   background: string
   border: string
   children?: React.ReactNode
+  groupRef?: React.MutableRefObject<THREE.Group>
 }
 
 const BorderedPlane: React.FC<Props> = ({
@@ -17,9 +18,10 @@ const BorderedPlane: React.FC<Props> = ({
   position,
   background,
   border,
-  children
+  children,
+  groupRef
 }) => {
-  return <group position={position}>
+  return <group position={position} ref={groupRef}>
     <mesh>
       <planeGeometry args={[width, height, 1, 1]} />
       <meshBasicMaterial color={border} />

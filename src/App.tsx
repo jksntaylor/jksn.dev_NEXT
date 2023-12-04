@@ -1,4 +1,5 @@
 // libraries
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, ScrollControls } from '@react-three/drei'
 // modules
@@ -7,23 +8,26 @@ import Landing from './sections/Landing'
 import { colors } from './utils/constants'
 // styles
 import './App.scss'
+import Welcome from './sections/Welcome'
 
 function App() {
   return <main>
-    <Canvas gl={{ antialias: true }} dpr={[1, 1.5]} camera={{ zoom: 0.9 }}>
-      <color attach="background" args={[colors.darkModeAccent]} />
-      <OrbitControls enableZoom={false}/>
-      <ScrollControls pages={6} damping={0.25} style={{ left: '5px' }}>
-        <Menu />
-        {/* <Scene /> */}
-        <Landing />
-        {/* <Welcome /> */}
-        {/* <SelectedWorks /> */}
-        {/* <Experiments /> */}
-        {/* <CallToAction /> */}
-        {/* <Credits /> */}
-      </ScrollControls>
-    </Canvas>
+    <Suspense fallback={null}>
+      <Canvas gl={{ antialias: true }} dpr={[1, 1.5]}>
+        <color attach="background" args={[colors.darkModeAccent]} />
+        <OrbitControls enableZoom={false}/>
+        <ScrollControls pages={10} damping={0.3}>
+          <Menu />
+          {/* <Scene /> */}
+          <Landing />
+          <Welcome />
+          {/* <SelectedWorks /> */}
+          {/* <Experiments /> */}
+          {/* <CallToAction /> */}
+          {/* <Credits /> */}
+        </ScrollControls>
+      </Canvas>
+    </Suspense>
   </main>
 }
 

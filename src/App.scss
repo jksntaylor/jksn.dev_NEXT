@@ -1,15 +1,33 @@
 @import url('./reset.css');
 @import url('./assets/fonts/typography.css');
 
+$color-dirtywhite: #F0E6E6;
+$color-fadedblack: #010101;
+$color-accent1: #FF2647;
+$color-accent2: #32DEED;
+
 main {
-  height: 100vh;
-  height: 100dvh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  border: 1px solid $color-dirtywhite;
   overflow: hidden;
-  color: white;
-  font-family: 'Formula Condensed';
-  text-transform: uppercase;
   em {
     font-feature-settings: 'ss01';
   }
+}
+
+.landing__slice h3 {
+  color: $color-dirtywhite;
+  width: 100vw;
+  font: 400 20rem 'Formula Condensed';
+  padding: 6rem 0 0 3rem;
+  text-shadow: 0.4rem 0 $color-accent1, 0.8rem 0 $color-accent2;
+}
+
+.welcome h1 {
+  color: $color-dirtywhite;
+  font: 100 125vh/100% 'Formula Condensed';
+  letter-spacing: -0.03em;
+  padding: 37.5vh 0 0 0;
+  width: 350vh;
 }
