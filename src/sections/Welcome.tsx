@@ -2,11 +2,9 @@
 import { Html, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from 'react'
-import BorderedPlane from "../components/BorderedPlane"
-import { colors } from "../utils/constants"
 import { Vector3 } from 'three'
-
 // modules
+import BorderedPlane from "../components/BorderedPlane"
 
 const Welcome = () => {
   const scrollData = useScroll()
@@ -24,9 +22,7 @@ const Welcome = () => {
   })
   return <BorderedPlane
     width={width * 2.35}
-    height={height}
-    background={colors.fadedBlack}
-    border={colors.dirtyWhite}
+    height={height + 2/viewport.factor}
     factor={viewport.factor}
     position={new Vector3(1.75 * height + width * 0.5, 0, 0.003)}
     groupRef={r_wrapper}

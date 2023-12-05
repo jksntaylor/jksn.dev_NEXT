@@ -2,9 +2,17 @@
 @import url('./assets/fonts/typography.css');
 
 $color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
 $color-fadedblack: #010101;
 $color-accent1: #FF2647;
 $color-accent2: #32DEED;
+
+* {
+  ::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+}
 
 main {
   height: 100%;
@@ -14,6 +22,12 @@ main {
   em {
     font-feature-settings: 'ss01';
   }
+}
+
+.section_number {
+  color: $color-dirtywhite;
+  font: 400 2.5rem/100% 'Neue Montreal';
+  letter-spacing: -0.03em;
 }
 
 .landing__slice h3 {
@@ -30,4 +44,29 @@ main {
   letter-spacing: -0.03em;
   padding: 36rem 0 0 0;
   width: 335rem;
+  overflow: hidden;
+}
+
+.selectedworks_counter {
+  color: $color-accent1;
+  font: 400 2.5rem/100% 'Neue Montreal';
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  padding-right: 2rem;
+  height: 2.2rem;
+  overflow: hidden;
+  span {
+    color: $color-dirtywhiteHalf;
+    font-size: 1.5rem;
+  }
+}
+
+.selectedworks_counter_column {
+  width: 1.5rem;
+  word-break: break-all;
+  text-align: center;
+  &:first-of-type {
+    text-align: right;
+  }
 }

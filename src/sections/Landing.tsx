@@ -123,9 +123,7 @@ const Landing = () => {
     width={width}
     height={width/6}
     factor={viewport.factor}
-    position={new Vector3(width * (i + 1), height/2 - width/12 - (i * width/6), 0)}
-    background={colors.fadedBlack}
-    border={colors.dirtyWhite}
+    position={new Vector3(width * (i + 1), height/2 - width/12 - (i * width/6) + ((i + 1) * 1/viewport.factor), 0)}
     groupRef={r_slices[i]}
   >
     <Html
@@ -143,8 +141,8 @@ const Landing = () => {
     const sliceOffset = scrollData.range(0, 0.05)
     const sectionOffset = scrollData.range(0.05, 0.05)
 
-    r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset))
-    r_wrapper.current.position.x = -width * (sectionOffset)
+    r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/viewport.factor)
+    r_wrapper.current.position.x = -width * sectionOffset
     r_material.current.u_time += delta
   })
 
