@@ -27,11 +27,11 @@ const SelectedWorks = () => {
   const r_projects = useRef<THREE.Group>(null!)
 
   const renderProjects = () => {
-    return projectData.map((project, index) => {
-      return <mesh>
-
-      </mesh>
-    })
+    return projectData.map((_project, index) => <group key={index}>
+      <Html center className="selectedworks_project" portal={{ current: scrollData.fixed }} zIndexRange={[0, 100]}>
+      </Html>
+      {/* <Image /> */}
+    </group>)
   }
 
   useFrame(() => {
