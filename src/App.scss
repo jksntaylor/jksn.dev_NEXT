@@ -35,7 +35,8 @@ main {
   width: 100vw;
   font: 400 20rem 'Formula Condensed';
   padding: 6rem 0 0 3rem;
-  text-shadow: 0.4rem 0 $color-accent1, 0.8rem 0 $color-accent2;
+  text-shadow: 0.4rem 0 $color-accent1,
+               0.8rem 0 $color-accent2;
 }
 
 .welcome h1 {
@@ -68,5 +69,18 @@ main {
   text-align: center;
   &:first-of-type {
     text-align: right;
+  }
+}
+
+.selectedworks_header {
+  color: $color-dirtywhite;
+  padding: 2rem;
+  // font: 400 5.25rem 'Neue Montreal';
+  font: 400 25rem/100% 'Neue Montreal';
+  letter-spacing: -0.03em;
+  span {
+    // font: 800 5rem 'Formula Condensed';
+    font: 800 23.5rem/100% 'Formula Condensed';
+    letter-spacing: 0.01em;
   }
 }

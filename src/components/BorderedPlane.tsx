@@ -1,7 +1,7 @@
 import { Vector3 } from 'three'
 import { colors } from '../utils/constants'
 
-type Props = {
+export type BorderedPlaneProps = {
   width: number
   height: number
   factor: number
@@ -12,7 +12,7 @@ type Props = {
   groupRef?: React.MutableRefObject<THREE.Group>
 }
 
-const BorderedPlane: React.FC<Props> = ({
+const BorderedPlane: React.FC<BorderedPlaneProps> = ({
   width,
   height,
   factor,

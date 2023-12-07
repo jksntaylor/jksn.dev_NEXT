@@ -15,12 +15,11 @@ import './App.scss'
 function App() {
   return <main>
     <Suspense fallback={null}>
-      <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
+      <Canvas gl={{ antialias: true }} dpr={[1, 1.5]}>
         <color attach="background" args={[colors.darkModeAccent_2]} />
         {/* <OrbitControls enableZoom={false}/> */}
         <ScrollControls pages={10} damping={0.2}>
           <Menu />
-          {/* <Scene /> */}
           <Landing />
           <Welcome />
           <SelectedWorks />
