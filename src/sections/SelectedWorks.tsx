@@ -15,7 +15,7 @@ import levis from '../assets/images/levis_bg.webp'
 import source7 from '../assets/images/s7_bg.webp'
 import huge from '../assets/images/huge_bg.webp'
 
-const images = [tiktok, rre, genies, realtime, levis, source7, huge]
+const images = [tiktok, rre, genies, realtime, levis, source7, huge, huge, huge, huge]
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -35,17 +35,22 @@ const SelectedWorks = () => {
 
   const r_projects = useRef<THREE.Group>(null!)
 
+  const projContainerHeight = (height - width * 0.046) * projectData.length * factor
+  const projContainerY = -width * 0.023 - (projContainerHeight/factor) * 0.5 + (height - width * 0.046) * 0.25
+  const projectContainerOffsetY = projContainerHeight / projectData.length * (projectData.length - 0.5) / factor
+
   const renderProjects = () => {
-    return <group>
+    return <group
+      ref={r_projects}
+      position= {[width * 0.1, projContainerY, 0]}
+    >
       <Html
-        center
-        // transform
-        // distanceFactor={3.4}
-        // occlude="blending"
+        // center
+        transform
+        distanceFactor={3.4}
         className="selectedworks_projects"
         portal={{ current: scrollData.fixed }}
-        style={{ width: width * 0.625 * factor, height: height * 7 * factor }}
-        position= {[width * 0.1, 0, 0]}
+        style={{ width: width * 0.625 * factor, height: projContainerHeight }}
         zIndexRange={[0, 100]} >
         {projectData.map((proj, i) => <div className="selectedworks_project" key={i}>
           {proj.awards && <div className="selectedworks_project_awards">
@@ -95,6 +100,10 @@ const SelectedWorks = () => {
     if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
 
     // project "scrolling"
+    if (r_projects.current) {
+      r_projects.current.position.x = (width * (1 - sidebarOffset) * 0.7125) + width * 0.1
+      r_projects.current.position.y = projContainerY + projectsOffset * projectContainerOffsetY
+    }
     // if (r_projects.current) r_projects.current.position.y = 0
     // if (r_projectsImgs.current) r_projectsImgs.current.position.y = 0
 
@@ -114,9 +123,9 @@ const SelectedWorks = () => {
       position={new Vector3(-width / 2 + width * 0.024, height / 2 - width * 0.023 + 1/factor, 0)}
     >
       <Html
-        center
-        // transform
-        // distanceFactor={3.4}
+        // center
+        transform
+        distanceFactor={3.4}
         className="section_number"
         portal={{ current: scrollData.fixed }}
         zIndexRange={[0, 100]}
@@ -129,9 +138,9 @@ const SelectedWorks = () => {
       position={new Vector3(-width / 2 + width * 0.524 + 0.5/factor, height / 2 - width * 0.023 + 1/factor, 0)}
     >
       <Html
-        center
-        // transform
-        // distanceFactor={3.4}
+        // center
+        transform
+        distanceFactor={3.4}
         zIndexRange={[0, 100]}
         className="selectedworks_counter"
         portal={{ current: scrollData.fixed }}
@@ -151,9 +160,9 @@ const SelectedWorks = () => {
     >
       <Html
         style={{ width: width/factor, height: (height - width * 0.046) * factor}}
-        center
-        // transform
-        // distanceFactor={3.4}
+        // center
+        transform
+        distanceFactor={3.4}
         className="selectedworks_header"
         portal={{ current: scrollData.fixed }}
         zIndexRange={[0, 100]}
@@ -162,9 +171,7 @@ const SelectedWorks = () => {
         <h4>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></h4>
       </Html>
     </BorderedPlane>
-    <group ref={r_projects}>
-      {renderProjects()}
-    </group>
+    {renderProjects()}
   </BorderedPlane>
 }
 

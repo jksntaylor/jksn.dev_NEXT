@@ -16,7 +16,7 @@ const BorderedPlane: React.FC<BorderedPlaneProps> = ({
   width,
   height,
   factor,
-  position,
+  position = new Vector3(0, 0, 0),
   background = colors.fadedBlack,
   border = colors.dirtyWhite,
   children,
@@ -27,11 +27,11 @@ const BorderedPlane: React.FC<BorderedPlaneProps> = ({
       <planeGeometry args={[width, height, 1, 1]} />
       <meshBasicMaterial color={border} />
     </mesh>
-    <mesh position={[0, 0, 0.001]}>
+    <mesh position={[0, 0, position.z + 0.001]}>
       <planeGeometry args={[width - 2/factor, height - 2/factor, 1, 1]} />
       <meshBasicMaterial color={background} />
     </mesh>
-    {children && <group position={[0, 0, 0.002]}>
+    {children && <group position={[0, 0, position.z + 0.002]}>
       {children}
     </group>}
   </group>

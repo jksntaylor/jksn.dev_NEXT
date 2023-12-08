@@ -24,13 +24,13 @@ const Welcome = () => {
     width={width * 2.35}
     height={height + 2/viewport.factor}
     factor={viewport.factor}
-    position={new Vector3(1.75 * height + width * 0.5, 0, 0.003)}
+    position={new Vector3(1.75 * height + width * 0.5, 0, 0)}
     groupRef={r_wrapper}
   >
     <Html
-      center
-      // transform
-      // distanceFactor={3.4}
+      // center
+      transform
+      distanceFactor={3.4}
       zIndexRange={[0, 100]}
       wrapperClass="welcome"
       portal={{ current: scrollData.fixed }}

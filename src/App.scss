@@ -88,8 +88,7 @@ main {
 .selectedworks_projects {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  background: $color-fadedblack;
+  justify-content: space-between;
 }
 
 .selectedworks_project {

@@ -127,9 +127,10 @@ const Landing = () => {
     groupRef={r_slices[i]}
   >
     <Html
-      // transform
-      // distanceFactor={3}
-      center
+      transform
+      distanceFactor={3.4}
+      // occlude="blending"
+      // center
       zIndexRange={[0, 100]}
       wrapperClass="landing__slice"
       portal={{ current: scrollData.fixed }}

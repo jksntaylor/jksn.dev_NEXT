@@ -1,5 +1,15 @@
 export const projectData = [
 {
+  year: '2021',
+  client1: 'Tiktok',
+  client2: 'Bitski',
+  role: 'Lead Creative Developer',
+  link: 'https://tiktok.reformcollective.com',
+  linkText: 'tiktok.reformcollective.com',
+  title: <>Tiktok Top<br/><span><em>M</em>ome<em>n</em>ts</span></>,
+  projectLink: '/projects/tiktok'
+},
+{
   awards: ['AWWWARDS | Site Of The Day & Developer Award', 'CSS Design Awards | Site Of The Day'],
   year: '2022',
   client1: 'RRE Ventures',
@@ -26,16 +36,6 @@ export const projectData = [
   linkText: 'source7.com',
   title: <>Source<br/><span><em>7</em></span></>,
   projectLink: '/projects/source7'
-},
-{
-  year: '2021',
-  client1: 'Tiktok',
-  client2: 'Bitski',
-  role: 'Lead Creative Developer',
-  link: 'https://tiktok.reformcollective.com',
-  linkText: 'tiktok.reformcollective.com',
-  title: <>Tiktok Top<br/><span><em>M</em>ome<em>n</em>ts</span></>,
-  projectLink: '/projects/tiktok'
 },
 {
   year: '2021',
@@ -66,7 +66,38 @@ export const projectData = [
   linkText: 'hugeinc.com',
   title: <>Huge<br/><span>I<em>n</em>c</span></>,
   projectLink: '/projects/huge'
-}]
+},
+{
+  year: '2022',
+  client1: "Huge",
+  client2: 'Inc',
+  role: 'Lead Frontend Developer',
+  link: 'https://hugeinc.com',
+  linkText: 'hugeinc.com',
+  title: <>Huge<br/><span>I<em>n</em>c</span></>,
+  projectLink: '/projects/huge'
+},
+{
+  year: '2022',
+  client1: "Huge",
+  client2: 'Inc',
+  role: 'Lead Frontend Developer',
+  link: 'https://hugeinc.com',
+  linkText: 'hugeinc.com',
+  title: <>Huge<br/><span>I<em>n</em>c</span></>,
+  projectLink: '/projects/huge'
+},
+{
+  year: '2022',
+  client1: "Huge",
+  client2: 'Inc',
+  role: 'Lead Frontend Developer',
+  link: 'https://hugeinc.com',
+  linkText: 'hugeinc.com',
+  title: <>Huge<br/><span>I<em>n</em>c</span></>,
+  projectLink: '/projects/huge'
+}
+]
 
 export type ProjectProps = {
   awards?: string[]
