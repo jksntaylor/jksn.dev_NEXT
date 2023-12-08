@@ -1,4 +1,33 @@
-export const projectData = [{
+export const projectData = [
+{
+  awards: ['AWWWARDS | Site Of The Day & Developer Award', 'CSS Design Awards | Site Of The Day'],
+  year: '2022',
+  client1: 'RRE Ventures',
+  role: 'Lead Creative Developer',
+  link: 'https://rre.com',
+  linkText: 'rre.com',
+  title: <>RRE<br/><span><em>V</em>ent<em>u</em>res</span></>,
+  projectLink: '/projects/rre'
+},
+{
+  year: '2021',
+  client1: 'Genies',
+  role: 'Frontend Developer',
+  link: 'https://genies.reformcollective.com',
+  linkText: 'genies.reformcollective.com',
+  title: <span>Ge<em>n</em>ies</span>,
+  projectLink: '/projects/genies'
+},
+{
+  year: '2021',
+  client1: 'Source 7',
+  role: 'Frontend Developer',
+  link: 'https://source7.com',
+  linkText: 'source7.com',
+  title: <>Source<br/><span><em>7</em></span></>,
+  projectLink: '/projects/source7'
+},
+{
   year: '2021',
   client1: 'Tiktok',
   client2: 'Bitski',
@@ -7,32 +36,8 @@ export const projectData = [{
   linkText: 'tiktok.reformcollective.com',
   title: <>Tiktok Top<br/><span><em>M</em>ome<em>n</em>ts</span></>,
   projectLink: '/projects/tiktok'
-}, {
-  awards: ['AWWWARDS SOTD, HM, Dev Award', 'CSS Design Awards SOTD'],
-  year: '2022',
-  client1: 'RRE Ventures',
-  role: 'Lead Creative Developer',
-  link: 'https://rre.com',
-  linkText: 'rre.com',
-  title: <>RRE<br/><span><em>V</em>ent<em>u</em>res</span></>,
-  projectLink: '/projects/rre'
-}, {
-  year: '2021',
-  client1: 'Genies',
-  role: 'Frontend Developer',
-  link: 'https://genies.reformcollective.com',
-  linkText: 'genies.reformcollective.com',
-  title: <span>Ge<em>n</em>ies</span>,
-  projectLink: '/projects/genies'
-}, {
-  year: '2021',
-  client1: 'Source 7',
-  role: 'Frontend Developer',
-  link: 'https://source7.com',
-  linkText: 'source7.com',
-  title: <>Source<br/><span><em>7</em></span></>,
-  projectLink: '/projects/source7'
-}, {
+},
+{
   year: '2021',
   client1: 'Realtime',
   client2: 'Robotics',
@@ -41,7 +46,8 @@ export const projectData = [{
   linkText: 'rtr.ai',
   title: <>Realtime<br/><span>Ro<em>b</em>oti<em>c</em>s</span></>,
   projectLink: '/projects/realtime'
-}, {
+},
+{
   year: '2021',
   client1: "Levi's",
   client2: 'Bitski',
@@ -50,7 +56,8 @@ export const projectData = [{
   linkText: 'levis.bitski.com',
   title: <>Levi's<br/><span>5<em>0</em>1 D<em>a</em>y</span></>,
   projectLink: '/projects/levis'
-}, {
+},
+{
   year: '2022',
   client1: "Huge",
   client2: 'Inc',

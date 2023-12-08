@@ -1,5 +1,5 @@
 // libraries
-import { Html, useScroll } from "@react-three/drei"
+import { Html, Image, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from 'react'
 import { Vector3 } from "three"
@@ -7,6 +7,15 @@ import { Vector3 } from "three"
 import BorderedPlane from "../components/BorderedPlane"
 // assets
 import { projectData } from "../utils/data"
+import tiktok from '../assets/images/tt_bg.webp'
+import rre from '../assets/images/rre_bg.webp'
+import genies from '../assets/images/genies_bg.webp'
+import realtime from '../assets/images/rtr_bg.webp'
+import levis from '../assets/images/levis_bg.webp'
+import source7 from '../assets/images/s7_bg.webp'
+import huge from '../assets/images/huge_bg.webp'
+
+const images = [tiktok, rre, genies, realtime, levis, source7, huge]
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -27,11 +36,38 @@ const SelectedWorks = () => {
   const r_projects = useRef<THREE.Group>(null!)
 
   const renderProjects = () => {
-    return projectData.map((_project, index) => <group key={index}>
-      <Html center className="selectedworks_project" portal={{ current: scrollData.fixed }} zIndexRange={[0, 100]}>
+    return <group>
+      <Html
+        center
+        // transform
+        // distanceFactor={3.4}
+        // occlude="blending"
+        className="selectedworks_projects"
+        portal={{ current: scrollData.fixed }}
+        style={{ width: width * 0.625 * factor, height: height * 7 * factor }}
+        position= {[width * 0.1, 0, 0]}
+        zIndexRange={[0, 100]} >
+        {projectData.map((proj, i) => <div className="selectedworks_project" key={i}>
+          {proj.awards && <div className="selectedworks_project_awards">
+            {proj.awards.map((award, i) => <span key={i}>{award}</span>)}
+          </div>}
+          <div className="selectedworks_project_info">
+            <span>{proj.year}<br/>{proj.client1}<br/>{proj.client2 && proj.client2}</span>
+            <span>{proj.role}<br/><a href={proj.link} target='_blank' rel='noopener noreferrer'>{proj.linkText}</a></span>
+          </div>
+          <h3 className="selectedworks_project_title">{proj.title}</h3>
+        </div>)}
       </Html>
-      {/* <Image /> */}
-    </group>)
+      <group>
+        {projectData.map((_proj, i) => { // extract into component (<SelectedWorksImage url={url}/>)
+          return <mesh key={i}>
+            <Image url={images[i]} />
+            {/* <planeGeometry args={[1, 1]} /> */}
+            {/* <selectedWorksMaterial /> */}
+          </mesh>
+        })}
+      </group>
+    </group>
   }
 
   useFrame(() => {
@@ -48,6 +84,7 @@ const SelectedWorks = () => {
     if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
     if (r_sidebar.current) { // sidebar width + position calculation
       r_sidebar.current.scale.x = (1 - sidebarOffset)* 0.8 + 0.2
+      r_sidebar.current.children[2].scale.x = 1 / r_sidebar.current.scale.x
       r_sidebar.current.children[0].scale.x = .008 * sidebarOffset + 1 // need to scale up background or the x-axis border is too thin
       r_sidebar.current.position.x = (-width/2 + width * 0.1) * sidebarOffset -1/factor
     }
@@ -58,6 +95,8 @@ const SelectedWorks = () => {
     if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
 
     // project "scrolling"
+    // if (r_projects.current) r_projects.current.position.y = 0
+    // if (r_projectsImgs.current) r_projectsImgs.current.position.y = 0
 
   })
 
@@ -65,7 +104,7 @@ const SelectedWorks = () => {
     width={width + 2/factor} // x/factor is equivalent to x pixels
     height={height + 2/factor}
     factor={factor}
-    position={new Vector3(width, 0, 0.002)}
+    position={new Vector3(width, 0, 0)}
     groupRef={r_wrapper}
   >
     <BorderedPlane // Section Number
@@ -74,7 +113,14 @@ const SelectedWorks = () => {
       factor={factor}
       position={new Vector3(-width / 2 + width * 0.024, height / 2 - width * 0.023 + 1/factor, 0)}
     >
-      <Html center className="section_number" portal={{ current: scrollData.fixed }} zIndexRange={[0, 100]}>02</Html>
+      <Html
+        center
+        // transform
+        // distanceFactor={3.4}
+        className="section_number"
+        portal={{ current: scrollData.fixed }}
+        zIndexRange={[0, 100]}
+      >02</Html>
     </BorderedPlane>
     <BorderedPlane // Project Counter
       width={width * 0.952 + 1/factor}
@@ -82,7 +128,15 @@ const SelectedWorks = () => {
       factor={factor}
       position={new Vector3(-width / 2 + width * 0.524 + 0.5/factor, height / 2 - width * 0.023 + 1/factor, 0)}
     >
-      <Html style={{ width: width * 0.952 * factor }} center className="selectedworks_counter" portal={{ current: scrollData.fixed }} zIndexRange={[0, 100]}>
+      <Html
+        center
+        // transform
+        // distanceFactor={3.4}
+        zIndexRange={[0, 100]}
+        className="selectedworks_counter"
+        portal={{ current: scrollData.fixed }}
+        style={{ width: width * 0.952 * factor }}
+      >
         <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
         <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
         <span>/10</span>
@@ -98,6 +152,8 @@ const SelectedWorks = () => {
       <Html
         style={{ width: width/factor, height: (height - width * 0.046) * factor}}
         center
+        // transform
+        // distanceFactor={3.4}
         className="selectedworks_header"
         portal={{ current: scrollData.fixed }}
         zIndexRange={[0, 100]}

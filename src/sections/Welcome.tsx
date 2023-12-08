@@ -27,7 +27,14 @@ const Welcome = () => {
     position={new Vector3(1.75 * height + width * 0.5, 0, 0.003)}
     groupRef={r_wrapper}
   >
-    <Html center zIndexRange={[0, 100]} wrapperClass="welcome" portal={{ current: scrollData.fixed }}>
+    <Html
+      center
+      // transform
+      // distanceFactor={3.4}
+      zIndexRange={[0, 100]}
+      wrapperClass="welcome"
+      portal={{ current: scrollData.fixed }}
+    >
       <h1 ref={r_text}>WELCOME</h1>
     </Html>
   </BorderedPlane>
