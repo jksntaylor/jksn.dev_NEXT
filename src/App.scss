@@ -9,8 +9,8 @@ $color-accent2: #32DEED;
 
 * {
   ::-webkit-scrollbar {
-    width: 0;
-    display: none;
+    // width: 0;
+    // display: none;
   }
 }
 
@@ -24,6 +24,22 @@ main {
   }
 }
 
+.menu {
+  border-right: 1px solid $color-dirtywhite;
+  background: $color-fadedblack;
+}
+
+.menu h4 {
+  color: $color-dirtywhite;
+  font: 400 1.6rem 'Neue Montreal';
+  writing-mode: vertical-lr;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+}
+
 .section_number {
   color: $color-dirtywhite;
   font: 400 2.5rem/100% 'Neue Montreal';
@@ -32,7 +48,7 @@ main {
 
 .landing__slice h3 {
   color: $color-dirtywhite;
-  width: 100vw;
+  width: 91.5vw;
   font: 400 20rem 'Formula Condensed';
   padding: 6rem 0 0 3rem;
   text-shadow: 0.4rem 0 $color-accent1,
@@ -41,14 +57,21 @@ main {
 
 .welcome h1 {
   color: $color-dirtywhite;
-  font: 100 120rem/100% 'Formula Condensed';
+  background: $color-fadedblack;
+  font: 100 120rem/50% 'Formula Condensed';
   letter-spacing: -0.03em;
   padding: 36rem 0 0 0;
   width: 335rem;
-  overflow: hidden;
 }
 
+
 .selectedworks_counter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.selectedworks_counter-mask {
   color: $color-accent1;
   font: 400 2.5rem/100% 'Neue Montreal';
   display: flex;
@@ -56,6 +79,7 @@ main {
   align-items: baseline;
   padding-right: 2rem;
   height: 2.2rem;
+  width: 100%;
   overflow: hidden;
   span {
     color: $color-dirtywhiteHalf;
@@ -88,11 +112,25 @@ main {
 .selectedworks_projects {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 .selectedworks_project {
   color: $color-dirtywhite;
+  height: calc(100dvh - 4.6vw);
+}
+
+.selectedworks_project-right {
+  text-align: right;
+  .selectedworks_project_info {
+    justify-content: flex-end;
+    padding-left: unset;
+    padding-right: 5rem;
+  }
+  .selectedworks_project_button {
+    margin-left: unset;
+    margin-right: 5rem;
+  }
 }
 
 .selectedworks_project_info {
@@ -100,7 +138,9 @@ main {
   text-transform: uppercase;
   display: flex;
   text-align: right;
+  padding-left: 5rem;
   span:first-of-type {
+    text-align: left;
     margin-right: 2.5rem;
   }
   a {
@@ -132,10 +172,29 @@ main {
 .selectedworks_project_title {
   font: 400 15rem/100% 'Neue Montreal';
   text-transform: uppercase;
-  letter-spacing: -0.075em;
+  letter-spacing: -0.03em;
   margin: 2.5rem auto 5rem;
   span {
     font: 700 15rem/100% 'Formula Condensed';
     letter-spacing: 0.015em;
+  }
+}
+
+.selectedworks_project_button {
+  all: unset;
+  cursor: pointer;
+  border: 0.1rem solid $color-accent1;
+  border-radius: 2.5rem;
+  box-sizing: border-box;
+  color: $color-accent1;
+  font: 300 2.8rem/100% 'Formula Condensed';
+  height: 5rem;
+  margin-left: 5rem;
+  padding: 1rem 2rem 0;
+  text-transform: uppercase;
+  transition: all 400ms ease;
+  &:hover {
+    box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-dirtywhite;
   }
 }

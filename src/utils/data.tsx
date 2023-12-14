@@ -25,7 +25,7 @@ export const projectData = [
   role: 'Frontend Developer',
   link: 'https://genies.reformcollective.com',
   linkText: 'genies.reformcollective.com',
-  title: <span>Ge<em>n</em>ies</span>,
+  title: <>Genies<br/><span>Fa<em>s</em>hi<em>on</em></span></>,
   projectLink: '/projects/genies'
 },
 {
@@ -34,7 +34,7 @@ export const projectData = [
   role: 'Frontend Developer',
   link: 'https://source7.com',
   linkText: 'source7.com',
-  title: <>Source<br/><span><em>7</em></span></>,
+  title: <>Source<br/><span>S<em>e</em>v<em>en</em></span></>,
   projectLink: '/projects/source7'
 },
 {
@@ -59,44 +59,13 @@ export const projectData = [
 },
 {
   year: '2022',
-  client1: "Huge",
-  client2: 'Inc',
+  client1: "Huge Inc",
   role: 'Lead Frontend Developer',
   link: 'https://hugeinc.com',
   linkText: 'hugeinc.com',
   title: <>Huge<br/><span>I<em>n</em>c</span></>,
   projectLink: '/projects/huge'
 },
-{
-  year: '2022',
-  client1: "Huge",
-  client2: 'Inc',
-  role: 'Lead Frontend Developer',
-  link: 'https://hugeinc.com',
-  linkText: 'hugeinc.com',
-  title: <>Huge<br/><span>I<em>n</em>c</span></>,
-  projectLink: '/projects/huge'
-},
-{
-  year: '2022',
-  client1: "Huge",
-  client2: 'Inc',
-  role: 'Lead Frontend Developer',
-  link: 'https://hugeinc.com',
-  linkText: 'hugeinc.com',
-  title: <>Huge<br/><span>I<em>n</em>c</span></>,
-  projectLink: '/projects/huge'
-},
-{
-  year: '2022',
-  client1: "Huge",
-  client2: 'Inc',
-  role: 'Lead Frontend Developer',
-  link: 'https://hugeinc.com',
-  linkText: 'hugeinc.com',
-  title: <>Huge<br/><span>I<em>n</em>c</span></>,
-  projectLink: '/projects/huge'
-}
 ]
 
 export type ProjectProps = {

@@ -1,81 +1,17 @@
 // libraries
-import { ReactThreeFiber, extend, useFrame, useThree } from "@react-three/fiber"
-import { Html, PerspectiveCamera, RenderTexture, Text, shaderMaterial, useScroll } from "@react-three/drei"
-import { Texture, Vector3 } from 'three'
+import { useFrame, useThree } from "@react-three/fiber"
+import { Html, PerspectiveCamera, RenderTexture, Text, useScroll } from "@react-three/drei"
+import { Vector3 } from 'three'
 import { useRef } from "react"
 // modules
 import BorderedPlane from "../components/BorderedPlane.tsx"
-import { colors, sNoise } from "../utils/constants.ts"
-
-const LandingMaterial = shaderMaterial({
-  u_texture: new Texture,
-  u_time: 0
-}, `
-  varying vec2 v_uv;
-  void main() {
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    v_uv = uv;
-  }
-`,`
-  ${sNoise}
-  uniform float u_time;
-  uniform sampler2D u_texture;
-  varying vec2 v_uv;
-
-  vec2 distortUV(vec2 uv, vec2 uv2, float intensity) {
-    float scale = 10.;
-    float speed = 0.02;
-
-    uv2.x += u_time * speed;
-    uv2.y += u_time * speed;
-
-    uv += snoise(vec3(uv2 * scale, 0.)) * intensity;
-
-    return uv;
-  }
-
-
-  void main () {
-    vec2 uv = v_uv;
-    vec2 uv2 = v_uv;
-
-    vec4 texture0 = texture2D(u_texture, distortUV(uv, uv2, 0.001));
-    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.004));
-    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.003));
-    vec4 color;
-
-    if (texture0.r > 0.001) {
-      color = texture0 + texture1 + texture2;
-    } else if (texture1.r > 0.001 && texture2.g > 0.001 || texture1.r > 0.001 && texture2.b > 0.001) {
-      color = texture0 + texture1 + texture2;
-    } else {
-      color = vec4(texture1.r, texture2.gb, 1.);
-    }
-
-    gl_FragColor = color;
-  }
-`)
-
-type t_LandingMaterial = {
-  u_texture: Texture
-  u_time: number
-}
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      landingMaterial: ReactThreeFiber.Object3DNode<t_LandingMaterial, typeof LandingMaterial>
-    }
-  }
-}
-
-extend({ LandingMaterial })
+import { t_LandingMaterial } from "../components/Materials.ts"
+import { colors } from "../utils/constants.ts"
 
 const Landing = () => {
   const scrollData = useScroll()
   const { viewport } = useThree()
-  const { width, height } = viewport.getCurrentViewport()
+  const { width, height, factor } = viewport.getCurrentViewport()
   // distorted text material
   const r_material = useRef<t_LandingMaterial>(null!)
   // wrapper ref
@@ -120,18 +56,17 @@ const Landing = () => {
 
   const renderSlices = (slices: React.ReactNode[]) => slices.map((slice, i) => <BorderedPlane
     key={i}
-    width={width}
+    width={width * 0.915}
     height={width/6}
-    factor={viewport.factor}
-    position={new Vector3(width * (i + 1), height/2 - width/12 - (i * width/6) + ((i + 1) * 1/viewport.factor), 0)}
+    factor={factor}
+    position={new Vector3(width * (i + 1) + width * 0.085, height/2 - width/12 - (i * width/6) + ((i + 1) * 1/factor), 0)}
     groupRef={r_slices[i]}
   >
     <Html
-      transform
-      distanceFactor={3.4}
-      // occlude="blending"
-      // center
-      zIndexRange={[0, 100]}
+      center
+      // transform
+      // distanceFactor={3.7}
+      zIndexRange={[2, 3]}
       wrapperClass="landing__slice"
       portal={{ current: scrollData.fixed }}
     >
@@ -143,14 +78,14 @@ const Landing = () => {
     const sliceOffset = scrollData.range(0, 0.05)
     const sectionOffset = scrollData.range(0.05, 0.05)
 
-    r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/viewport.factor)
-    r_wrapper.current.position.x = -width * sectionOffset
+    r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
+    r_wrapper.current.position.x = -width * 0.915 * sectionOffset
     r_material.current.u_time += delta
   })
 
   return <group ref={r_wrapper}>
-    <mesh>
-      <planeGeometry args={[width, height, 64, 64]} />
+    <mesh position={[width * 0.0425, 0, 0]}>
+      <planeGeometry args={[width * 0.915, height, 64, 64]} />
       <landingMaterial ref={r_material}>
         <RenderTexture attach="u_texture">
           <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
@@ -160,7 +95,7 @@ const Landing = () => {
       </landingMaterial>
     </mesh>
     <group position={[0, 0, 0.0001]}>
-      {renderSlices([<>L<em>E</em>T'S B<em>U</em>ILD</>, <><em>SOMETH</em>I<em>NG</em></>, <>NE<em>W</em></>])}
+      {renderSlices([<>L<em>E</em>T'S B<em>U</em>ILD</>, <><em>S</em>O<em>MET</em>HI<em>NG</em></>, <>NE<em>W</em></>])}
     </group>
   </group>
 }
