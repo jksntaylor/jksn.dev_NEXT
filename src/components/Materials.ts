@@ -1,12 +1,14 @@
 import { ReactThreeFiber, extend } from "@react-three/fiber"
-import { Texture } from "three"
+import { Texture, Vector2 } from "three"
 import { sNoise } from "../utils/constants"
 import { shaderMaterial } from "@react-three/drei"
 
 const LandingMaterial = shaderMaterial({
   u_texture: new Texture,
+  u_mouse: new Vector2,
   u_time: 0
 }, `
+  uniform float u_aspect;
   varying vec2 v_uv;
   void main() {
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -15,6 +17,7 @@ const LandingMaterial = shaderMaterial({
 `,`
   ${sNoise}
   uniform float u_time;
+  uniform vec2 u_mouse;
   uniform sampler2D u_texture;
   varying vec2 v_uv;
 
@@ -35,9 +38,17 @@ const LandingMaterial = shaderMaterial({
     vec2 uv = v_uv;
     vec2 uv2 = v_uv;
 
-    vec4 texture0 = texture2D(u_texture, distortUV(uv, uv2, 0.001));
-    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.004));
-    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.003));
+    float cursor_distance = distance(vec2(v_uv.x, v_uv.y), u_mouse);
+    float strength = smoothstep(0.2, 0.1, cursor_distance);
+    float offX = v_uv.x + sin(v_uv.y + u_time * .1);
+    float offY = v_uv.y - u_time * 0.1 - cos(u_time * 0.001) * 0.1;
+
+    float n = snoise(vec3(offX, offY, u_time * .1) * 9.);
+    float mask = smoothstep(0.05, 1., strength * (n + 1.) * 0.75) * (1. - distance(v_uv, u_mouse) * 5.);
+
+    vec4 texture0 = texture2D(u_texture, distortUV(uv, uv2, 0.001 + mask * 0.2));
+    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.004 + mask * 0.2));
+    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.003 + mask * 0.2));
     vec4 color;
 
     if (texture0.r > 0.001) {
@@ -48,12 +59,15 @@ const LandingMaterial = shaderMaterial({
       color = vec4(texture1.r, texture2.gb, 1.);
     }
 
+    vec4 color2 = vec4(vec3(mask), 1.);
+
     gl_FragColor = color;
   }
 `)
 
 export type t_LandingMaterial = {
   u_texture: Texture
+  u_mouse: Vector2
   u_time: number
 }
 
@@ -66,7 +80,7 @@ const SelectedWorksMaterial = shaderMaterial({
 
   void main() {
     vec4 pos = vec4(position, 1.0);
-    pos.y -= u_delta * sin(uv.x * 16.) * 100.;
+    pos.y -= u_delta * sin(uv.x * 24.) * 100.;
     gl_Position = projectionMatrix * modelViewMatrix * pos;
     v_uv = uv;
   }
