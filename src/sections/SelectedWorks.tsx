@@ -17,7 +17,7 @@ import realtime from '../assets/images/rtr_bg.webp'
 import levis from '../assets/images/levis_bg.webp'
 import source7 from '../assets/images/s7_bg.webp'
 import huge from '../assets/images/huge_bg.webp'
-import gsap from "gsap"
+// import gsap from "gsap"
 
 const images = [tiktok, rre, genies, source7, realtime, levis, huge, huge, huge, huge]
 
