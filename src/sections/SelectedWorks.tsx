@@ -5,8 +5,11 @@ import { useEffect, useRef } from 'react'
 import { Vector3 } from "three"
 // modules
 import BorderedPlane from "../components/BorderedPlane"
-// assets
+import { t_SelectedWorksMaterial } from "../components/Materials"
 import { projectData } from "../utils/data"
+import { colors } from "../utils/constants"
+import { lerp } from "../utils/functions"
+// assets
 import tiktok from '../assets/images/tt_bg.webp'
 import rre from '../assets/images/rre_bg.webp'
 import genies from '../assets/images/genies_bg.webp'
@@ -14,12 +17,11 @@ import realtime from '../assets/images/rtr_bg.webp'
 import levis from '../assets/images/levis_bg.webp'
 import source7 from '../assets/images/s7_bg.webp'
 import huge from '../assets/images/huge_bg.webp'
-import { colors } from "../utils/constants"
-import { t_SelectedWorksMaterial } from "src/components/Materials"
+import gsap from "gsap"
 
 const images = [tiktok, rre, genies, source7, realtime, levis, huge, huge, huge, huge]
 
-const SelectedWorks: React.FC<{toggleScroll: () => void}> = ({ toggleScroll }) => {
+const SelectedWorks = () => {
   const scrollData = useScroll()
 
   const { viewport } = useThree()
@@ -27,6 +29,8 @@ const SelectedWorks: React.FC<{toggleScroll: () => void}> = ({ toggleScroll }) =
   const { width, height } = viewport.getCurrentViewport()
 
   const r_wrapper = useRef<THREE.Group>(null!)
+  const r_top = useRef<THREE.Group>(null!)
+  const r_side = useRef<THREE.Group>(null!)
   const r_counter1 = useRef<HTMLDivElement>(null!)
   const r_counter2 = useRef<HTMLDivElement>(null!)
   const r_sidebar = useRef<THREE.Group & { children: [THREE.Mesh, THREE.Mesh] }>(null!)
@@ -35,12 +39,25 @@ const SelectedWorks: React.FC<{toggleScroll: () => void}> = ({ toggleScroll }) =
   const r_projects = useRef<THREE.Group>(null!)
 
   const r_delta = useRef(0)
+  const r_projectOpen = useRef(0)
 
   const projContainerHeight = (height - width * 0.046) * projectData.length * factor
   const projectContainerOffsetY = ((projContainerHeight / projectData.length) * (projectData.length - 1)) / factor
 
-  const openProject = () => {
-    toggleScroll()
+  const openProject = (i: number) => {
+    // toggleScroll()
+    const container = document.getElementsByTagName('main')[0].children[0].children[0].children[1] as HTMLDivElement
+    if (r_projectOpen.current === i) {
+      r_projectOpen.current = 0
+      container.style.overflow = 'hidden auto'
+    } else {
+      r_projectOpen.current = i
+      container.style.overflow = 'hidden'
+    }
+
+    // gsap.to(r_sidebar.current.position, {
+    //   x: -10
+    // })
   }
 
   const Image: React.FC<{url: string, position: Vector3 }> = ({ url, position }) => {
@@ -80,7 +97,7 @@ const SelectedWorks: React.FC<{toggleScroll: () => void}> = ({ toggleScroll }) =
             <span>{proj.role}<br/><a href={proj.link} target='_blank' rel='noopener noreferrer'>{proj.linkText}</a></span>
           </div>
           <h3 className="selectedworks_project_title">{proj.title}</h3>
-          <button className="selectedworks_project_button" onClick={openProject}>Vie<em>w</em> Project →</button>
+          <button className="selectedworks_project_button" onClick={() => openProject(i + 1)}>Vie<em>w</em> Project →</button>
         </div>)}
       </Html>
       <group position={[0, 0, 0]}>
@@ -99,99 +116,119 @@ const SelectedWorks: React.FC<{toggleScroll: () => void}> = ({ toggleScroll }) =
     const counterOffset = scrollData.range(0.525, 0.035) // just for counter first column (0 - 1)
     const sectionOffset2 = scrollData.range(0.56, 0.05)
 
-    // section horizontal movement
-    r_wrapper.current.position.x = -width * 0.915 * sectionOffset + width * 0.9575 - width * 0.915 * sectionOffset2
+    if (!r_projectOpen.current) {
+      // section horizontal movement
+      r_wrapper.current.position.x = -width * 0.915 * sectionOffset + width * 0.9575 - width * 0.915 * sectionOffset2
 
-    if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
-    if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
+      if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
+      if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
 
-    if (r_sidebar.current) { // sidebar width + position calculation
-      r_sidebar.current.scale.x = (1 - sidebarOffset)* 0.8 + 0.2
-      r_sidebar.current.children[2].scale.x = 1 / r_sidebar.current.scale.x
-      r_sidebar.current.children[0].scale.x = .008 * sidebarOffset + 1 // need to scale up background or the x-axis border is too thin
-      r_sidebar.current.position.x = (-width/2 + width * 0.135) * sidebarOffset -1/factor
+      if (r_sidebar.current) { // sidebar width + position calculation
+        r_sidebar.current.scale.x = (1 - sidebarOffset)* 0.8 + 0.2
+        r_sidebar.current.children[2].scale.x = 1 / r_sidebar.current.scale.x
+        r_sidebar.current.children[0].scale.x = .008 * sidebarOffset + 1 // need to scale up background or the x-axis border is too thin
+        r_sidebar.current.position.x = (-width/2 + width * 0.135) * sidebarOffset -1/factor
+      }
+
+      if (r_sidebarText.current) { // sidebar text scaling
+        r_sidebarText.current.style.width = `${(1 - sidebarOffset) * (width * 0.732 * factor) + (width * 0.183 * factor)}px`
+        r_sidebarText.current.style.fontSize = `${(1 - sidebarOffset) * 19.75 + 5.25}rem`
+      }
+
+      if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
+
+      if (r_projects.current) { // project "scrolling"
+        r_projects.current.position.x = (width * (1 - sidebarOffset) * 0.7125) + width * 0.1
+        r_delta.current = (r_projects.current.position.y - (projectsOffset * projectContainerOffsetY)) / 100
+        r_projects.current.position.y = projectsOffset * projectContainerOffsetY
+      }
     }
 
-    if (r_sidebarText.current) { // sidebar text scaling
-      r_sidebarText.current.style.width = `${(1 - sidebarOffset) * (width * 0.732 * factor) + (width * 0.183 * factor)}px`
-      r_sidebarText.current.style.fontSize = `${(1 - sidebarOffset) * 19.75 + 5.25}rem`
-    }
-
-    if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
-
-    if (r_projects.current) { // project "scrolling"
-      r_projects.current.position.x = (width * (1 - sidebarOffset) * 0.7125) + width * 0.1
-      r_delta.current = (r_projects.current.position.y - (projectsOffset * projectContainerOffsetY)) / 100
-      r_projects.current.position.y = projectsOffset * projectContainerOffsetY
+    if (r_projectOpen.current) {
+      // if (r_side.current.position.x )
+      if (Math.abs(r_side.current.position.x - -width * 0.285) > 0.1) {
+        console.log('animating side')
+        r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.15)
+      } else if (Math.abs(r_top.current.position.y - width * 0.046) > 0.01) {
+        console.log('animating top')
+        r_top.current.position.y = lerp(r_top.current.position.y, width * 0.046, 0.15)
+      }
+    } else {
+      if (Math.abs(r_top.current.position.y) > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, 0, 0.1)
+      else if (Math.abs(r_side.current.position.x) > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, 0, 0.1)
     }
   })
 
   return <group ref={r_wrapper}>
-    <BorderedPlane // Section Number
-      width={width * 0.048 + 2/factor}
-      height={width * 0.046}
-      factor={factor}
-      position={new Vector3(-width / 2 + width * 0.0665, height / 2 - width * 0.023 + 1/factor, 0)}
-    >
-      <Html
-        center
-        // transform
-        // distanceFactor={3.4}
-        className="section_number"
-        portal={{ current: scrollData.fixed }}
-        zIndexRange={[0, 100]}
-      >02</Html>
-    </BorderedPlane>
-    <BorderedPlane // Project Counter
-      width={width * 0.867 + 1/factor}
-      height={width * 0.046}
-      factor={factor}
-      position={new Vector3(-width / 2 + width * 0.524 + 0.5/factor, height / 2 - width * 0.023 + 1/factor, 0)}
-    >
-      <Html
-        center
-        // transform
-        // distanceFactor={3.4}
-        zIndexRange={[5, 6]}
-        portal={{ current: scrollData.fixed }}
-        className="selectedworks_counter"
-        style={{
-          width: width * 0.867 * factor,
-          height: width * 0.046 * factor,
-          background: colors.fadedBlack,
-          borderBottom: `1px solid ${colors.dirtyWhite}`
-        }}
+    <group ref={r_top}>
+      <BorderedPlane // Section Number
+        width={width * 0.048 + 2/factor}
+        height={width * 0.046}
+        factor={factor}
+        position={new Vector3(-width / 2 + width * 0.0665, height / 2 - width * 0.023 + 1/factor, 0)}
       >
-        <div className="selectedworks_counter-mask">
-          <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
-          <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
-          <span>/10</span>
-        </div>
-      </Html>
-    </BorderedPlane>
-    <BorderedPlane // Sidebar
-      width={width * 0.915 + 1/factor}
-      height={height - width * 0.046 + 2/factor}
-      factor={factor}
-      position={new Vector3(-1/factor, -width * 0.023 + 1/factor, 0)}
-      groupRef={r_sidebar}
-    >
-      <Html
-        center
-        // transform
-        // distanceFactor={3.4}
-        className="selectedworks_header"
-        portal={{ current: scrollData.fixed }}
-        zIndexRange={[1, 2]}
-        ref={r_sidebarText}
-        style={{
-          width: width * 0.915 * factor,
-          height: (height - width * 0.046) * factor
-        }}
+        <Html
+          center
+          // transform
+          // distanceFactor={3.4}
+          className="section_number"
+          portal={{ current: scrollData.fixed }}
+          zIndexRange={[0, 100]}
+        >02</Html>
+      </BorderedPlane>
+      <BorderedPlane // Project Counter
+        width={width * 0.867 + 1/factor}
+        height={width * 0.046}
+        factor={factor}
+        position={new Vector3(-width / 2 + width * 0.524 + 0.5/factor, height / 2 - width * 0.023 + 1/factor, 0)}
       >
-        <h4>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></h4>
-      </Html>
-    </BorderedPlane>
+        <Html
+          center
+          // transform
+          // distanceFactor={3.4}
+          zIndexRange={[5, 6]}
+          portal={{ current: scrollData.fixed }}
+          className="selectedworks_counter"
+          style={{
+            width: width * 0.867 * factor,
+            height: width * 0.046 * factor,
+            background: colors.fadedBlack,
+            borderBottom: `1px solid ${colors.dirtyWhite}`
+          }}
+        >
+          <div className="selectedworks_counter-mask">
+            <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
+            <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
+            <span>/10</span>
+          </div>
+        </Html>
+      </BorderedPlane>
+    </group>
+    <group ref={r_side}>
+      <BorderedPlane // Sidebar
+        width={width * 0.915 + 1/factor}
+        height={height - width * 0.046 + 2/factor}
+        factor={factor}
+        position={new Vector3(-1/factor, -width * 0.023 + 1/factor, 0)}
+        groupRef={r_sidebar}
+      >
+        <Html
+          center
+          // transform
+          // distanceFactor={3.4}
+          className="selectedworks_sidebar"
+          portal={{ current: scrollData.fixed }}
+          zIndexRange={[1, 2]}
+          ref={r_sidebarText}
+          style={{
+            width: width * 0.915 * factor,
+            height: (height - width * 0.046) * factor
+          }}
+        >
+          <h4>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></h4>
+        </Html>
+      </BorderedPlane>
+    </group>
     {renderProjects()}
   </group>
 }

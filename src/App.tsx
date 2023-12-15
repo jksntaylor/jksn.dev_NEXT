@@ -1,8 +1,8 @@
 // libraries
-import { Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
-import { OrbitControls } from '@react-three/drei'
+// import { OrbitControls } from '@react-three/drei'
 // modules
 import './components/Materials'
 import Menu from './components/Menu'
@@ -14,21 +14,16 @@ import { colors } from './utils/constants'
 import './App.scss'
 
 function App() {
-
-  const [scrollEnabled, setScrollEnabled] = useState(true)
-
-  const toggleScroll = () => setScrollEnabled(!scrollEnabled)
-
   return <main>
     <Suspense fallback={null}>
       <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
         <color attach="background" args={[colors.fadedBlack]} />
-        <OrbitControls enableZoom={false}/>
-        <ScrollControls pages={10} damping={0.2} enabled={scrollEnabled}>
+        {/* <OrbitControls enableZoom={false}/> */}
+        <ScrollControls pages={10} damping={0.2}>
           <Menu />
           <Landing />
           <Welcome />
-          <SelectedWorks toggleScroll={toggleScroll}/>
+          <SelectedWorks/>
           {/* <Experiments /> */}
           {/* <CallToAction /> */}
           {/* <Credits /> */}

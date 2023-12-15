@@ -80,7 +80,7 @@ const SelectedWorksMaterial = shaderMaterial({
 
   void main() {
     vec4 pos = vec4(position, 1.0);
-    pos.y -= u_delta * sin(uv.x * 24.) * 100.;
+    pos.y -= u_delta * sin(uv.x * 50.) * 100.;
     gl_Position = projectionMatrix * modelViewMatrix * pos;
     v_uv = uv;
   }

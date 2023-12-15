@@ -9,8 +9,8 @@ $color-accent2: #32DEED;
 
 * {
   ::-webkit-scrollbar {
-    width: 0;
-    display: none;
+    // width: 0;
+    // display: none;
   }
 }
 
@@ -96,7 +96,7 @@ main {
   }
 }
 
-.selectedworks_header {
+.selectedworks_sidebar {
   color: $color-dirtywhite;
   padding: 2rem;
   // font: 400 5.25rem 'Neue Montreal';
