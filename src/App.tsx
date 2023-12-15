@@ -14,6 +14,7 @@ import { colors } from './utils/constants'
 import './App.scss'
 
 function App() {
+
   return <main>
     <Suspense fallback={null}>
       <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
@@ -23,7 +24,7 @@ function App() {
           <Menu />
           <Landing />
           <Welcome />
-          <SelectedWorks/>
+          <SelectedWorks />
           {/* <Experiments /> */}
           {/* <CallToAction /> */}
           {/* <Credits /> */}

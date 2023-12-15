@@ -85,8 +85,8 @@ const Landing = () => {
     r_material.current.u_time += delta
 
     if (r_mouse.current.target.distanceTo(r_mouse.current.current) > 0.01) {
-      const mouseX = lerp(r_mouse.current.current.x, r_mouse.current.target.x, 0.1)
-      const mouseY = lerp(r_mouse.current.current.y, r_mouse.current.target.y, 0.1)
+      const mouseX = lerp(r_mouse.current.current.x, r_mouse.current.target.x, 0.05)
+      const mouseY = lerp(r_mouse.current.current.y, r_mouse.current.target.y, 0.05)
       r_material.current.u_mouse.set(mouseX, mouseY)
       r_mouse.current.current.set(mouseX, mouseY)
     }

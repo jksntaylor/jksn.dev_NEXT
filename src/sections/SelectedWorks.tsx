@@ -54,10 +54,6 @@ const SelectedWorks = () => {
       r_projectOpen.current = i
       container.style.overflow = 'hidden'
     }
-
-    // gsap.to(r_sidebar.current.position, {
-    //   x: -10
-    // })
   }
 
   const Image: React.FC<{url: string, position: Vector3 }> = ({ url, position }) => {
@@ -145,17 +141,19 @@ const SelectedWorks = () => {
     }
 
     if (r_projectOpen.current) {
-      // if (r_side.current.position.x )
-      if (Math.abs(r_side.current.position.x - -width * 0.285) > 0.1) {
-        console.log('animating side')
-        r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.15)
-      } else if (Math.abs(r_top.current.position.y - width * 0.046) > 0.01) {
-        console.log('animating top')
-        r_top.current.position.y = lerp(r_top.current.position.y, width * 0.046, 0.15)
-      }
+      const sideDiff = Math.abs(r_side.current.position.x - -width * 0.285)
+      const topDiff = Math.abs(r_top.current.position.y - width * 0.048)
+      if (sideDiff > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.1)
+      // else r_side.current.position.x = -width * 0.285
+
+      if (sideDiff < 0.4 && topDiff > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, width * 0.046, 0.1)
+      // else r_top.current.position.y = width * 0.046
     } else {
-      if (Math.abs(r_top.current.position.y) > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, 0, 0.1)
-      else if (Math.abs(r_side.current.position.x) > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, 0, 0.1)
+      if (r_top.current.position.y > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, 0, 0.1)
+      // else r_top.current.position.y = 0
+
+      if (r_top.current.position.y < 0.2 && r_side.current.position.x < -0.01) r_side.current.position.x = lerp(r_side.current.position.x, 0, 0.1)
+      // else r_side.current.position.x = 0
     }
   })
 

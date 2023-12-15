@@ -1,7 +1,7 @@
-import { useThree } from "@react-three/fiber"
-import BorderedPlane from "./BorderedPlane"
-import { Vector3 } from "three"
 import { Html, useScroll } from "@react-three/drei"
+import { useThree } from "@react-three/fiber"
+import { Vector3 } from "three"
+import BorderedPlane from "./BorderedPlane"
 
 const Menu = () => {
   const scrollData = useScroll()
