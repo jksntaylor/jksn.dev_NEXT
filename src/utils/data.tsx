@@ -66,6 +66,35 @@ export const projectData = [
   title: <>Huge<br/><span>I<em>n</em>c</span></>,
   projectLink: '/projects/huge'
 },
+{
+  year: '2021',
+  client1: 'Tiktok',
+  client2: 'Bitski',
+  role: 'Lead Creative Developer',
+  link: 'https://tiktok.reformcollective.com',
+  linkText: 'tiktok.reformcollective.com',
+  title: <>Tiktok Top<br/><span><em>M</em>ome<em>n</em>ts</span></>,
+  projectLink: '/projects/tiktok'
+},
+{
+  awards: ['AWWWARDS | Site Of The Day & Developer Award', 'CSS Design Awards | Site Of The Day'],
+  year: '2022',
+  client1: 'RRE Ventures',
+  role: 'Lead Creative Developer',
+  link: 'https://rre.com',
+  linkText: 'rre.com',
+  title: <>RRE<br/><span><em>V</em>ent<em>u</em>res</span></>,
+  projectLink: '/projects/rre'
+},
+{
+  year: '2021',
+  client1: 'Genies',
+  role: 'Frontend Developer',
+  link: 'https://genies.reformcollective.com',
+  linkText: 'genies.reformcollective.com',
+  title: <>Genies<br/><span>Fa<em>s</em>hi<em>on</em></span></>,
+  projectLink: '/projects/genies'
+},
 ]
 
 export type ProjectProps = {

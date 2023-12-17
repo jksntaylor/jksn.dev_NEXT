@@ -46,7 +46,7 @@ const SelectedWorks = () => {
 
   const openProject = (i: number) => {
     // toggleScroll()
-    const container = document.getElementsByTagName('main')[0].children[0].children[0].children[1] as HTMLDivElement
+    const container = document.querySelector('main > div > div > div') as HTMLDivElement
     if (r_projectOpen.current === i) {
       r_projectOpen.current = 0
       container.style.overflow = 'hidden auto'
@@ -143,17 +143,12 @@ const SelectedWorks = () => {
     if (r_projectOpen.current) {
       const sideDiff = Math.abs(r_side.current.position.x - -width * 0.285)
       const topDiff = Math.abs(r_top.current.position.y - width * 0.048)
-      if (sideDiff > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.1)
-      // else r_side.current.position.x = -width * 0.285
 
+      if (sideDiff > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.1)
       if (sideDiff < 0.4 && topDiff > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, width * 0.046, 0.1)
-      // else r_top.current.position.y = width * 0.046
     } else {
       if (r_top.current.position.y > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, 0, 0.1)
-      // else r_top.current.position.y = 0
-
       if (r_top.current.position.y < 0.2 && r_side.current.position.x < -0.01) r_side.current.position.x = lerp(r_side.current.position.x, 0, 0.1)
-      // else r_side.current.position.x = 0
     }
   })
 

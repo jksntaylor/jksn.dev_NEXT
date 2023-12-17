@@ -80,9 +80,17 @@ const Landing = () => {
     const sliceOffset = scrollData.range(0, 0.05)
     const sectionOffset = scrollData.range(0.05, 0.05)
 
-    r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
-    r_wrapper.current.position.x = -width * 0.915 * sectionOffset
-    r_material.current.u_time += delta
+    if (sliceOffset === 0) {
+      r_material.current.u_time += delta
+      if (r_wrapper.current.position.x !== 0) r_wrapper.current.position.x = 0
+    } else if (sliceOffset > 0 && sectionOffset < 1) {
+      r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
+      r_wrapper.current.position.x = -width * 0.915 * sectionOffset
+      r_material.current.u_time += delta
+    } else if (sectionOffset === 1 && r_wrapper.current.position.x !== -width * 0.915) {
+      r_slices.forEach(slice => slice.current.position.x = width * 0.0425)
+      r_wrapper.current.position.x = -width * 0.915
+    }
 
     if (r_mouse.current.target.distanceTo(r_mouse.current.current) > 0.01) {
       const mouseX = lerp(r_mouse.current.current.x, r_mouse.current.target.x, 0.05)
