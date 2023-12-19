@@ -20,7 +20,7 @@ function App() {
       <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
         <color attach="background" args={[colors.fadedBlack]} />
         {/* <OrbitControls enableZoom={false}/> */}
-        <ScrollControls pages={10} damping={0.2}>
+        <ScrollControls pages={15} damping={0.2}>
           <Menu />
           <Landing />
           <Welcome />

@@ -54,6 +54,20 @@ main {
   padding: 5rem 1rem;
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(360deg)
+  }
+}
+
+.landing__arrow-outer {
+  transform-origin: center center;
+  animation: spin 20s linear infinite;
+}
+
 .section_number {
   color: $color-dirtywhite;
   font: 400 2.5rem/100% 'Neue Montreal';

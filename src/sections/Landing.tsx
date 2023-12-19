@@ -8,6 +8,8 @@ import BorderedPlane from "../components/BorderedPlane.tsx"
 import { t_LandingMaterial } from "../components/Materials.ts"
 import { colors } from "../utils/constants.ts"
 import { lerp } from "../utils/functions.tsx"
+// assets
+import LandingArrow from '../assets/images/landing-arrow'
 
 const Landing = () => {
   const scrollData = useScroll()
@@ -18,6 +20,8 @@ const Landing = () => {
   const r_mouse = useRef({ target: new Vector2(2, 2), current: new Vector2(2, 2) })
   // wrapper ref
   const r_wrapper = useRef<THREE.Group>(null!)
+  const r_arrow = useRef<THREE.Group>(null!)
+  const r_arrowInner = useRef<SVGGElement>(null!)
   // distorted text lines
   const r_text1 = useRef<typeof Text>(null!)
   const r_text2 = useRef<typeof Text>(null!)
@@ -67,7 +71,7 @@ const Landing = () => {
     <Html
       center
       // transform
-      // distanceFactor={3.7}
+      // distanceFactor={3.4}
       zIndexRange={[2, 3]}
       wrapperClass="landing__slice"
       portal={{ current: scrollData.fixed }}
@@ -81,13 +85,21 @@ const Landing = () => {
     const sectionOffset = scrollData.range(0.05, 0.05)
 
     if (sliceOffset === 0) {
+      console.log('animating landing text')
       r_material.current.u_time += delta
       if (r_wrapper.current.position.x !== 0) r_wrapper.current.position.x = 0
     } else if (sliceOffset > 0 && sectionOffset < 1) {
+      console.log('animating landing')
       r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
       r_wrapper.current.position.x = -width * 0.915 * sectionOffset
+      r_arrowInner.current.style.transform = `scale(${Math.min(sliceOffset + 1, 1.4)})`
+      r_arrow.current.position.x = width / 2 - width * 0.065 - width * 0.05 * sliceOffset
+      r_arrow.current.position.y = height/2 - width * 0.065 - height * 0.7 * sliceOffset
+      r_arrow.current.rotation.z = Math.PI * 2 * sliceOffset
+      r_arrow.current.scale.set(sliceOffset * .5 + 1, sliceOffset *  .5 + 1, 1)
       r_material.current.u_time += delta
     } else if (sectionOffset === 1 && r_wrapper.current.position.x !== -width * 0.915) {
+      console.log('setting landing finish state')
       r_slices.forEach(slice => slice.current.position.x = width * 0.0425)
       r_wrapper.current.position.x = -width * 0.915
     }
@@ -117,6 +129,19 @@ const Landing = () => {
     </mesh>
     <group position={[0, 0, 0.0001]}>
       {renderSlices([<>L<em>E</em>T'S B<em>U</em>ILD</>, <><em>S</em>O<em>MET</em>HI<em>NG</em></>, <>NE<em>W</em></>])}
+    </group>
+    <group ref={r_arrow} position={[width / 2 - width * 0.065, height/2 - width * 0.065, 0]}>
+      <Html
+        // center
+        transform
+        distanceFactor={3.4}
+        zIndexRange={[5, 6]}
+        wrapperClass="landing__arrow"
+        portal={{ current: scrollData.fixed }}
+        style={{ width: width * 0.097 * factor, height: width * 0.097 * factor}}
+        >
+        <LandingArrow innerRef={r_arrowInner}/>
+      </Html>
     </group>
   </group>
 }
