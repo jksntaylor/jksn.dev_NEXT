@@ -17,10 +17,10 @@ function App() {
 
   return <main>
     <Suspense fallback={null}>
-      <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
+      <Canvas gl={{ antialias: true }} dpr={1}>
         <color attach="background" args={[colors.fadedBlack]} />
         {/* <OrbitControls enableZoom={false}/> */}
-        <ScrollControls pages={15} damping={0.2}>
+        <ScrollControls pages={10} damping={0.2}>
           <Menu />
           <Landing />
           <Welcome />

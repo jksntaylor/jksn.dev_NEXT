@@ -93,6 +93,13 @@ const Menu = () => {
     if (!r_menuOpen.current) menuTL.tweenTo(0)
   }
 
+  const handleLinkClick = (index: number) => {
+    console.log(index)
+    const doc = document.querySelector('main > div > div > div') as HTMLDivElement
+    doc.scrollTo({ top: window.innerHeight * 2.6 })
+    toggleMenu()
+  }
+
   return <group>
     <BorderedPlane
       width={width * 0.94 + 8/factor}
@@ -113,6 +120,9 @@ const Menu = () => {
           height: height * factor
         }}
       >
+        <div className="menu__links">
+          <h3 onClick={() => handleLinkClick(0)}>something</h3>
+        </div>
         <h4>
           <span>Available for Freelance</span>
           <span>JACKSON TAYLOR</span>

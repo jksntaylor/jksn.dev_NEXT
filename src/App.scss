@@ -42,6 +42,15 @@ main {
   box-sizing: content-box;
 }
 
+.menu__drawer {
+  display: flex;
+}
+
+.menu__links {
+  width: 80%;
+  color: $color-dirtywhite;
+}
+
 .menu__drawer h4 {
   color: $color-dirtywhite;
   font: 400 1.6rem 'Neue Montreal';
