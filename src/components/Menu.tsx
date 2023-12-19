@@ -54,7 +54,7 @@ const Menu = () => {
         transformOrigin: 'center',
         ease: 'expo.inOut'
       }, 0.75).to(r_drawer.current.position, {
-        x: width * 0.0275 + 4/factor,
+        x: width * 0.0275,
         duration: 0.75,
         ease: 'expo.inOut'
       }, 0.75)
@@ -134,11 +134,11 @@ const Menu = () => {
         zIndexRange={[10, 11]}
         portal={{ current: scrollData.fixed }}
         style={{
-          width: width * 0.055 * factor + 4,
+          width: width * 0.055 * factor + 8,
           height: height * factor,
         }}
       >
-        <svg onClick={() => toggleMenu()} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} x="0" y="0" width="41" height="44" viewBox="0 0 41 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg onClick={toggleMenu} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} x="0" y="0" width="41" height="44" viewBox="0 0 41 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path ref={r_path1} d="M1.4 01.5L40 12" stroke={colors.dirtyWhite} strokeWidth="3" strokeDasharray="80% 20%" strokeDashoffset="20%"/>
           <path ref={r_path2} d="M1.4 16.5L40 27" stroke={colors.dirtyWhite} strokeWidth="3" strokeDasharray="80% 20%" strokeDashoffset="40%"/>
           <path ref={r_path2b} d="M1.4 16.5L40 27" stroke={colors.dirtyWhite} strokeWidth="3" strokeDasharray="100% 0%" strokeDashoffset="50%" opacity={0}/>

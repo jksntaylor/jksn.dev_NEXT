@@ -2,7 +2,7 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
-// import { OrbitControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 // modules
 import './components/Materials'
 import Menu from './components/Menu'

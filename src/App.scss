@@ -83,6 +83,10 @@ main {
                0.8rem 0 $color-accent2;
 }
 
+.welcome {
+  position: relative;
+}
+
 .welcome h1 {
   color: $color-dirtywhite;
   background: $color-fadedblack;
@@ -90,6 +94,34 @@ main {
   letter-spacing: -0.03em;
   padding: 36rem 0 0 0;
   width: 335rem;
+}
+
+.welcome__definition {
+  width: 50rem;
+  background: $color-accent1;
+  border: 2px solid $color-fadedblack;
+  padding: 3rem;
+  position: absolute;
+  top: 40%;
+  left: 30%;
+  span {
+    display: block;
+    font: 400 4rem/100% 'Formula Condensed';
+  }
+  span:last-of-type {
+    font: italic 700 1.6rem/120% 'Neue Montreal';
+    margin-bottom: 2rem;
+  }
+  h5 {
+    text-transform: uppercase;
+    font: 400 2.5rem/120% 'Neue Montreal';
+    margin-bottom: 2rem;
+  }
+  h6 {
+    font: 100 1.6rem/120% 'Neue Montreal';
+    text-transform: uppercase;
+    text-align: right;
+  }
 }
 
 
