@@ -10,13 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@prismicio/client": "^7.3.1",
+    "@prismicio/react": "^2.7.3",
     "@react-three/drei": "^9.88.17",
     "@react-three/fiber": "^8.15.11",
     "gsap": "^3.12.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.158.0",
-    "wouter": "^2.12.1"
+    "three": "^0.158.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

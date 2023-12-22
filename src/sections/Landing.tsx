@@ -73,7 +73,7 @@ const Landing = () => {
       // transform
       // distanceFactor={3.4}
       zIndexRange={[2, 3]}
-      wrapperClass="landing__slice"
+      wrapperClass="landing_slice"
       portal={{ current: scrollData.fixed }}
     >
       <h3>{slice}</h3>
@@ -119,7 +119,7 @@ const Landing = () => {
   return <group ref={r_wrapper}>
     <mesh position={[width * 0.0425, 0, 0]} onPointerMove={e => handlePointer(e)}>
       <planeGeometry args={[width * 0.915, height, 64, 64]} />
-      <landingMaterial ref={r_material} u_mouse={new Vector2(2, 2)}>
+      <landingMaterial ref={r_material} u_mouse={new Vector2(2, 2)} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
           <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
           <color attach="background" args={[colors.fadedBlack]} />
@@ -136,7 +136,7 @@ const Landing = () => {
         transform
         distanceFactor={3.4}
         zIndexRange={[5, 6]}
-        wrapperClass="landing__arrow"
+        wrapperClass="landing_arrow"
         portal={{ current: scrollData.fixed }}
         style={{ width: width * 0.097 * factor, height: width * 0.097 * factor}}
         >

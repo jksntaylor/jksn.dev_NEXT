@@ -14,7 +14,6 @@ import { colors } from './utils/constants'
 import './App.scss'
 
 function App() {
-
   return <main>
     <Suspense fallback={null}>
       <Canvas gl={{ antialias: true }} dpr={1}>

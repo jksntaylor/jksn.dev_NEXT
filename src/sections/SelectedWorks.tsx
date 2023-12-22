@@ -1,28 +1,52 @@
 // libraries
+import { useAllPrismicDocumentsByType, useSinglePrismicDocument } from "@prismicio/react"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useRef } from 'react'
 import { Vector3 } from "three"
+import gsap from 'gsap'
 // modules
 import BorderedPlane from "../components/BorderedPlane"
 import { t_SelectedWorksMaterial } from "../components/Materials"
-import { projectData } from "../utils/data"
 import { colors } from "../utils/constants"
-import { lerp } from "../utils/functions"
 // assets
-import tiktok from '../assets/images/tt_bg.webp'
-import rre from '../assets/images/rre_bg.webp'
-import genies from '../assets/images/genies_bg.webp'
-import realtime from '../assets/images/rtr_bg.webp'
-import levis from '../assets/images/levis_bg.webp'
-import source7 from '../assets/images/s7_bg.webp'
-import huge from '../assets/images/huge_bg.webp'
+
 // import gsap from "gsap"
 
-const images = [tiktok, rre, genies, source7, realtime, levis, huge, huge, huge, huge]
+// type t_CaseStudy = {
+//   data: {
+//     awards?: string[],
+//     client1: string,
+//     client2?: string,
+//     cover_image: { url: string },
+//     images: { url: string }[],
+//     project_description?: string,
+//     project_link: { url: string },
+//     project_link_text: string,
+//     project_title: { text: string }[],
+//     role: string,
+//     year: string
+//   }
+// }
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
+
+  // const [caseStudies] = useAllPrismicDocumentsByType('case_study')
+  const [document] = useSinglePrismicDocument('homepage', {
+    fetchLinks: [
+      'case_study.cover_image',
+      'case_study.awards',
+      'case_study.project_title',
+      'case_study.project_link',
+      'case_study.project_link_text',
+      'case_study.year',
+      'case_study.role',
+      'case_study.client1',
+      'case_study.client2',
+      'case_study.images'
+    ]
+  })
 
   const { viewport } = useThree()
   const { factor } = viewport
@@ -39,21 +63,29 @@ const SelectedWorks = () => {
   const r_projects = useRef<THREE.Group>(null!)
 
   const r_delta = useRef(0)
-  const r_projectOpen = useRef(0)
+  const r_projectOpen = useRef(-1)
 
-  const projContainerHeight = (height - width * 0.046) * projectData.length * factor
-  const projectContainerOffsetY = ((projContainerHeight / projectData.length) * (projectData.length - 1)) / factor
+  const projContainerHeight = (height - width * 0.046) * 10 * factor
+  const projContainerOffsetY = ((projContainerHeight / 10) * 9) / factor
+
+  useEffect(() => {
+    console.log(document)
+  }, [document])
+
 
   const openProject = (i: number) => {
-    // toggleScroll()
-    const container = document.querySelector('main > div > div > div') as HTMLDivElement
-    if (r_projectOpen.current === i) {
-      r_projectOpen.current = 0
-      container.style.overflow = 'hidden auto'
-    } else {
-      r_projectOpen.current = i
-      container.style.overflow = 'hidden'
-    }
+    // const container = document.querySelector('main > div > div > div') as HTMLDivElement
+    // if (r_projectOpen.current === i) {
+    //   r_projectOpen.current = -1
+    //   container.style.overflow = 'hidden auto'
+    // } else {
+    //   r_projectOpen.current = i
+    //   container.style.overflow = 'hidden'
+    // }
+    const scrollContainer = document.querySelector('main > div > div > div') as HTMLDivElement
+    gsap.to(r_side.current, {
+
+    })
   }
 
   const Image: React.FC<{url: string, position: Vector3 }> = ({ url, position }) => {
@@ -84,22 +116,25 @@ const SelectedWorks = () => {
         style={{ width: width * 0.625 * factor, height: projContainerHeight }}
         position={[0, -projContainerHeight/factor/2 + (height - width * 0.046)/4, 0]}
         zIndexRange={[0, 100]} >
-        {projectData.map((proj, i) => <div className={`selectedworks_project selectedworks_project-${i%2?'right':'left'}`} key={i}>
-          {proj.awards && <div className="selectedworks_project_awards">
-            {proj.awards.map((award, i) => <span key={i}>{award}</span>)}
-          </div>}
-          <div className="selectedworks_project_info">
-            <span>{proj.year}<br/>{proj.client1}<br/>{proj.client2 && proj.client2}</span>
-            <span>{proj.role}<br/><a href={proj.link} target='_blank' rel='noopener noreferrer'>{proj.linkText}</a></span>
+        {document && document.data.case_studies.map((proj, i) => {
+          const { awards, client1, client2, year, role, project_link, project_link_text, project_title } = proj.case_study.data
+          return <div className={`selectedworks_project selectedworks_project-${i%2?'right':'left'}`} key={i}>
+            {awards[1] && <div className="selectedworks_project_awards">
+              {awards.map((award: { award: string }, i: number) => <span key={i}>★&nbsp;{award.award}&nbsp;★</span>)}
+            </div>}
+            <div className="selectedworks_project_info">
+              <span>{year}<br/>{client1}<br/>{client2 && client2}</span>
+              <span>{role}<br/><a href={project_link.url} target='_blank' rel='noopener noreferrer'>{project_link_text}</a></span>
+            </div>
+            <h3 className="selectedworks_project_title" dangerouslySetInnerHTML={{ __html: project_title[0].text}}/>
+            <button className="selectedworks_project_button" onClick={() => openProject(i)}>Vie<em>w</em> Project →</button>
           </div>
-          <h3 className="selectedworks_project_title">{proj.title}</h3>
-          <button className="selectedworks_project_button" onClick={() => openProject(i + 1)}>Vie<em>w</em> Project →</button>
-        </div>)}
+        })}
       </Html>
       <group position={[0, 0, 0]}>
-        {projectData.map((_proj, i) => { // extract into component (<SelectedWorksImage url={url}/>)
+        {document && document.data.case_studies.map((proj, i) => { // extract into component (<SelectedWorksImage url={url}/>)
           const posX = i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187
-          return <Image url={images[i]} position={new Vector3(posX, (height - width * 0.046) * -i, 0)} key={i}/>
+          return <Image url={proj.case_study.data.cover_image.url} position={new Vector3(posX, (height - width * 0.046) * -i, 0)} key={i}/>
         })}
       </group>
     </group>
@@ -112,7 +147,7 @@ const SelectedWorks = () => {
     const counterOffset = scrollData.range(0.525, 0.035) // just for counter first column (0 - 1)
     const sectionOffset2 = scrollData.range(0.56, 0.05)
 
-    if (!r_projectOpen.current) {
+    if (r_projectOpen.current === -1) {
       // section horizontal movement
       r_wrapper.current.position.x = -width * 0.915 * sectionOffset + width * 0.9575 - width * 0.915 * sectionOffset2
 
@@ -135,21 +170,21 @@ const SelectedWorks = () => {
 
       if (r_projects.current) { // project "scrolling"
         r_projects.current.position.x = (width * (1 - sidebarOffset) * 0.7125) + width * 0.1
-        r_delta.current = (r_projects.current.position.y - (projectsOffset * projectContainerOffsetY)) / 100
-        r_projects.current.position.y = projectsOffset * projectContainerOffsetY
+        r_delta.current = (r_projects.current.position.y - (projectsOffset * projContainerOffsetY)) / 100
+        r_projects.current.position.y = projectsOffset * projContainerOffsetY
       }
     }
 
-    if (r_projectOpen.current) {
-      const sideDiff = Math.abs(r_side.current.position.x - -width * 0.285)
-      const topDiff = Math.abs(r_top.current.position.y - width * 0.048)
+    // if (r_projectOpen.current >= 0) {
+    //   const sideDiff = Math.abs(r_side.current.position.x - -width * 0.285)
+    //   const topDiff = Math.abs(r_top.current.position.y - width * 0.048)
 
-      if (sideDiff > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.1)
-      if (sideDiff < 0.4 && topDiff > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, width * 0.046, 0.1)
-    } else {
-      if (r_top.current.position.y > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, 0, 0.1)
-      if (r_top.current.position.y < 0.2 && r_side.current.position.x < -0.01) r_side.current.position.x = lerp(r_side.current.position.x, 0, 0.1)
-    }
+    //   if (sideDiff > 0.01) r_side.current.position.x = lerp(r_side.current.position.x, -width * 0.285, 0.1)
+    //   if (sideDiff < 0.4 && topDiff > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, width * 0.046, 0.1)
+    // } else {
+    //   if (r_top.current.position.y > 0.01) r_top.current.position.y = lerp(r_top.current.position.y, 0, 0.1)
+    //   if (r_top.current.position.y < 0.2 && r_side.current.position.x < -0.01) r_side.current.position.x = lerp(r_side.current.position.x, 0, 0.1)
+    // }
   })
 
   return <group ref={r_wrapper}>

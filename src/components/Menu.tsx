@@ -1,10 +1,13 @@
+// libraries
 import { Html, useScroll } from "@react-three/drei"
 import { useThree } from "@react-three/fiber"
+import { useEffect, useRef } from "react"
 import { Vector3 } from "three"
+import gsap from "gsap"
+// modules
 import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
-import { useEffect, useRef } from "react"
-import gsap from "gsap"
+import { scrollTo } from "../utils/functions"
 
 const Menu = () => {
   const scrollData = useScroll()
@@ -12,10 +15,12 @@ const Menu = () => {
   const { height, width, factor } = viewport.getCurrentViewport(camera, [0, 0, 0])
 
   const r_drawer = useRef<THREE.Group>(null!)
+
   const r_path1 = useRef<SVGPathElement>(null!)
   const r_path2 = useRef<SVGPathElement>(null!)
   const r_path2b = useRef<SVGPathElement>(null!)
   const r_path3 = useRef<SVGPathElement>(null!)
+
   const r_menuOpen = useRef(false)
 
   const menuTL = gsap.timeline({ paused: true })
@@ -81,8 +86,6 @@ const Menu = () => {
       window.removeEventListener('keydown', e => handleEscape(e))
     }
     r_menuOpen.current = !r_menuOpen.current
-    // const doc = document.querySelector('main > div > div > div') as HTMLDivElement
-    // doc.scrollTo({ top: window.innerHeight * 2.59, behavior: 'smooth' })
   }
 
   const mouseEnter = () => {
@@ -95,8 +98,7 @@ const Menu = () => {
 
   const handleLinkClick = (index: number) => {
     console.log(index)
-    const doc = document.querySelector('main > div > div > div') as HTMLDivElement
-    doc.scrollTo({ top: window.innerHeight * 2.6 })
+    scrollTo(window.innerHeight * (2.6 + index * 0.33))
     toggleMenu()
   }
 
@@ -112,7 +114,7 @@ const Menu = () => {
         center
         // transform
         // distanceFactor={3.4}
-        className="menu__drawer"
+        className="menu_drawer"
         zIndexRange={[8, 9]}
         portal={{ current: scrollData.fixed }}
         style={{
@@ -120,8 +122,8 @@ const Menu = () => {
           height: height * factor
         }}
       >
-        <div className="menu__links">
-          <h3 onClick={() => handleLinkClick(0)}>something</h3>
+        <div className="menu_links">
+          <h3 onClick={() => handleLinkClick(9)}>something</h3>
         </div>
         <h4>
           <span>Available for Freelance</span>

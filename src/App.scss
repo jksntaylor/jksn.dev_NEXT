@@ -24,7 +24,7 @@ main {
   }
 }
 
-.menu, .menu__drawer {
+.menu, .menu_drawer {
   border-right: 1px solid $color-dirtywhite;
   background: $color-fadedblack;
 }
@@ -42,16 +42,16 @@ main {
   box-sizing: content-box;
 }
 
-.menu__drawer {
+.menu_drawer {
   display: flex;
 }
 
-.menu__links {
+.menu_links {
   width: 80%;
   color: $color-dirtywhite;
 }
 
-.menu__drawer h4 {
+.menu_drawer h4 {
   color: $color-dirtywhite;
   font: 400 1.6rem 'Neue Montreal';
   writing-mode: vertical-lr;
@@ -72,7 +72,7 @@ main {
   }
 }
 
-.landing__arrow-outer {
+.landing_arrow-outer {
   transform-origin: center center;
   animation: spin 20s linear infinite;
 }
@@ -83,7 +83,7 @@ main {
   letter-spacing: -0.03em;
 }
 
-.landing__slice h3 {
+.landing_slice h3 {
   color: $color-dirtywhite;
   width: 91.5vw;
   font: 400 20rem 'Formula Condensed';
@@ -105,7 +105,7 @@ main {
   width: 335rem;
 }
 
-.welcome__definition {
+.welcome_definition {
   width: 50rem;
   background: $color-accent1;
   border: 2px solid $color-fadedblack;
@@ -187,6 +187,7 @@ main {
 .selectedworks_project {
   color: $color-dirtywhite;
   height: calc(100dvh - 4.6vw);
+  position: relative;
 }
 
 .selectedworks_project-right {
@@ -199,6 +200,18 @@ main {
   .selectedworks_project_button {
     margin-left: unset;
     margin-right: 5rem;
+  }
+}
+
+.selectedworks_project_awards {
+  font: 400 1.4rem/140% 'Neue Montreal';
+  text-transform: uppercase;
+  position: absolute;
+  text-align: center;
+  top: -7.5rem;
+  right: 5rem;
+  span {
+    display: block;
   }
 }
 

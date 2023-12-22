@@ -5,10 +5,10 @@ import { shaderMaterial } from "@react-three/drei"
 
 const LandingMaterial = shaderMaterial({
   u_texture: new Texture,
+  u_aspect: 1,
   u_mouse: new Vector2,
   u_time: 0
 }, `
-  uniform float u_aspect;
   varying vec2 v_uv;
   void main() {
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -18,6 +18,7 @@ const LandingMaterial = shaderMaterial({
   ${sNoise}
   uniform float u_time;
   uniform vec2 u_mouse;
+  uniform float u_aspect;
   uniform sampler2D u_texture;
   varying vec2 v_uv;
 
@@ -39,7 +40,7 @@ const LandingMaterial = shaderMaterial({
     vec2 uv2 = v_uv;
 
     // mouse mask
-    float cursor_distance = distance(vec2(v_uv.x, v_uv.y), u_mouse);
+    float cursor_distance = distance(vec2(v_uv.x, v_uv.y / u_aspect), vec2(u_mouse.x, u_mouse.y / u_aspect));
     float strength = smoothstep(0.2, 0.1, cursor_distance);
     float offX = v_uv.x + sin(v_uv.y + u_time * .1);
     float offY = v_uv.y - u_time * 0.01 - cos(u_time * 0.001) * 0.1;
@@ -74,6 +75,7 @@ const LandingMaterial = shaderMaterial({
 
 export type t_LandingMaterial = {
   u_texture: Texture
+  u_aspect: number
   u_mouse: Vector2
   u_time: number
 }

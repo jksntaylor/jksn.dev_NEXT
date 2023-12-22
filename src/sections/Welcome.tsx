@@ -47,7 +47,7 @@ const Welcome = () => {
       portal={{ current: scrollData.fixed }}
     >
       <h1 ref={r_text}>WELCOME</h1>
-      <div ref={r_definition} className="welcome__definition">
+      <div ref={r_definition} className="welcome_definition">
         <span>C<em>R</em>E•<em>A</em>•TI<em>V</em>E <em>D</em>E•V<em>EL</em>•O<em>P</em>•E<em>R</em></span>
         <span>(noun)</span>
         <h5>A frontend dev who specializes in interactive animation and 3D for the web</h5>
