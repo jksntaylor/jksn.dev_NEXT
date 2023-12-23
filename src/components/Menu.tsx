@@ -7,7 +7,6 @@ import gsap from "gsap"
 // modules
 import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
-import { scrollTo } from "../utils/functions"
 
 const Menu = () => {
   const scrollData = useScroll()
@@ -97,9 +96,9 @@ const Menu = () => {
   }
 
   const handleLinkClick = (index: number) => {
-    console.log(index)
-    scrollTo(window.innerHeight * (2.6 + index * 0.33))
     toggleMenu()
+    const event = new CustomEvent('toggleProject', { detail: index })
+    window.dispatchEvent(event)
   }
 
   return <group>
@@ -123,7 +122,7 @@ const Menu = () => {
         }}
       >
         <div className="menu_links">
-          <h3 onClick={() => handleLinkClick(9)}>something</h3>
+          <h3 onClick={() => handleLinkClick(5)}>something</h3>
         </div>
         <h4>
           <span>Available for Freelance</span>

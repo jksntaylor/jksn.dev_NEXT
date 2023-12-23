@@ -20,5 +20,5 @@ export const lerp = (x: number, y: number, t: number) => (1 - t) * x + t * y
 
 export const scrollTo = (distance: number) => {
   const doc = document.querySelector('main > div > div > div') as HTMLDivElement
-  doc.scrollTo({ top: distance })
+  doc.scrollTo({ top: distance, behavior: 'instant' })
 }
