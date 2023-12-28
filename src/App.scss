@@ -281,3 +281,130 @@ main {
     color: $color-dirtywhite;
   }
 }
+
+.projectpage {
+  color: $color-dirtywhite;
+  position: relative;
+  padding: 5rem;
+  >* {
+    pointer-events: all;
+  }
+}
+
+.projectpage_top {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 45rem;
+  p {
+    font: 400 1.6rem/120% 'Neue Montreal';
+    letter-spacing: 0.03em;
+    margin: 2rem 0;
+  }
+}
+
+.projectpage_back {
+  position: absolute;
+  top: 5rem;
+  left: 5rem;
+  background: $color-fadedblack;
+  border: 1px solid $color-accent1;
+  border-radius: 2.5rem;
+  box-sizing: border-box;
+  color: $color-accent1;
+  cursor: pointer;
+  font: 300 2.8rem/100% 'Formula Condensed';
+  height: 5rem;
+  padding: 1rem 2rem 0;
+  transition: all 400ms ease;
+  &:hover {
+    box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-dirtywhite;
+  }
+}
+
+.projectpage h3 {
+  font: 400 6.4rem/100% 'Neue Montreal';
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-right: 5rem;
+  span {
+    font: 700 6.4rem/100% 'Formula Condensed';
+    letter-spacing: 0.01em;
+  }
+}
+
+.projectpage_info {
+  font: 400 1.6rem/120% 'Neue Montreal';
+  text-transform: uppercase;
+  white-space: pre;
+  padding-top: 2rem;
+  div {
+    margin-bottom: 0.2rem;
+    span {
+      display: inline-block;
+      &:first-of-type {
+        width: 9.5rem;
+      }
+    }
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 300ms ease-in-out;
+    position: relative;
+    &::after {
+      content: "";
+      display: block;
+      width: 0%;
+      height: 0.1rem;
+      position: absolute;
+      background: $color-accent1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 300ms ease-in-out;
+    }
+    &:hover {
+      color: $color-accent1;
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.projectpage_carousel {
+  width: 100%;
+  height: 40rem;
+  background: $color-accent1;
+  position: relative;
+}
+
+.projectpage_carousel_nav {
+  position: absolute;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.projectpage_visit {
+  position: absolute;
+  bottom: 5rem;
+  right: 5rem;
+  background: $color-accent1;
+  border: 1px solid $color-fadedblack;
+  border-radius: 2.5rem;
+  box-sizing: border-box;
+  color: $color-fadedblack;
+  cursor: pointer;
+  font: 300 2.8rem/100% 'Formula Condensed';
+  height: 5rem;
+  padding: 1rem 2rem 0;
+  transition: all 400ms ease;
+  &:hover {
+    box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-accent1;
+    border: 1px solid $color-accent1;
+    background: $color-fadedblack
+  }
+}

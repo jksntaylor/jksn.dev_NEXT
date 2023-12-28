@@ -132,9 +132,9 @@ const Landing = () => {
     </group>
     <group ref={r_arrow} position={[width / 2 - width * 0.065, height/2 - width * 0.065, 0]}>
       <Html
-        // center
-        transform
-        distanceFactor={3.4}
+        center
+        // transform
+        // distanceFactor={3.4}
         zIndexRange={[5, 6]}
         wrapperClass="landing_arrow"
         portal={{ current: scrollData.fixed }}

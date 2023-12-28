@@ -56,6 +56,10 @@ html {
 	overflow: hidden;
 }
 
+button {
+	all: unset;
+}
+
 #root {
 	width: 100vw;
 	height: 100vh;

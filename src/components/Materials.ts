@@ -49,8 +49,8 @@ const LandingMaterial = shaderMaterial({
 
     // text distortion
     vec4 texture0 = texture2D(u_texture, distortUV(uv, uv2, 0.001 + mask * 0.2));
-    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.004 + mask * 0.2));
-    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.003 + mask * 0.2));
+    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.005 + mask * 0.2));
+    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.006 + mask * 0.2));
     vec4 color;
 
     // color blending

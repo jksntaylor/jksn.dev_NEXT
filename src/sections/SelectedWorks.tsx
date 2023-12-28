@@ -1,8 +1,8 @@
 // libraries
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
-import { useCallback, useEffect, useRef } from 'react'
 import { Vector3 } from "three"
 import gsap from 'gsap'
 // modules
@@ -24,31 +24,30 @@ const SelectedWorks = () => {
       'case_study.role',
       'case_study.client1',
       'case_study.client2',
-      'case_study.images'
+      'case_study.images',
+      'case_study.project_description'
     ]
   })
 
   type t_project = {
-    case_study: {
-      data: {
-        cover_image: { url: string }
-        awards: { award?: string }[]
-        project_title: { text: string }[]
-        project_link: { url: string }
-        project_link_text: string
-        year: string
-        role: string
-        client1: string
-        client2?: string
-        images: { url: string }[]
-      }
-    }
+    cover_image: { url: string }
+    awards: { award?: string }[]
+    project_title: { text: string }[]
+    project_link: { url: string }
+    project_link_text: string
+    year: string
+    role: string
+    client1: string
+    client2?: string
+    images: { project_image: { url: string }}[]
+    project_description: string
   }
 
   const { viewport } = useThree()
   const { factor } = viewport
   const { width, height } = viewport.getCurrentViewport()
 
+  // Refs for animation
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_top = useRef<THREE.Group>(null!)
   const r_side = useRef<THREE.Group>(null!)
@@ -60,14 +59,21 @@ const SelectedWorks = () => {
   const r_projects = useRef<THREE.Group>(null!)
   const r_projectsInner = useRef<HTMLDivElement>(null!)
   const r_projectsImages = useRef<THREE.Group>(null!)
-
-  const r_projectPage = useRef<HTMLDivElement>(null!)
+  // Refs for dynamic content
+  const r_projPage = useRef<HTMLDivElement>(null!)
+  const r_projTitle = useRef<HTMLHeadingElement>(null!)
+  const r_projRole = useRef<HTMLSpanElement>(null!)
+  const r_projLink = useRef<HTMLAnchorElement>(null!)
+  const r_projClients = useRef<HTMLSpanElement>(null!)
+  const r_projYear = useRef<HTMLSpanElement>(null!)
+  const r_projDescription = useRef<HTMLDivElement>(null!)
+  const r_projCarousel = useRef<HTMLDivElement>(null!)
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
 
-  const projContainerHeight = (height - width * 0.046) * 10 * factor
-  const projContainerOffsetY = ((projContainerHeight / 10) * 9) / factor
+  const projContainerHeight = useMemo(() => (height - width * 0.046) * 10 * factor, [height, width, factor])
+  const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
 
   const projectTL = gsap.timeline({ paused: true })
 
@@ -104,6 +110,21 @@ const SelectedWorks = () => {
       window.removeEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
     } else {
       r_projectOpen.current = i
+      // Dynamic Content
+      if (home) {
+        const {
+          project_title, project_link, project_link_text, client1, client2, role, year, project_description
+        } = home.data.case_studies[i].case_study.data as t_project
+
+        r_projTitle.current.innerHTML = project_title[0].text
+        r_projLink.current.href = project_link.url
+        r_projLink.current.innerText = project_link_text
+        r_projClients.current.innerText = `${client1} ${client2 ? `, ${client2}` : ''}`
+        r_projRole.current.innerText = role
+        r_projYear.current.innerText = year
+        r_projDescription.current.innerText = project_description
+      }
+
       container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.33) })
       projectTL.play()
       image.material.u_zoom = height / (width * 0.444) + 0.05
@@ -120,7 +141,7 @@ const SelectedWorks = () => {
       container.style.overflow = 'hidden'
       window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
     }
-  }, [projectTL, height, width])
+  }, [projectTL, home])
 
   useEffect(() => {
     setTimeout(() => {
@@ -136,12 +157,14 @@ const SelectedWorks = () => {
         x: width * 0.915 * factor,
         duration: 1,
         ease: 'expo.inOut'
-      }, 0.1)
+      }, 0.1).set(r_projPage.current, {
+        visibility: 'visible'
+      }, 0.8)
     }, 50);
 
     window.addEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
     return () => window.removeEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
-  }, [toggleProject, projectTL, width, factor])
+  }, [toggleProject, projectTL])
 
   const Image: React.FC<{url: string, position: Vector3 }> = ({ url, position }) => {
     const r_mat = useRef<t_SelectedWorksMaterial>(null!)
@@ -172,7 +195,7 @@ const SelectedWorks = () => {
         style={{ width: width * 0.625 * factor, height: projContainerHeight }}
         position={[0, -projContainerHeight/factor/2 + (height - width * 0.046)/4, 0]}
         zIndexRange={[0, 100]} >
-        {home && home.data.case_studies.map((proj: t_project, i: number) => {
+        {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => {
           const { awards, client1, client2, year, role, project_link, project_link_text, project_title } = proj.case_study.data
           return <div className={`selectedworks_project selectedworks_project-${i%2?'right':'left'}`} key={i}>
             {awards[1] && <div className="selectedworks_project_awards">
@@ -188,7 +211,7 @@ const SelectedWorks = () => {
         })}
       </Html>
       <group position={[0, 0, 0]} ref={r_projectsImages}>
-        {home && home.data.case_studies.map((proj: t_project, i: number) => { // extract into component (<SelectedWorksImage url={url}/>)
+        {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => { // extract into component (<SelectedWorksImage url={url}/>)
           const posX = i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187
           return <Image url={proj.case_study.data.cover_image.url} position={new Vector3(posX, (height - width * 0.046) * -i, 0)} key={i}/>
         })}
@@ -304,16 +327,40 @@ const SelectedWorks = () => {
       </BorderedPlane>
     </group>
     {renderProjects()}
-    <Html
+    {home && <Html
       center
       // transform
       // distanceFactor={3.4}
       zIndexRange={[7, 8]}
+      className="projectpage"
+      ref={r_projPage}
       portal={{ current: scrollData.fixed }}
-      ref={r_projectPage}
+      style={{
+        height: height * factor,
+        width: width * 0.915 * factor,
+        pointerEvents: 'none',
+        visibility: 'hidden'
+      }}
     >
-
-    </Html>
+      <button className="projectpage_back" onClick={() => toggleProject(r_projectOpen.current)}>← <em>B</em>AC<em>K</em></button>
+      <div className="projectpage_top">
+        <h3 ref={r_projTitle}>TEMP TITLE</h3>
+        <div className="projectpage_info">
+          <div><span>Role:</span><span ref={r_projRole}/></div>
+          <div><span>Link:</span><a ref={r_projLink}/></div>
+          <div><span>Clients:</span><span ref={r_projClients}/></div>
+          <div><span>Year:</span><span ref={r_projYear}/></div>
+        </div>
+        <p ref={r_projDescription}/>
+      </div>
+      <div className="projectpage_carousel" ref={r_projCarousel}>
+      </div>
+      <div className="projectpage_carousel_nav">
+        <button>←</button>
+        <button>→</button>
+      </div>
+      <button className="projectpage_visit">VI<em>S</em>IT S<em>ITE</em> →</button>
+    </Html>}
   </group>
 }
 
