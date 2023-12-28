@@ -28,6 +28,23 @@ const SelectedWorks = () => {
     ]
   })
 
+  type t_project = {
+    case_study: {
+      data: {
+        cover_image: { url: string }
+        awards: { award?: string }[]
+        project_title: { text: string }[]
+        project_link: { url: string }
+        project_link_text: string
+        year: string
+        role: string
+        client1: string
+        client2?: string
+        images: { url: string }[]
+      }
+    }
+  }
+
   const { viewport } = useThree()
   const { factor } = viewport
   const { width, height } = viewport.getCurrentViewport()
@@ -41,6 +58,10 @@ const SelectedWorks = () => {
   const r_sidebarText = useRef<HTMLDivElement>(null!)
   const r_sidebarTextSpan = useRef<HTMLSpanElement>(null!)
   const r_projects = useRef<THREE.Group>(null!)
+  const r_projectsInner = useRef<HTMLDivElement>(null!)
+  const r_projectsImages = useRef<THREE.Group>(null!)
+
+  const r_projectPage = useRef<HTMLDivElement>(null!)
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
@@ -50,43 +71,73 @@ const SelectedWorks = () => {
 
   const projectTL = gsap.timeline({ paused: true })
 
-  const handleEscape = (e: KeyboardEvent) => {
-    if (r_projectOpen.current > -1) {
-      e.preventDefault()
-      if (e.key === 'Escape') toggleProject(r_projectOpen.current)
-    }
-  }
 
   const toggleProject = useCallback((i: number) => {
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (r_projectOpen.current > -1) {
+        e.preventDefault()
+        if (e.key === 'Escape') toggleProject(r_projectOpen.current)
+      }
+    }
+
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
+    const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+
     if (r_projectOpen.current === i) {
       r_projectOpen.current = -1
       container.style.overflow = 'hidden auto'
-      projectTL.reverse()
+
+      gsap.to(image.position, {
+        x: i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
+        duration: 2,
+        ease: 'power2.inOut'
+      })
+      gsap.to(image.material, {
+        u_progress: 0,
+        duration: 2,
+        ease: 'power1.inOut'
+      })
+
+      setTimeout(() => { projectTL.reverse() }, 1000);
+
       window.removeEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
-      // reverse project opening
     } else {
       r_projectOpen.current = i
       container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.33) })
       projectTL.play()
+      image.material.u_zoom = height / (width * 0.444) + 0.05
+      gsap.to(image.position, {
+        x: -width / 2,
+        duration: 2,
+        ease: 'power2.inOut'
+      })
+      gsap.to(image.material, {
+        u_progress: 1,
+        duration: 2,
+        ease: 'power1.inOut'
+      })
       container.style.overflow = 'hidden'
       window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
-      // open project
     }
-  }, [projectTL])
+  }, [projectTL, height, width])
 
   useEffect(() => {
-    projectTL.to(r_side.current.position, {
-      x: -width * 0.285,
-      duration: 0.8,
-      ease: 'expo.inOut'
-    }).to(r_top.current.position, {
-      y: width * 0.046,
-      duration: 0.5,
-      ease: 'expo.inOut'
-    }, 0.3).to('.selectedworks_projects', {
-      x: width * 0.915 * factor,
-    }, 0)
+    setTimeout(() => {
+      projectTL.to(r_side.current.position, {
+        x: -width * 0.285,
+        duration: 0.8,
+        ease: 'expo.inOut'
+      }).to(r_top.current.position, {
+        y: width * 0.046,
+        duration: 0.5,
+        ease: 'expo.inOut'
+      }, 0.3).to(r_projectsInner.current, {
+        x: width * 0.915 * factor,
+        duration: 1,
+        ease: 'expo.inOut'
+      }, 0.1)
+    }, 50);
 
     window.addEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
     return () => window.removeEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
@@ -116,15 +167,16 @@ const SelectedWorks = () => {
         // transform
         // distanceFactor={3.4}
         className="selectedworks_projects"
+        ref={r_projectsInner}
         portal={{ current: scrollData.fixed }}
         style={{ width: width * 0.625 * factor, height: projContainerHeight }}
         position={[0, -projContainerHeight/factor/2 + (height - width * 0.046)/4, 0]}
         zIndexRange={[0, 100]} >
-        {home && home.data.case_studies.map((proj, i) => {
+        {home && home.data.case_studies.map((proj: t_project, i: number) => {
           const { awards, client1, client2, year, role, project_link, project_link_text, project_title } = proj.case_study.data
           return <div className={`selectedworks_project selectedworks_project-${i%2?'right':'left'}`} key={i}>
             {awards[1] && <div className="selectedworks_project_awards">
-              {awards.map((award: { award: string }, i: number) => <span key={i}>★&nbsp;{award.award}&nbsp;★</span>)}
+              {awards.map((award, i: number) => <span key={i}>★&nbsp;{award.award}&nbsp;★</span>)}
             </div>}
             <div className="selectedworks_project_info">
               <span>{year}<br/>{client1}<br/>{client2 && client2}</span>
@@ -135,8 +187,8 @@ const SelectedWorks = () => {
           </div>
         })}
       </Html>
-      <group position={[0, 0, 0]}>
-        {home && home.data.case_studies.map((proj, i) => { // extract into component (<SelectedWorksImage url={url}/>)
+      <group position={[0, 0, 0]} ref={r_projectsImages}>
+        {home && home.data.case_studies.map((proj: t_project, i: number) => { // extract into component (<SelectedWorksImage url={url}/>)
           const posX = i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187
           return <Image url={proj.case_study.data.cover_image.url} position={new Vector3(posX, (height - width * 0.046) * -i, 0)} key={i}/>
         })}
@@ -150,20 +202,15 @@ const SelectedWorks = () => {
     const projectsOffset = scrollData.range(0.26, 0.3)
     const counterOffset = scrollData.range(0.525, 0.035) // just for counter first column (0 - 1)
     const sectionOffset2 = scrollData.range(0.56, 0.05)
-    // section horizontal movement
 
     if (sectionOffset === 0 && r_wrapper.current.position.x !== width * 0.9575) {
       r_wrapper.current.position.x = width * 0.9575
     } else if (sectionOffset > 0 && sectionOffset2 < 1) {
+      // section horizontal movement
       r_wrapper.current.position.x = -width * 0.915 * sectionOffset + width * 0.9575 - width * 0.915 * sectionOffset2
 
-      if (r_counter1.current) {
-        r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
-      }
-
-      if (r_counter2.current) {
-        r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
-      }
+      if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
+      if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
 
       if (r_sidebar.current) { // sidebar width + position calculation
         r_sidebar.current.scale.x = (1 - sidebarOffset)* 0.8 + 0.2
@@ -177,9 +224,7 @@ const SelectedWorks = () => {
         r_sidebarText.current.style.fontSize = `${(1 - sidebarOffset) * 19.75 + 5.25}rem`
       }
 
-      if (r_sidebarTextSpan.current) {
-        r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
-      }
+      if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
 
       if (r_projects.current) { // project "scrolling"
         r_projects.current.position.x = (width * (1 - sidebarOffset) * 0.7125) + width * 0.1
@@ -252,16 +297,23 @@ const SelectedWorks = () => {
           portal={{ current: scrollData.fixed }}
           zIndexRange={[1, 2]}
           ref={r_sidebarText}
-          style={{
-            width: width * 0.915 * factor,
-            height: (height - width * 0.046) * factor
-          }}
+          style={{ width: width * 0.915 * factor, height: (height - width * 0.046) * factor }}
         >
           <h4>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></h4>
         </Html>
       </BorderedPlane>
     </group>
     {renderProjects()}
+    <Html
+      center
+      // transform
+      // distanceFactor={3.4}
+      zIndexRange={[7, 8]}
+      portal={{ current: scrollData.fixed }}
+      ref={r_projectPage}
+    >
+
+    </Html>
   </group>
 }
 

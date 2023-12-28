@@ -82,14 +82,25 @@ export type t_LandingMaterial = {
 
 const SelectedWorksMaterial = shaderMaterial({
   u_texture: new Texture(),
+  u_progress: 0,
+  u_zoom: 1,
   u_delta: 0
 },`
   uniform float u_delta;
+  uniform float u_progress;
+  uniform float u_zoom;
   varying vec2 v_uv;
 
   void main() {
     vec4 pos = vec4(position, 1.0);
     pos.y -= u_delta * sin(uv.x * 50.) * 100.;
+
+    float angle = u_progress * 3.14159 / 2.;
+    float wave = cos(angle);
+    float c = sin(length(uv - .5) * 15. + u_progress * 12.) * .5 + .5;
+    pos.x *= mix(1., u_zoom + wave * c, u_progress);
+    pos.y *= mix(1., u_zoom + wave * c, u_progress);
+
     gl_Position = projectionMatrix * modelViewMatrix * pos;
     v_uv = uv;
   }
@@ -110,6 +121,8 @@ const SelectedWorksMaterial = shaderMaterial({
 
 export type t_SelectedWorksMaterial = {
   u_texture: Texture
+  u_progress: number
+  u_zoom: number
   u_delta: number
 }
 
