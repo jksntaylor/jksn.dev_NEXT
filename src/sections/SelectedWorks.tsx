@@ -1,5 +1,5 @@
 // libraries
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
@@ -8,11 +8,12 @@ import gsap from 'gsap'
 // modules
 import { t_SelectedWorksMaterial } from "../components/Materials"
 import BorderedPlane from "../components/BorderedPlane"
+import { t_project } from '../utils/types'
 import { colors } from "../utils/constants"
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
-
+  const { viewport } = useThree()
   const [home] = useSinglePrismicDocument('homepage', {
     fetchLinks: [
       'case_study.cover_image',
@@ -29,36 +30,20 @@ const SelectedWorks = () => {
     ]
   })
 
-  type t_project = {
-    cover_image: { url: string }
-    awards: { award?: string }[]
-    project_title: { text: string }[]
-    project_link: { url: string }
-    project_link_text: string
-    year: string
-    role: string
-    client1: string
-    client2?: string
-    images: { project_image: { url: string }}[]
-    project_description: string
-  }
-
-  const { viewport } = useThree()
-  const { factor } = viewport
-  const { width, height } = viewport.getCurrentViewport()
+  const { width, height, factor } = viewport.getCurrentViewport()
 
   // Refs for animation
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_top = useRef<THREE.Group>(null!)
+  const r_sidebar = useRef<THREE.Group & { children: [THREE.Mesh, THREE.Mesh] }>(null!)
   const r_side = useRef<THREE.Group>(null!)
   const r_counter1 = useRef<HTMLDivElement>(null!)
   const r_counter2 = useRef<HTMLDivElement>(null!)
-  const r_sidebar = useRef<THREE.Group & { children: [THREE.Mesh, THREE.Mesh] }>(null!)
   const r_sidebarText = useRef<HTMLDivElement>(null!)
   const r_sidebarTextSpan = useRef<HTMLSpanElement>(null!)
   const r_projects = useRef<THREE.Group>(null!)
   const r_projectsInner = useRef<HTMLDivElement>(null!)
-  const r_projectsImages = useRef<THREE.Group>(null!)
+  const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_SelectedWorksMaterial })[] }>(null!);
   // Refs for dynamic content
   const r_projPage = useRef<HTMLDivElement>(null!)
   const r_projTitle = useRef<HTMLHeadingElement>(null!)
@@ -68,6 +53,7 @@ const SelectedWorks = () => {
   const r_projYear = useRef<HTMLSpanElement>(null!)
   const r_projDescription = useRef<HTMLDivElement>(null!)
   const r_projCarousel = useRef<HTMLDivElement>(null!)
+  const r_projVisit = useRef<HTMLAnchorElement>(null!)
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
@@ -75,15 +61,13 @@ const SelectedWorks = () => {
   const projContainerHeight = useMemo(() => (height - width * 0.046) * 10 * factor, [height, width, factor])
   const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
 
-  const projectTL = gsap.timeline({ paused: true })
+  const projectTL = gsap.timeline({ paused: true, onStart: () => { console.log('starting tl') } })
 
-
-  const toggleProject = useCallback((i: number) => {
-
+  const toggleProject = (i: number) => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (r_projectOpen.current > -1) {
+      if (e.key === 'Escape' && r_projectOpen.current !== -1) {
         e.preventDefault()
-        if (e.key === 'Escape') toggleProject(r_projectOpen.current)
+        toggleProject(r_projectOpen.current)
       }
     }
 
@@ -92,23 +76,25 @@ const SelectedWorks = () => {
 
     if (r_projectOpen.current === i) {
       r_projectOpen.current = -1
+      console.log('closing proj')
       container.style.overflow = 'hidden auto'
+      if (image) {
 
-      gsap.to(image.position, {
-        x: i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
-        duration: 2,
-        ease: 'power2.inOut'
-      })
-      gsap.to(image.material, {
-        u_progress: 0,
-        duration: 2,
-        ease: 'power1.inOut'
-      })
-
-      setTimeout(() => { projectTL.reverse() }, 1000);
-
+        gsap.to(image.position, {
+          x: i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
+          duration: 2,
+          ease: 'power2.inOut'
+        })
+        gsap.to(image.material, {
+          u_progress: 0,
+          duration: 2,
+          ease: 'power1.inOut',
+        })
+      }
+      projectTL.reverse()
       window.removeEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
     } else {
+      console.log('opening proj')
       r_projectOpen.current = i
       // Dynamic Content
       if (home) {
@@ -118,39 +104,41 @@ const SelectedWorks = () => {
 
         r_projTitle.current.innerHTML = project_title[0].text
         r_projLink.current.href = project_link.url
+        r_projVisit.current.href = project_link.url
         r_projLink.current.innerText = project_link_text
         r_projClients.current.innerText = `${client1} ${client2 ? `, ${client2}` : ''}`
         r_projRole.current.innerText = role
         r_projYear.current.innerText = year
-        r_projDescription.current.innerText = project_description
+        if (project_description) r_projDescription.current.innerText = project_description
       }
-
-      container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.33) })
+      // End Dynamic Content
+      container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.332) })
       projectTL.play()
-      image.material.u_zoom = height / (width * 0.444) + 0.05
-      gsap.to(image.position, {
-        x: -width / 2,
-        duration: 2,
-        ease: 'power2.inOut'
-      })
-      gsap.to(image.material, {
-        u_progress: 1,
-        duration: 2,
-        ease: 'power1.inOut'
-      })
+      if (image) {
+        gsap.to(image.position, {
+          x: -width / 2,
+          duration: 2,
+          ease: 'power1.inOut'
+        })
+        gsap.to(image.material, {
+          u_progress: 1,
+          duration: 2,
+          ease: 'power1.inOut'
+        })
+      }
       container.style.overflow = 'hidden'
       window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
     }
-  }, [projectTL, home])
+  }
 
   useEffect(() => {
     setTimeout(() => {
       projectTL.to(r_side.current.position, {
-        x: -width * 0.285,
+        x: -width * (0.285 + 0.2 /* padding */),
         duration: 0.8,
         ease: 'expo.inOut'
       }).to(r_top.current.position, {
-        y: width * 0.046,
+        y: width * (0.046 + 0.5 /* padding */),
         duration: 0.5,
         ease: 'expo.inOut'
       }, 0.3).to(r_projectsInner.current, {
@@ -160,23 +148,36 @@ const SelectedWorks = () => {
       }, 0.1).set(r_projPage.current, {
         visibility: 'visible'
       }, 0.8)
-    }, 50);
+    }, 200);
+  }, [projectTL, width, factor])
 
+  useEffect(() => {
     window.addEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
-    return () => window.removeEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
-  }, [toggleProject, projectTL])
+    return () => {
+      window.removeEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const Image: React.FC<{url: string, position: Vector3 }> = ({ url, position }) => {
+  const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_SelectedWorksMaterial>(null!)
+    const r_mesh = useRef<THREE.Mesh>(null!)
     const texture = useTexture(url)
 
     useEffect(() => { r_mat.current.u_texture = texture }, [texture])
+    useEffect(() => {
+      r_mesh.current.position.set(
+        index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
+        (height - width * 0.046) * -index,
+        0
+      )
+    }, [index])
 
     useFrame(() => { if(r_mat.current.u_delta !== r_delta.current) r_mat.current.u_delta = r_delta.current })
 
-    return <mesh position={position}>
+    return <mesh ref={r_mesh}>
       <planeGeometry args={[width * 0.374 , width * 0.444, 48, 1]} />
-      <selectedWorksMaterial ref={r_mat} />
+      <selectedWorksMaterial ref={r_mat} u_zoom={height / (width * 0.444) + 0.05}/>
     </mesh>
   }
 
@@ -186,9 +187,9 @@ const SelectedWorks = () => {
       position= {[width * 0.0575, -width * 0.023, 0]}
     >
       <Html
-        center
-        // transform
-        // distanceFactor={3.4}
+        // center
+        transform
+        distanceFactor={3.4}
         className="selectedworks_projects"
         ref={r_projectsInner}
         portal={{ current: scrollData.fixed }}
@@ -211,10 +212,7 @@ const SelectedWorks = () => {
         })}
       </Html>
       <group position={[0, 0, 0]} ref={r_projectsImages}>
-        {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => { // extract into component (<SelectedWorksImage url={url}/>)
-          const posX = i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187
-          return <Image url={proj.case_study.data.cover_image.url} position={new Vector3(posX, (height - width * 0.046) * -i, 0)} key={i}/>
-        })}
+        {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => <Image url={proj.case_study.data.cover_image.url} key={i} index={i}/>)}
       </group>
     </group>
   }
@@ -259,6 +257,10 @@ const SelectedWorks = () => {
     }
   })
 
+  const moveCarousel = (direction: 'left' | 'right') => {
+    console.log('move carousel: ', direction)
+  }
+
   return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
     <group ref={r_top}>
       <BorderedPlane // Section Number
@@ -268,9 +270,9 @@ const SelectedWorks = () => {
         position={new Vector3(-width / 2 + width * 0.0665, height / 2 - width * 0.023 + 1/factor, 0)}
       >
         <Html
-          center
-          // transform
-          // distanceFactor={3.4}
+          // center
+          transform
+          distanceFactor={3.4}
           className="section_number"
           portal={{ current: scrollData.fixed }}
           zIndexRange={[0, 100]}
@@ -283,9 +285,9 @@ const SelectedWorks = () => {
         position={new Vector3(-width / 2 + width * 0.524 + 0.5/factor, height / 2 - width * 0.023 + 1/factor, 0)}
       >
         <Html
-          center
-          // transform
-          // distanceFactor={3.4}
+          // center
+          transform
+          distanceFactor={3.4}
           zIndexRange={[5, 6]}
           portal={{ current: scrollData.fixed }}
           className="selectedworks_counter"
@@ -313,9 +315,9 @@ const SelectedWorks = () => {
         groupRef={r_sidebar}
       >
         <Html
-          center
-          // transform
-          // distanceFactor={3.4}
+          // center
+          transform
+          distanceFactor={3.4}
           className="selectedworks_sidebar"
           portal={{ current: scrollData.fixed }}
           zIndexRange={[1, 2]}
@@ -344,22 +346,34 @@ const SelectedWorks = () => {
     >
       <button className="projectpage_back" onClick={() => toggleProject(r_projectOpen.current)}>← <em>B</em>AC<em>K</em></button>
       <div className="projectpage_top">
-        <h3 ref={r_projTitle}>TEMP TITLE</h3>
+        <h3 ref={r_projTitle} />
         <div className="projectpage_info">
-          <div><span>Role:</span><span ref={r_projRole}/></div>
-          <div><span>Link:</span><a ref={r_projLink}/></div>
-          <div><span>Clients:</span><span ref={r_projClients}/></div>
-          <div><span>Year:</span><span ref={r_projYear}/></div>
+          <div>
+            <span>Role:</span>
+            <span ref={r_projRole}/>
+          </div>
+          <div>
+            <span>Link:</span>
+            <a ref={r_projLink}/>
+          </div>
+          <div>
+            <span>Clients:</span>
+            <span ref={r_projClients}/>
+          </div>
+          <div>
+            <span>Year:</span>
+            <span ref={r_projYear}/>
+          </div>
         </div>
         <p ref={r_projDescription}/>
       </div>
       <div className="projectpage_carousel" ref={r_projCarousel}>
       </div>
       <div className="projectpage_carousel_nav">
-        <button>←</button>
-        <button>→</button>
+        <button onClick={() => moveCarousel('left')}>←</button>
+        <button onClick={() => moveCarousel('right')}>→</button>
       </div>
-      <button className="projectpage_visit">VI<em>S</em>IT S<em>ITE</em> →</button>
+      <a className="projectpage_visit" ref={r_projVisit} target='_blank' rel='noopener noreferrer'>VI<em>S</em>IT S<em>ITE</em> →</a>
     </Html>}
   </group>
 }

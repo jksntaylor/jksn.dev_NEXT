@@ -1,5 +1,5 @@
 @import url('./reset.css');
-@import url('./assets/fonts/typography.css');
+@import url('../assets/fonts/typography.css');
 
 $color-dirtywhite: #F0E6E6;
 $color-dirtywhiteHalf: #757575;
@@ -24,6 +24,19 @@ main {
   }
 }
 
+.resize_cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+  background: $color-fadedblack;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .menu, .menu_drawer {
   border-right: 1px solid $color-dirtywhite;
   background: $color-fadedblack;
@@ -34,6 +47,7 @@ main {
   justify-content: center;
   align-items: center;
   border-left: 1px solid $color-dirtywhite;
+  z-index: 50;
 }
 
 .menu svg {
@@ -340,11 +354,13 @@ main {
   padding-top: 2rem;
   div {
     margin-bottom: 0.2rem;
-    span {
+    overflow: hidden;
+    span, a {
+      transform: translateY(2rem);
       display: inline-block;
-      &:first-of-type {
-        width: 9.5rem;
-      }
+    }
+    span:first-of-type {
+      width: 9.5rem;
     }
   }
   a {
@@ -388,6 +404,7 @@ main {
 }
 
 .projectpage_visit {
+  text-decoration: none;
   position: absolute;
   bottom: 5rem;
   right: 5rem;
@@ -399,7 +416,7 @@ main {
   cursor: pointer;
   font: 300 2.8rem/100% 'Formula Condensed';
   height: 5rem;
-  padding: 1rem 2rem 0;
+  padding: 1.5rem 2rem 0;
   transition: all 400ms ease;
   &:hover {
     box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;

@@ -95,11 +95,11 @@ const Menu = () => {
     if (!r_menuOpen.current) menuTL.tweenTo(0)
   }
 
-  const handleLinkClick = (index: number) => {
-    toggleMenu()
-    const event = new CustomEvent('toggleProject', { detail: index })
-    window.dispatchEvent(event)
-  }
+  // const handleLinkClick = (index: number) => {
+  //   toggleMenu()
+  //   const event = new CustomEvent('toggleProject', { detail: index })
+  //   window.dispatchEvent(event)
+  // }
 
   return <group>
     <BorderedPlane
@@ -118,11 +118,10 @@ const Menu = () => {
         portal={{ current: scrollData.fixed }}
         style={{
           width: width * 0.94 * factor + 8,
-          height: height * factor
+          height: height * factor + 4
         }}
       >
         <div className="menu_links">
-          <h3 onClick={() => handleLinkClick(5)}>something</h3>
         </div>
         <h4>
           <span>Available for Freelance</span>

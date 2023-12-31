@@ -9,7 +9,7 @@ import BorderedPlane from "../components/BorderedPlane"
 const Welcome = () => {
   const scrollData = useScroll()
   const { viewport } = useThree()
-  const { width, height } = viewport.getCurrentViewport()
+  const { width, height, factor } = viewport.getCurrentViewport()
   const r_text = useRef<HTMLHeadingElement>(null!)
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_definition = useRef<HTMLDivElement>(null!)
@@ -33,8 +33,8 @@ const Welcome = () => {
   })
   return <BorderedPlane
     width={width * 2.35}
-    height={height + 2/viewport.factor}
-    factor={viewport.factor}
+    height={height + 2/factor}
+    factor={factor}
     position={new Vector3(width * 1.675, 0, 0.0002)}
     groupRef={r_wrapper}
   >

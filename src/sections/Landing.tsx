@@ -94,14 +94,19 @@ const Landing = () => {
       r_wrapper.current.position.x = -width * 0.915 * sectionOffset
       r_material.current.u_time += delta
 
-      r_arrowInner.current.style.transform = `scale(${Math.min(sliceOffset + 1, 1.4)})`
+      r_arrowInner.current.style.transform = `scale(${Math.min(sliceOffset + 1, 1.4)}) `
+      if (r_arrowInner.current.parentElement) r_arrowInner.current.parentElement.style.transform = `rotate(${-360 * sliceOffset}deg)`
       r_arrow.current.position.x = width / 2 - width * 0.065 - width * 0.05 * sliceOffset
       r_arrow.current.position.y = height/2 - width * 0.065 - height * 0.7 * sliceOffset
-      r_arrow.current.rotation.z = Math.PI * 2 * sliceOffset
+      // r_arrowInner.current.rotation.z = Math.PI * 2 * sliceOffset
       r_arrow.current.scale.set(sliceOffset * .5 + 1, sliceOffset *  .5 + 1, 1)
-    } else if (sectionOffset === 1 && r_wrapper.current.position.x !== -width * 0.915) {
-      r_slices.forEach(slice => slice.current.position.x = width * 0.0425)
-      r_wrapper.current.position.x = -width * 0.915
+    } else if (sectionOffset === 1) {
+      if (r_wrapper.current.position.x !== -width * 0.915) {
+        r_wrapper.current.position.x = -width * 0.915
+      }
+      if (r_slices[0].current.position.x !== width * 0.0425) {
+        r_slices.forEach(slice => slice.current.position.x = width * 0.0425)
+      }
     }
 
     if (r_mouse.current.target.distanceTo(r_mouse.current.current) > 0.01) {
