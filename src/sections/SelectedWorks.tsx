@@ -14,6 +14,8 @@ import { colors } from "../utils/constants"
 const SelectedWorks = () => {
   const scrollData = useScroll()
   const { viewport } = useThree()
+  const { width, height, factor } = viewport.getCurrentViewport()
+
   const [home] = useSinglePrismicDocument('homepage', {
     fetchLinks: [
       'case_study.cover_image',
@@ -29,8 +31,6 @@ const SelectedWorks = () => {
       'case_study.project_description'
     ]
   })
-
-  const { width, height, factor } = viewport.getCurrentViewport()
 
   // Refs for animation
   const r_wrapper = useRef<THREE.Group>(null!)
@@ -61,7 +61,7 @@ const SelectedWorks = () => {
   const projContainerHeight = useMemo(() => (height - width * 0.046) * 10 * factor, [height, width, factor])
   const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
 
-  const projectTL = gsap.timeline({ paused: true, onStart: () => { console.log('starting tl') } })
+  const projectTL = useRef(gsap.timeline())
 
   const toggleProject = (i: number) => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -71,30 +71,19 @@ const SelectedWorks = () => {
       }
     }
 
+    const handleResize = () => {
+      if (r_projectOpen.current !== -1) toggleProject(r_projectOpen.current)
+    }
+
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
     const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_SelectedWorksMaterial }
-
     if (r_projectOpen.current === i) {
       r_projectOpen.current = -1
-      console.log('closing proj')
       container.style.overflow = 'hidden auto'
-      if (image) {
-
-        gsap.to(image.position, {
-          x: i % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
-          duration: 2,
-          ease: 'power2.inOut'
-        })
-        gsap.to(image.material, {
-          u_progress: 0,
-          duration: 2,
-          ease: 'power1.inOut',
-        })
-      }
-      projectTL.reverse()
+      projectTL.current.reverse()
+      window.removeEventListener('resize', handleResize)
       window.removeEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
     } else {
-      console.log('opening proj')
       r_projectOpen.current = i
       // Dynamic Content
       if (home) {
@@ -113,27 +102,8 @@ const SelectedWorks = () => {
       }
       // End Dynamic Content
       container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.332) })
-      projectTL.play()
-      if (image) {
-        gsap.to(image.position, {
-          x: -width / 2,
-          duration: 2,
-          ease: 'power1.inOut'
-        })
-        gsap.to(image.material, {
-          u_progress: 1,
-          duration: 2,
-          ease: 'power1.inOut'
-        })
-      }
-      container.style.overflow = 'hidden'
-      window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
-    }
-  }
-
-  useEffect(() => {
-    setTimeout(() => {
-      projectTL.to(r_side.current.position, {
+      projectTL.current.kill()
+      projectTL.current = gsap.timeline().to(r_side.current.position, {
         x: -width * (0.285 + 0.2 /* padding */),
         duration: 0.8,
         ease: 'expo.inOut'
@@ -147,9 +117,20 @@ const SelectedWorks = () => {
         ease: 'expo.inOut'
       }, 0.1).set(r_projPage.current, {
         visibility: 'visible'
-      }, 0.8)
-    }, 200);
-  }, [projectTL, width, factor])
+      }, 0.8).to(image.position, {
+        x: -width / 2,
+        duration: 2,
+        ease: 'power1.inOut'
+      }, 0.5).to(image.material, {
+        u_progress: 1,
+        duration: 2,
+        ease: 'power1.inOut'
+      }, 0.5)
+      container.style.overflow = 'hidden'
+      window.addEventListener('resize', handleResize)
+      window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
+    }
+  }
 
   useEffect(() => {
     window.addEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
@@ -163,21 +144,16 @@ const SelectedWorks = () => {
     const r_mat = useRef<t_SelectedWorksMaterial>(null!)
     const r_mesh = useRef<THREE.Mesh>(null!)
     const texture = useTexture(url)
-
     useEffect(() => { r_mat.current.u_texture = texture }, [texture])
     useEffect(() => {
-      r_mesh.current.position.set(
-        index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
-        (height - width * 0.046) * -index,
-        0
-      )
+        r_mesh.current.position.set(index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187, (height - width * 0.046) * -index, 0)
     }, [index])
 
     useFrame(() => { if(r_mat.current.u_delta !== r_delta.current) r_mat.current.u_delta = r_delta.current })
 
     return <mesh ref={r_mesh}>
-      <planeGeometry args={[width * 0.374 , width * 0.444, 48, 1]} />
-      <selectedWorksMaterial ref={r_mat} u_zoom={height / (width * 0.444) + 0.05}/>
+      <planeGeometry args={[viewport.width * 0.374 , viewport.width * 0.444, 48, 1]} />
+      <selectedWorksMaterial ref={r_mat} u_zoom={viewport.height / (viewport.width * 0.444) + 0.05}/>
     </mesh>
   }
 

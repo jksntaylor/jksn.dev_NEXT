@@ -12,7 +12,7 @@ import SelectedWorks from './sections/SelectedWorks'
 import { colors } from './utils/constants'
 // styles
 import './styles/App.scss'
-import favicon from '/public/android-chrome-512x512.png'
+import cover from './assets/images/resize_cover.png'
 
 function App() {
 
@@ -25,7 +25,7 @@ function App() {
     clearTimeout(resetTimer.current)
     resetTimer.current = setTimeout(() => {
       setShowResizeCover(false)
-    }, 1000);
+    }, 2000);
   }, [])
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function App() {
       </Canvas>
     </Suspense>
     {showResizeCover && <div className='resize_cover'>
-      <img src={favicon} alt="favicon" />
+      <img src={cover} alt="resizing cover" />
     </div>}
   </main>
 }
