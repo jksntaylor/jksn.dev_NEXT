@@ -46,6 +46,7 @@ const SelectedWorks = () => {
   const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_SelectedWorksMaterial })[] }>(null!);
   // Refs for dynamic content
   const r_projPage = useRef<HTMLDivElement>(null!)
+  const r_projButton = useRef<HTMLButtonElement>(null!)
   const r_projTitle = useRef<HTMLHeadingElement>(null!)
   const r_projRole = useRef<HTMLSpanElement>(null!)
   const r_projLink = useRef<HTMLAnchorElement>(null!)
@@ -91,7 +92,7 @@ const SelectedWorks = () => {
           project_title, project_link, project_link_text, client1, client2, role, year, project_description
         } = home.data.case_studies[i].case_study.data as t_project
 
-        r_projTitle.current.innerHTML = project_title[0].text
+        r_projTitle.current.innerHTML = project_title[0].text.split('<br/>').map((el, i) => `<div>${i === 0 ? `<span>${el}</span>` : el}</div>`).join('')
         r_projLink.current.href = project_link.url
         r_projVisit.current.href = project_link.url
         r_projLink.current.innerText = project_link_text
@@ -105,27 +106,64 @@ const SelectedWorks = () => {
       projectTL.current.kill()
       projectTL.current = gsap.timeline().to(r_side.current.position, {
         x: -width * (0.285 + 0.2 /* padding */),
-        duration: 0.8,
+        duration: 0.85,
         ease: 'expo.inOut'
       }).to(r_top.current.position, {
         y: width * (0.046 + 0.5 /* padding */),
         duration: 0.5,
         ease: 'expo.inOut'
-      }, 0.3).to(r_projectsInner.current, {
+      }, 0.4).to(r_projectsInner.current, {
         x: width * 0.915 * factor,
-        duration: 1,
+        duration: 1.85,
         ease: 'expo.inOut'
-      }, 0.1).set(r_projPage.current, {
-        visibility: 'visible'
-      }, 0.8).to(image.position, {
+      }, 0.2).to(image.position, {
         x: -width / 2,
-        duration: 2,
-        ease: 'power1.inOut'
+        duration: 2.35,
+        ease: 'power2.inOut'
       }, 0.5).to(image.material, {
         u_progress: 1,
-        duration: 2,
-        ease: 'power1.inOut'
-      }, 0.5)
+        duration: 2.35,
+        ease: 'power2.inOut'
+      }, 0.5).set(r_projPage.current, {
+        visibility: 'visible'
+      }, 1.0).to('.projectpage_back', {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 0.25,
+        ease: 'expo.inOut'
+      }, 1.0).to([r_projTitle.current.children[0].children[0], r_projTitle.current.children[1].children[0]], {
+        y: 0,
+        duration: 0.85,
+        stagger: 0.2,
+        ease: 'expo.inOut'
+      }, 1.35).to('.projectpage_info > div > *', {
+        y: 0,
+        duration: 0.35,
+        stagger: 0.05,
+        ease: 'expo.inOut'
+      }, 1.95).to(r_projDescription.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.85,
+        ease: 'expo.inOut'
+      }, 2.15).to(r_projCarousel.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.85,
+        ease: 'expo.inOut'
+      }, 2.3).to('.projectpage_carousel_nav', {
+        y: 0,
+        opacity: 1,
+        duration: 0.35,
+        ease: 'expo.inOut'
+      }, 2.85).to('.projectpage_visit', {
+        y: 0,
+        scale: 1,
+        opacity: 1,
+        duration: 0.85,
+        ease: 'expo.inOut'
+      }, 2.95)
       container.style.overflow = 'hidden'
       window.addEventListener('resize', handleResize)
       window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
@@ -320,7 +358,9 @@ const SelectedWorks = () => {
         visibility: 'hidden'
       }}
     >
-      <button className="projectpage_back" onClick={() => toggleProject(r_projectOpen.current)}>← <em>B</em>AC<em>K</em></button>
+      <button className="projectpage_back" onClick={() => toggleProject(r_projectOpen.current)}>
+        ← <em>B</em>AC<em>K</em>
+      </button>
       <div className="projectpage_top">
         <h3 ref={r_projTitle} />
         <div className="projectpage_info">

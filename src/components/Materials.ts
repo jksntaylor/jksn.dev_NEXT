@@ -97,7 +97,7 @@ const SelectedWorksMaterial = shaderMaterial({
 
     float angle = u_progress * 3.14159 / 2.;
     float wave = cos(angle);
-    float c = sin(length(uv - .5) * 15. + u_progress * 12.) * .5 + .5;
+    float c = sin(length(uv - .5) * 20. + u_progress * 16.) * .5 + .5;
     pos.x *= mix(1., u_zoom + wave * c, u_progress);
     pos.y *= mix(1., u_zoom + wave * c, u_progress);
 

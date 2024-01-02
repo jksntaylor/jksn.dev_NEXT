@@ -317,6 +317,8 @@ main {
     font: 400 1.6rem/120% 'Neue Montreal';
     letter-spacing: 0.03em;
     margin: 2rem 0;
+    transform: translateY(50%);
+    opacity: 0;
   }
 }
 
@@ -333,11 +335,13 @@ main {
   font: 300 2.8rem/100% 'Formula Condensed';
   height: 5rem;
   padding: 1rem 2rem 0;
-  transition: all 400ms ease;
+  transition: box-shadow 400ms ease, color 400ms ease;
   &:hover {
     box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
     color: $color-dirtywhite;
   }
+  transform: translateY(50%) scale(0.8);
+  opacity: 0;
 }
 
 .projectpage h3 {
@@ -345,9 +349,16 @@ main {
   letter-spacing: -0.03em;
   text-transform: uppercase;
   margin-right: 5rem;
-  span {
+  div:last-of-type span {
     font: 700 6.4rem/100% 'Formula Condensed';
     letter-spacing: 0.01em;
+  }
+  div {
+    overflow: hidden;
+    span {
+      display: inline-block;
+      transform: translateY(110%);
+    }
   }
 }
 
@@ -370,7 +381,7 @@ main {
   a {
     text-decoration: none;
     color: inherit;
-    transition: all 300ms ease-in-out;
+    transition: color 300ms ease-in-out;
     position: relative;
     &::after {
       content: "";
@@ -382,7 +393,7 @@ main {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      transition: all 300ms ease-in-out;
+      transition: width 300ms ease-in-out;
     }
     &:hover {
       color: $color-accent1;
@@ -398,13 +409,30 @@ main {
   height: 40rem;
   background: $color-accent1;
   position: relative;
+  transform: translateY(30%);
+  opacity: 0;
 }
 
 .projectpage_carousel_nav {
   position: absolute;
   bottom: 5rem;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(50%);
+  opacity: 0;
+  button {
+    font: 300 4.8rem/100% 'Formula Condensed';
+    color: $color-accent1;
+    border: 1px solid $color-accent1;
+    padding: 0.5rem 1.5rem 0;
+    border-radius: 50%;
+    margin: 0 2.5rem;
+    cursor: pointer;
+    transition: all 400ms ease;
+    &:hover {
+      box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+      color: $color-dirtywhite;
+    }
+  }
 }
 
 .projectpage_visit {
@@ -421,7 +449,9 @@ main {
   font: 300 2.8rem/100% 'Formula Condensed';
   height: 5rem;
   padding: 1.5rem 2rem 0;
-  transition: all 400ms ease;
+  transition: box-shadow 400ms ease, color 400ms ease, border 400ms ease, background 400ms ease;
+  transform: translateY(50%) scale(0.8);
+  opacity: 0;
   &:hover {
     box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
     color: $color-accent1;
