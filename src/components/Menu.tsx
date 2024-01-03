@@ -67,9 +67,9 @@ const Menu = () => {
   }, [menuTL, factor, width])
 
   const handleEscape = (e: KeyboardEvent) => {
-    if (r_menuOpen.current) {
-      e.preventDefault()
-      if (e.key === 'Escape') toggleMenu()
+    if (r_menuOpen.current && e.key === 'Escape') {
+      e.stopPropagation()
+      toggleMenu()
     }
   }
 
@@ -101,6 +101,10 @@ const Menu = () => {
   //   window.dispatchEvent(event)
   // }
 
+  const MenuLink: React.FC<{str: string}> = ({str}) => {
+    return <div>{str}</div>
+  }
+
   return <group>
     <BorderedPlane
       width={width * 0.94 + 8/factor}
@@ -122,6 +126,13 @@ const Menu = () => {
         }}
       >
         <div className="menu_links">
+          <MenuLink str="tiKtok&nbsp;tOp&nbsp;moMents"/>
+          <MenuLink str="Rre&nbsp;ventUreS"/>
+          <MenuLink str="gEnieS"/>
+          <MenuLink str="soURce&nbsp;7"/>
+          <MenuLink str="reaLtiMe&nbsp;roBotics"/>
+          <MenuLink str="leVi's&nbsp;501&nbsp;Day"/>
+          <MenuLink str="huGe&nbsp;iNc"/>
         </div>
         <h4>
           <span>Available for Freelance</span>

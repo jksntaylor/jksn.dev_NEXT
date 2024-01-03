@@ -46,15 +46,15 @@ const SelectedWorks = () => {
   const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_SelectedWorksMaterial })[] }>(null!);
   // Refs for dynamic content
   const r_projPage = useRef<HTMLDivElement>(null!)
-  const r_projButton = useRef<HTMLButtonElement>(null!)
   const r_projTitle = useRef<HTMLHeadingElement>(null!)
   const r_projRole = useRef<HTMLSpanElement>(null!)
   const r_projLink = useRef<HTMLAnchorElement>(null!)
   const r_projClients = useRef<HTMLSpanElement>(null!)
   const r_projYear = useRef<HTMLSpanElement>(null!)
   const r_projDescription = useRef<HTMLDivElement>(null!)
-  const r_projCarousel = useRef<HTMLDivElement>(null!)
   const r_projVisit = useRef<HTMLAnchorElement>(null!)
+  const r_projCarousel = useRef<HTMLDivElement>(null!)
+  const r_projCarouselIndex = useRef(0)
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
@@ -65,10 +65,16 @@ const SelectedWorks = () => {
   const projectTL = useRef(gsap.timeline())
 
   const toggleProject = (i: number) => {
-    const handleEscape = (e: KeyboardEvent) => {
+
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && r_projectOpen.current !== -1) {
-        e.preventDefault()
         toggleProject(r_projectOpen.current)
+      } else if (r_projectOpen.current > -1) {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'a') {
+          moveCarousel('left')
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'd') {
+          moveCarousel('right')
+        }
       }
     }
 
@@ -83,7 +89,7 @@ const SelectedWorks = () => {
       container.style.overflow = 'hidden auto'
       projectTL.current.reverse()
       window.removeEventListener('resize', handleResize)
-      window.removeEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
+      window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     } else {
       r_projectOpen.current = i
       // Dynamic Content
@@ -103,7 +109,9 @@ const SelectedWorks = () => {
       }
       // End Dynamic Content
       container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.332) })
+
       projectTL.current.kill()
+
       projectTL.current = gsap.timeline().to(r_side.current.position, {
         x: -width * (0.285 + 0.2 /* padding */),
         duration: 0.85,
@@ -118,11 +126,11 @@ const SelectedWorks = () => {
         ease: 'expo.inOut'
       }, 0.2).to(image.position, {
         x: -width / 2,
-        duration: 2.35,
+        duration: 2.15,
         ease: 'power2.inOut'
       }, 0.5).to(image.material, {
         u_progress: 1,
-        duration: 2.35,
+        duration: 2.15,
         ease: 'power2.inOut'
       }, 0.5).set(r_projPage.current, {
         visibility: 'visible'
@@ -132,7 +140,7 @@ const SelectedWorks = () => {
         y: 0,
         duration: 0.25,
         ease: 'expo.inOut'
-      }, 1.0).to([r_projTitle.current.children[0].children[0], r_projTitle.current.children[1].children[0]], {
+      }, 1.35).to([r_projTitle.current.children[0].children[0], r_projTitle.current.children[1].children[0]], {
         y: 0,
         duration: 0.85,
         stagger: 0.2,
@@ -164,9 +172,10 @@ const SelectedWorks = () => {
         duration: 0.85,
         ease: 'expo.inOut'
       }, 2.95)
+
       container.style.overflow = 'hidden'
       window.addEventListener('resize', handleResize)
-      window.addEventListener('keydown', (e: KeyboardEvent) => handleEscape(e))
+      window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     }
   }
 
@@ -272,7 +281,11 @@ const SelectedWorks = () => {
   })
 
   const moveCarousel = (direction: 'left' | 'right') => {
-    console.log('move carousel: ', direction)
+    if (direction === 'right' && r_projCarouselIndex.current < 3 /* # of proj images - 1 */) {
+      ++r_projCarouselIndex.current
+    } else if (direction === 'left' && r_projCarouselIndex.current > 0) {
+      --r_projCarouselIndex.current
+    }
   }
 
   return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
