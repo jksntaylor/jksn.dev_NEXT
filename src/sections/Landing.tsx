@@ -46,18 +46,18 @@ const Landing = () => {
     fillOpacity: 1,
     color: colors.dirtyWhite,
     lineHeight: 1,
-    letterSpacing: -0.02,
+    letterSpacing: 0,
     maxWidth: 12,
     font: '/fonts/NeueMontreal400.woff',
-    scale: new Vector3(width / 12, width / 12, 1),
+    scale: new Vector3(width / 12.5, width / 12, 1),
     anchorX: 'left',
     anchorY: 'bottom'
   }
 
   const renderText = () => <>
-    <Text ref={r_text1} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 12) * 2 + 0.1, 0]}>JACKSON TAYLOR IS A</Text>
-    <Text ref={r_text2} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 12) + 0.1, 0]}>CREATIVE DEVELOPER</Text>
-    <Text ref={r_text3} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + 0.1, 0]}>BASED IN SALT LAKE  </Text>
+    <Text ref={r_text1} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 12) * 2 + 0.1, 0]}>HEY, I'M JACKSON TAYLOR</Text>
+    <Text ref={r_text2} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 12) + 0.1, 0]}>A CREATIVE DEVELOPER</Text>
+    <Text ref={r_text3} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + 0.1, 0]}>BASED IN SALT LAKE CITY</Text>
   </>
 
   const renderSlices = (slices: React.ReactNode[]) => slices.map((slice, i) => <BorderedPlane

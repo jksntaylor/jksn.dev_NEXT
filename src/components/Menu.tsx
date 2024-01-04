@@ -7,6 +7,7 @@ import gsap from "gsap"
 // modules
 import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
+import { lerp } from "../utils/functions"
 
 const Menu = () => {
   const scrollData = useScroll()
@@ -35,40 +36,39 @@ const Menu = () => {
         y: '200%',
         opacity: 0,
         duration: 0.5
-      }, 0.5).to(r_path3.current, {
+      }, 0.7).to(r_path3.current, {
         y: '-200%',
         opacity: 0,
         duration: 0.5
-      }, 0.5).to(r_path2.current, {
+      }, 0.7).to(r_path2.current, {
         strokeDasharray: '100% 0%',
         duration: 0.5
-      }, 0.5).to(r_path2b.current, {
+      }, 0.7).to(r_path2b.current, {
         opacity: 1,
         duration: 0.5
-      }, 0.5).to(r_path2.current, {
+      }, 0.7).to(r_path2.current, {
         rotate: -75,
         scaleX: 1.2,
         duration: 0.75,
         transformOrigin: 'center',
         ease: 'expo.inOut'
-      }, 0.75).to(r_path2b.current, {
+      }, 0.95).to(r_path2b.current, {
         rotate: -165,
         scaleX: 1.2,
         duration: 0.75,
         transformOrigin: 'center',
         ease: 'expo.inOut'
-      }, 0.75).to(r_drawer.current.position, {
+      }, 0.95).to(r_drawer.current.position, {
         x: width * 0.0275,
         duration: 0.75,
         ease: 'expo.inOut'
-      }, 0.75)
+      }, 0.95)
     }, 50);
 
   }, [menuTL, factor, width])
 
   const handleEscape = (e: KeyboardEvent) => {
     if (r_menuOpen.current && e.key === 'Escape') {
-      e.stopPropagation()
       toggleMenu()
     }
   }
@@ -88,29 +88,101 @@ const Menu = () => {
   }
 
   const mouseEnter = () => {
-    if (!r_menuOpen.current) menuTL.tweenTo(0.5)
+    if (!r_menuOpen.current) menuTL.tweenTo(0.7)
   }
 
   const mouseLeave = () => {
     if (!r_menuOpen.current) menuTL.tweenTo(0)
   }
 
-  // const handleLinkClick = (index: number) => {
-  //   toggleMenu()
-  //   const event = new CustomEvent('toggleProject', { detail: index })
-  //   window.dispatchEvent(event)
-  // }
-
-  const MenuLink: React.FC<{str: string}> = ({str}) => {
-    return <div>{str}</div>
+  const handleLinkClick = (index: number) => {
+    const event = new CustomEvent('toggleProject', { detail: index })
+    window.dispatchEvent(event)
+    toggleMenu()
   }
+
+  // START MenuLink COMPONENT
+  const MenuLink: React.FC<{str: string, projIndex: number}> = ({str, projIndex}) => {
+
+    const r_link = useRef<HTMLDivElement>(null!)
+    const r_cursor = useRef({ target: 0, value: 0 })
+    const r_chars: { el: HTMLSpanElement, pos: number }[] = []
+    const r_intensity = useRef({ value: 0 })
+
+    const intensityTL = gsap.timeline({ paused: true }).to(r_intensity.current, { value: 1, duration: 0.35 })
+
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+      intensityTL.play()
+      const rect = r_link.current.getBoundingClientRect()
+      r_cursor.current.value = (e.clientX - rect.left) / rect.width
+    }
+
+    const handleMouseLeave = () => {
+      intensityTL.reverse()
+    }
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      const rect = r_link.current.getBoundingClientRect()
+      r_cursor.current.target = (e.clientX - rect.left) / rect.width
+    }
+
+    const Character: React.FC<{char: string}> = ({char}) => {
+      const r_span = useRef<HTMLSpanElement>(null!)
+      useEffect(() => {
+        const rect = r_link.current.getBoundingClientRect()
+        r_chars.push({
+          el: r_span.current,
+          pos: (r_span.current.getBoundingClientRect().x - rect.left) / rect.width,
+        })
+      }, [])
+      return <span style={{ display: 'inline-block', transformOrigin: 'bottom'}} ref={r_span}>
+        {char.match(/[A-Z07]/g) ? <em>{char}</em> : char}
+      </span>
+    }
+
+    const generateString = (str: string) => str.split('').map((c, i) => <Character char={c} key={i}/>)
+
+    const animate = () => {
+      if (r_cursor.current.target !== r_cursor.current.value) r_cursor.current.value = lerp(r_cursor.current.value, r_cursor.current.target, 0.05)
+      if (r_intensity.current.value > 0) {
+        r_chars.forEach((char, i) => {
+          const strength = (1.0 - Math.min(Math.max(Math.abs(char.pos - r_cursor.current.value) * 3, 0), 1.0)) * r_intensity.current.value
+          if (i===0) console.log(char.pos)
+          char.el.style.transform = `
+            scale(${char.el.innerHTML === 'i' || char.el.innerHTML === "'" ? 1 + 2 * strength : 1}, ${1 + strength / 2})
+            translateY(${strength * 15}%)
+          `
+          char.el.style.color = `color-mix(in srgb, ${colors.darkModeAccent} ${strength * 250}%, ${colors.dirtyWhite})`
+          if (char.el.innerHTML !== 'i' && char.el.innerHTML !== "&nbsp;") char.el.style.fontWeight = `${200 + strength * 600}`
+        })
+      }
+      requestAnimationFrame(animate)
+    }
+
+    useEffect(() => {
+      animate()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    return <div
+      ref={r_link}
+      className="menu_link"
+      onMouseEnter={e => handleMouseEnter(e)}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={e => handleMouseMove(e)}
+      onClick={() => handleLinkClick(projIndex)}
+    >
+      {generateString(str)}
+    </div>
+  }
+  // END MenuLink COMPONENT
 
   return <group>
     <BorderedPlane
-      width={width * 0.94 + 8/factor}
+      width={width * 0.945}
       height={height}
       factor={factor}
-      position={new Vector3(-width * 0.94 + width * 0.055 - 4/factor, 0, 0)}
+      position={new Vector3(-width * 0.915 + width * 0.03, 0, 0)}
       groupRef={r_drawer}
     >
       <Html
@@ -121,18 +193,18 @@ const Menu = () => {
         zIndexRange={[8, 9]}
         portal={{ current: scrollData.fixed }}
         style={{
-          width: width * 0.94 * factor + 8,
+          width: width * 0.945 * factor,
           height: height * factor + 4
         }}
       >
         <div className="menu_links">
-          <MenuLink str="tiKtok&nbsp;tOp&nbsp;moMents"/>
-          <MenuLink str="Rre&nbsp;ventUreS"/>
-          <MenuLink str="gEnieS"/>
-          <MenuLink str="soURce&nbsp;7"/>
-          <MenuLink str="reaLtiMe&nbsp;roBotics"/>
-          <MenuLink str="leVi's&nbsp;501&nbsp;Day"/>
-          <MenuLink str="huGe&nbsp;iNc"/>
+          <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
+          <MenuLink projIndex={1} str="Rre&nbsp;ventUreS"/>
+          <MenuLink projIndex={2} str="gEnieS"/>
+          <MenuLink projIndex={3} str="soURce&nbsp;7"/>
+          <MenuLink projIndex={4} str="reaLtiMe&nbsp;roBotics"/>
+          <MenuLink projIndex={5} str="leVi's&nbsp;501&nbsp;Day"/>
+          <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
         </div>
         <h4>
           <span>Available for Freelance</span>

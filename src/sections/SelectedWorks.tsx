@@ -1,5 +1,5 @@
 // libraries
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
@@ -29,7 +29,7 @@ const SelectedWorks = () => {
       'case_study.client2',
       'case_study.images',
       'case_study.project_description'
-    ]
+    ],
   })
 
   // Refs for animation
@@ -64,17 +64,13 @@ const SelectedWorks = () => {
 
   const projectTL = useRef(gsap.timeline())
 
-  const toggleProject = (i: number) => {
+  const toggleProject = useCallback((i: number) => {
 
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && r_projectOpen.current !== -1) {
-        toggleProject(r_projectOpen.current)
-      } else if (r_projectOpen.current > -1) {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'a') {
-          moveCarousel('left')
-        } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'd') {
-          moveCarousel('right')
-        }
+      if (e.key === 'Escape' && r_projectOpen.current !== -1) toggleProject(r_projectOpen.current)
+      else if (r_projectOpen.current > -1) {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'a') moveCarousel('left')
+        else if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'd') moveCarousel('right')
       }
     }
 
@@ -84,6 +80,7 @@ const SelectedWorks = () => {
 
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
     const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+
     if (r_projectOpen.current === i) {
       r_projectOpen.current = -1
       container.style.overflow = 'hidden auto'
@@ -94,6 +91,7 @@ const SelectedWorks = () => {
       r_projectOpen.current = i
       // Dynamic Content
       if (home) {
+        console.log('switching content')
         const {
           project_title, project_link, project_link_text, client1, client2, role, year, project_description
         } = home.data.case_studies[i].case_study.data as t_project
@@ -177,15 +175,24 @@ const SelectedWorks = () => {
       window.addEventListener('resize', handleResize)
       window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     }
-  }
+  }, [factor, home, width])
+
+  const externalToggleProject = useCallback((i: number) => {
+    if (home) {
+      if (r_projectOpen.current === i || r_projectOpen.current === -1) toggleProject(i)
+      else {
+        toggleProject(r_projectOpen.current)
+        setTimeout(() => { toggleProject(i) }, 4000);
+      }
+    }
+  }, [toggleProject, home])
 
   useEffect(() => {
-    window.addEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
+    window.addEventListener('toggleProject', ((e: CustomEvent) => externalToggleProject(e.detail)) as EventListener)
     return () => {
-      window.removeEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
+      window.removeEventListener('toggleProject', ((e: CustomEvent) => externalToggleProject(e.detail)) as EventListener)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [externalToggleProject])
 
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_SelectedWorksMaterial>(null!)
