@@ -143,13 +143,12 @@ const Menu = () => {
     const generateString = (str: string) => str.split('').map((c, i) => <Character char={c} key={i}/>)
 
     const animate = () => {
-      if (r_cursor.current.target !== r_cursor.current.value) r_cursor.current.value = lerp(r_cursor.current.value, r_cursor.current.target, 0.05)
+      if (r_cursor.current.target !== r_cursor.current.value) r_cursor.current.value = lerp(r_cursor.current.value, r_cursor.current.target, 0.1)
       if (r_intensity.current.value > 0) {
-        r_chars.forEach((char, i) => {
-          const strength = (1.0 - Math.min(Math.max(Math.abs(char.pos - r_cursor.current.value) * 3, 0), 1.0)) * r_intensity.current.value
-          if (i===0) console.log(char.pos)
+        r_chars.forEach(char => {
+          const strength = (0.75 - Math.min(Math.max(Math.abs(char.pos - r_cursor.current.value) * 3, 0), 0.75)) * r_intensity.current.value
           char.el.style.transform = `
-            scale(${char.el.innerHTML === 'i' || char.el.innerHTML === "'" ? 1 + 2 * strength : 1}, ${1 + strength / 2})
+            scale(${char.el.innerHTML === 'i' || char.el.innerHTML === "'" ? 1 + strength : 1}, ${1 + strength / 2})
             translateY(${strength * 15}%)
           `
           char.el.style.color = `color-mix(in srgb, ${colors.darkModeAccent} ${strength * 250}%, ${colors.dirtyWhite})`
@@ -198,13 +197,22 @@ const Menu = () => {
         }}
       >
         <div className="menu_links">
-          <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
-          <MenuLink projIndex={1} str="Rre&nbsp;ventUreS"/>
-          <MenuLink projIndex={2} str="gEnieS"/>
-          <MenuLink projIndex={3} str="soURce&nbsp;7"/>
-          <MenuLink projIndex={4} str="reaLtiMe&nbsp;roBotics"/>
-          <MenuLink projIndex={5} str="leVi's&nbsp;501&nbsp;Day"/>
-          <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
+          <div className="menu_links-projects">
+            <span>PROJECTS<hr/></span>
+            <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
+            <MenuLink projIndex={1} str="Rre&nbsp;ventUreS"/>
+            <MenuLink projIndex={2} str="gEnieS"/>
+            <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics"/>
+            <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
+            <MenuLink projIndex={5} str="soURce&nbsp;7"/>
+            <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
+            <MenuLink projIndex={7} str="BitsKi"/>
+            <MenuLink projIndex={8} str="bRaiNBasE"/>
+            <MenuLink projIndex={9} str="iNtrOvOke"/>
+          </div>
+          <div className="menu_links-experiments">
+
+          </div>
         </div>
         <h4>
           <span>Available for Freelance</span>

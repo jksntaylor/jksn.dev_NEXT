@@ -91,7 +91,6 @@ const SelectedWorks = () => {
       r_projectOpen.current = i
       // Dynamic Content
       if (home) {
-        console.log('switching content')
         const {
           project_title, project_link, project_link_text, client1, client2, role, year, project_description
         } = home.data.case_studies[i].case_study.data as t_project
@@ -181,8 +180,9 @@ const SelectedWorks = () => {
     if (home) {
       if (r_projectOpen.current === i || r_projectOpen.current === -1) toggleProject(i)
       else {
+        projectTL.current.timeScale(2)
         toggleProject(r_projectOpen.current)
-        setTimeout(() => { toggleProject(i) }, 4000);
+        setTimeout(() => { toggleProject(i) }, 2000);
       }
     }
   }, [toggleProject, home])
