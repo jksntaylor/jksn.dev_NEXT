@@ -63,8 +63,10 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     r_year.current.innerText = year
     if (project_description) r_description.current.innerText = project_description
 
-    r_carousel.current.style.transform = 'none'
     r_carouselIndex.current = 0
+    gsap.set(r_carousel.current, {
+      x: 0
+    })
     for (let i = 0; i < 4; i++) {
       if (images[i] && images[i].project_image.url) {
         r_carousel.current.children[i].src = images[i].project_image.url
