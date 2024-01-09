@@ -1,7 +1,7 @@
 // libraries
 import { Html, useScroll } from "@react-three/drei"
 import { useThree } from "@react-three/fiber"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { Vector3 } from "three"
 import gsap from "gsap"
 // modules
@@ -24,6 +24,22 @@ const Menu = () => {
   const r_menuOpen = useRef(false)
 
   const menuTL = useRef(gsap.timeline({ paused: true }))
+
+  const toggleMenu = useCallback(() => {
+    const container = document.querySelector('main > div > div > div') as HTMLDivElement
+    if (!r_menuOpen.current) {
+      container.style.overflow = 'hidden'
+      menuTL.current.play()
+    } else {
+      container.style.overflow = 'hidden auto'
+      menuTL.current.reverse()
+    }
+    r_menuOpen.current = !r_menuOpen.current
+  }, [])
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (r_menuOpen.current && e.key === 'Escape') toggleMenu()
+  }, [toggleMenu])
 
   useEffect(() => {
     setTimeout(() => {
@@ -64,28 +80,11 @@ const Menu = () => {
         ease: 'expo.inOut'
       }, 0.85)
     }, 50);
-
-  }, [menuTL, factor, width])
-
-  const handleEscape = (e: KeyboardEvent) => {
-    if (r_menuOpen.current && e.key === 'Escape') {
-      toggleMenu()
-    }
-  }
-
-  const toggleMenu = () => {
-    const container = document.querySelector('main > div > div > div') as HTMLDivElement
-    if (!r_menuOpen.current) {
-      container.style.overflow = 'hidden'
-      menuTL.current.play()
       window.addEventListener('keydown', e => handleEscape(e))
-    } else {
-      container.style.overflow = 'hidden auto'
-      menuTL.current.reverse()
+    return () => {
       window.removeEventListener('keydown', e => handleEscape(e))
     }
-    r_menuOpen.current = !r_menuOpen.current
-  }
+  }, [menuTL, factor, width, handleEscape])
 
   const mouseEnter = () => {
     if (!r_menuOpen.current) menuTL.current.tweenTo(0.55)

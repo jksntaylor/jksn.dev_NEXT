@@ -28,7 +28,6 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
 
   const moveCarousel = (direction: 'left' | 'right') => {
-    console.log('direction', r_carouselIndex.current)
     if (direction === 'right' && r_carouselIndex.current < 3 /* # of proj images - 1 */) {
       r_carouselIndex.current += 1
     } else if (direction === 'left' && r_carouselIndex.current > 0) {
@@ -42,8 +41,8 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   }
 
   const handleKey = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') moveCarousel('left')
-    else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') moveCarousel('right')
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'a') moveCarousel('left')
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'd') moveCarousel('right')
   }, [])
 
   const changeContent = (proj: t_project) => {
@@ -67,7 +66,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     gsap.set(r_carousel.current, {
       x: 0
     })
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       if (images[i] && images[i].project_image.url) {
         r_carousel.current.children[i].src = images[i].project_image.url
         r_carousel.current.children[i].style.visibility = 'inherit'
@@ -239,15 +238,15 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
 
   useEffect(() => {
+    window.addEventListener('hideProject', () => hideProject())
+    window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     window.addEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
     window.addEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
-    window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
-    window.addEventListener('hideProject', hideProject)
     return () => {
+      window.removeEventListener('hideProject', () => hideProject())
+      window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       window.removeEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
       window.removeEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
-      window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
-      window.removeEventListener('hideProject', hideProject)
     }
   }, [showProject, swapProject, handleKey])
 
@@ -267,7 +266,10 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
         visibility: 'hidden'
       }}
     >
-      <button className="projectpage_back" onClick={() => window.dispatchEvent(new CustomEvent('toggleProject', { detail: r_projIndex.current }))}>
+      <button className="projectpage_back" onClick={e => {
+        e.preventDefault()
+        window.dispatchEvent(new CustomEvent('toggleProject', { detail: r_projIndex.current }))
+      }}>
         ← <em>B</em>AC<em>K</em>
       </button>
       <div className="projectpage_top">
@@ -276,26 +278,15 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
           <div><span ref={r_title1} /></div>
         </h3>
         <div className="projectpage_info">
-          <div>
-            <span>Role:</span><span ref={r_role}/>
-          </div>
-          <div>
-            <span>Link:</span><a ref={r_link} href="/"/>
-          </div>
-          <div>
-            <span>Clients:</span><span ref={r_clients}/>
-          </div>
-          <div>
-            <span>Year:</span><span ref={r_year}/>
-          </div>
+          <div><span>Role:    </span><span ref={r_role}/></div>
+          <div><span>Link:    </span><a ref={r_link} href="/" target="_blank" rel="noopener noreferrer"/></div>
+          <div><span>Clients: </span><span ref={r_clients}/></div>
+          <div><span>Year:    </span><span ref={r_year}/></div>
         </div>
         <p ref={r_description}/>
       </div>
       <div className="projectpage_carousel" ref={r_carousel}>
-        <img />
-        <img />
-        <img />
-        <img />
+        <img /><img /><img /><img /><img />
       </div>
       <div className="projectpage_carousel_nav">
         <button onClick={() => moveCarousel('left')}>←</button>

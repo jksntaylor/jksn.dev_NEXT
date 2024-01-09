@@ -13,6 +13,7 @@ import { colors } from './utils/constants'
 // styles
 import cover from './assets/images/resize_cover.webp'
 import './styles/App.scss'
+import Experiments from './sections/Experiments'
 
 function App() {
 
@@ -44,7 +45,7 @@ function App() {
           <Landing />
           <Welcome />
           <SelectedWorks />
-          {/* <Experiments /> */}
+          <Experiments />
           {/* <CallToAction /> */}
           {/* <Credits /> */}
         </ScrollControls>

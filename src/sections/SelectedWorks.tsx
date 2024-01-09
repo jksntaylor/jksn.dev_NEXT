@@ -167,10 +167,12 @@ const SelectedWorks = () => {
     }
   }, [toggleProject, handleMenuClick])
 
+  // START IMAGE COMPONENT
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_SelectedWorksMaterial>(null!)
     const r_mesh = useRef<THREE.Mesh>(null!)
     const texture = useTexture(url)
+
     useEffect(() => {
       if (r_mat.current.u_texture !== texture) r_mat.current.u_texture = texture
       r_mesh.current.position.set(index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187, (height - width * 0.046) * -index, 0)
@@ -182,7 +184,7 @@ const SelectedWorks = () => {
       <planeGeometry args={[viewport.width * 0.374 , viewport.width * 0.444, 48, 1]} />
       <selectedWorksMaterial ref={r_mat} u_zoom={viewport.height / (viewport.width * 0.444) + 0.05}/>
     </mesh>
-  }
+  } // END IMAGE COMPONENT
 
   const renderProjects = () => {
     return <group
@@ -262,45 +264,32 @@ const SelectedWorks = () => {
 
   return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
     <group ref={r_top}>
-      <BorderedPlane // Section Number
-        width={width * 0.048 + 2/factor}
+      <BorderedPlane
+        width={width * 0.915}
         height={width * 0.046}
         factor={factor}
-        position={new Vector3(-width / 2 + width * 0.0665, height / 2 - width * 0.023 + 1/factor, 0)}
+        position={new Vector3(0, height / 2 - width * 0.023 + 1/factor, 0)}
       >
         <Html
           // center
           transform
           distanceFactor={3.4}
-          className="section_number"
+          className="selectedworks_top"
           portal={{ current: scrollData.fixed }}
-          zIndexRange={[0, 100]}
-        >02</Html>
-      </BorderedPlane>
-      <BorderedPlane // Project Counter
-        width={width * 0.867 + 1/factor}
-        height={width * 0.046}
-        factor={factor}
-        position={new Vector3(-width / 2 + width * 0.524 + 0.5/factor, height / 2 - width * 0.023 + 1/factor, 0)}
-      >
-        <Html
-          // center
-          transform
-          distanceFactor={3.4}
-          zIndexRange={[5, 6]}
-          portal={{ current: scrollData.fixed }}
-          className="selectedworks_counter"
           style={{
-            width: width * 0.867 * factor,
+            width: width * 0.915 * factor,
             height: width * 0.046 * factor,
-            background: colors.fadedBlack,
             borderBottom: `1px solid ${colors.dirtyWhite}`
           }}
+          zIndexRange={[5, 6]}
         >
-          <div className="selectedworks_counter-mask">
-            <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
-            <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
-            <span>/10</span>
+          <div className='section_number' style={{ width: width * 0.046 * factor }}>02</div>
+          <div className="selectedworks_counter">
+            <div className="selectedworks_counter-mask">
+              <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
+              <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
+              <span>/10</span>
+            </div>
           </div>
         </Html>
       </BorderedPlane>
