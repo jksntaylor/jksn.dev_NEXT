@@ -11,8 +11,8 @@ import Welcome from './sections/Welcome'
 import SelectedWorks from './sections/SelectedWorks'
 import { colors } from './utils/constants'
 // styles
-import './styles/App.scss'
 import cover from './assets/images/resize_cover.png'
+import './styles/App.scss'
 
 function App() {
 

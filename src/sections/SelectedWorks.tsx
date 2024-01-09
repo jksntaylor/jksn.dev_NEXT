@@ -61,12 +61,12 @@ const SelectedWorks = () => {
     }
 
     const handleResize = () => {
-      // if (r_projectOpen.current !== -1) {
-      //   setTimeout(() => {
-      //     r_projectsImages.current.children[r_projectOpen.current].material.u_progress = 1
-      //     r_projectsImages.current.children[r_projectOpen.current].position.setX(-width/2)
-      //   }, 0);
-      // }
+      if (r_projectOpen.current !== -1) {
+        setTimeout(() => {
+          r_projectsImages.current.children[r_projectOpen.current].material.u_progress = 1
+          r_projectsImages.current.children[r_projectOpen.current].position.setX(-width/2)
+        }, 0);
+      }
     }
 
     const container = document.querySelector('main > div > div > div') as HTMLDivElement

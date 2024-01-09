@@ -323,12 +323,16 @@ main {
     box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
     color: $color-dirtywhite;
   }
+  &:active {
+    box-shadow: none;
+    color: $color-dirtywhite;
+  }
 }
 
 .projectpage {
   color: $color-dirtywhite;
   position: relative;
-  padding: 5rem;
+  padding: 4rem 5rem 5rem;
   >* {
     pointer-events: all;
   }
@@ -341,7 +345,7 @@ main {
   p {
     font: 400 1.6rem/120% 'Neue Montreal';
     letter-spacing: 0.03em;
-    margin: 2rem 0;
+    margin: 0 0 2rem;
     transform: translateY(50%);
     opacity: 0;
   }
@@ -363,6 +367,10 @@ main {
   transition: box-shadow 400ms ease, color 400ms ease;
   &:hover {
     box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-dirtywhite;
+  }
+  &:active {
+    box-shadow: none;
     color: $color-dirtywhite;
   }
   transform: translateY(50%) scale(0.8);
@@ -430,12 +438,21 @@ main {
 }
 
 .projectpage_carousel {
-  width: 100%;
+  width: max-content;
   height: 40rem;
-  background: $color-accent1;
   position: relative;
-  transform: translateY(30%);
-  opacity: 0;
+  overflow: visible;
+  display: flex;
+  img {
+    transform: translateY(30%);
+    opacity: 0;
+    height: 100%;
+    width: 60rem;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 5rem;
+    border: 1px solid $color-dirtywhite;
+  }
 }
 
 .projectpage_carousel_nav {
@@ -455,6 +472,10 @@ main {
     transition: all 400ms ease;
     &:hover {
       box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+      color: $color-dirtywhite;
+    }
+    &:active {
+      box-shadow: none;
       color: $color-dirtywhite;
     }
   }
@@ -479,6 +500,12 @@ main {
   opacity: 0;
   &:hover {
     box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-accent1;
+    border: 1px solid $color-accent1;
+    background: $color-fadedblack
+  }
+  &:active {
+    box-shadow: none;
     color: $color-accent1;
     border: 1px solid $color-accent1;
     background: $color-fadedblack

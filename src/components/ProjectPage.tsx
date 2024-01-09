@@ -17,8 +17,8 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   const r_year = useRef<HTMLSpanElement>(null!)
   const r_description = useRef<HTMLParagraphElement>(null!)
   const r_visit = useRef<HTMLAnchorElement>(null!)
-  const r_carousel = useRef<HTMLDivElement>(null!)
-  const r_carouselIndex = useRef(-1)
+  const r_carousel = useRef<HTMLDivElement & { children: HTMLImageElement[] }>(null!)
+  const r_carouselIndex = useRef(0)
   const r_projIndex = useRef(-1)
 
   const scrollData = useScroll()
@@ -28,17 +28,29 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
 
   const moveCarousel = (direction: 'left' | 'right') => {
+    console.log('direction', r_carouselIndex.current)
     if (direction === 'right' && r_carouselIndex.current < 3 /* # of proj images - 1 */) {
-      ++r_carouselIndex.current
+      r_carouselIndex.current += 1
     } else if (direction === 'left' && r_carouselIndex.current > 0) {
-      --r_carouselIndex.current
+      r_carouselIndex.current -= 1
     }
+    gsap.to(r_carousel.current, {
+      x: `-${65 * r_carouselIndex.current}rem`,
+      ease: 'expo.out',
+      duration: 2,
+    })
   }
+
+  const handleKey = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') moveCarousel('left')
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') moveCarousel('right')
+  }, [])
 
   const changeContent = (proj: t_project) => {
     const {
       project_title, project_link, project_link_text,
-      client1, client2, role, year, project_description
+      client1, client2, role, year,
+      project_description, images
     } = proj
 
     r_title0.current.innerText = project_title[0].text.split('<br/>')[0]
@@ -50,6 +62,18 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     r_role.current.innerText = role
     r_year.current.innerText = year
     if (project_description) r_description.current.innerText = project_description
+
+    r_carousel.current.style.transform = 'none'
+    r_carouselIndex.current = 0
+    for (let i = 0; i < 4; i++) {
+      if (images[i] && images[i].project_image.url) {
+        r_carousel.current.children[i].src = images[i].project_image.url
+        r_carousel.current.children[i].style.visibility = 'inherit'
+      } else {
+        r_carousel.current.children[i].src = ''
+        r_carousel.current.children[i].style.visibility = 'hidden'
+      }
+    }
   }
 
   const showProject = useCallback((details: { proj: t_project, i: number}) => {
@@ -77,20 +101,21 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
         y: 0,
         opacity: 1,
         duration: 0.85
-      }, 2.15).to(r_carousel.current, {
+      }, 2.15).to(r_carousel.current.children, {
         y: 0,
         opacity: 1,
-        duration: 0.85
-      }, 2.3).to('.projectpage_carousel_nav', {
+        stagger: 0.05,
+        duration: 0.5
+      }, 2.2).to('.projectpage_carousel_nav', {
         y: 0,
         opacity: 1,
         duration: 0.35
-      }, 2.4).to(r_visit.current, {
+      }, 2.3).to(r_visit.current, {
         y: 0,
         scale: 1,
         opacity: 1,
         duration: 0.85
-      }, 2.5)
+      }, 2.4)
     }
   }, [])
 
@@ -107,7 +132,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       y: '50%',
       scale: 0.8,
       opacity: 0,
-      duration: 0.25
+      duration: 0.85
     }).to([r_title0.current, r_title1.current], {
       y: '110%',
       duration: 0.85,
@@ -120,20 +145,21 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       y: '50%',
       opacity: 0,
       duration: 0.85
-    }, 0.8).to(r_carousel.current, {
+    }, 0.8).to(r_carousel.current.children, {
       y: '30%',
       opacity: 0,
-      duration: 0.85
-    }, 1.15).to('.projectpage_carousel_nav', {
+      stagger: 0.05,
+      duration: 0.5
+    }, 1.05).to('.projectpage_carousel_nav', {
       y: '50%',
       opacity: 0,
       duration: 0.35
-    }, 1.25).to(r_visit.current, {
+    }, 1.15).to(r_visit.current, {
       y: '50%',
       scale: 0.8,
       opacity: 0,
       duration: 0.85
-    }, 1.35)
+    }, 1.25)
   }
 
   // used in menu component
@@ -176,9 +202,10 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       y: '50%',
       opacity: 0,
       duration: 0.5
-    }, 0.5).to(r_carousel.current, {
+    }, 0.5).to(r_carousel.current.children, {
       y: '30%',
       opacity: 0,
+      stagger: 0.1,
       duration: 0.5
     }, 0.6).to(nextImage.position, {
       x: -width / 2,
@@ -200,9 +227,10 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       y: 0,
       opacity: 1,
       duration: 0.85
-    }, 1.7).to(r_carousel.current, {
+    }, 1.7).to(r_carousel.current.children, {
       y: 0,
       opacity: 1,
+      stagger: 0.1,
       duration: 0.85
     }, 1.9)
   }, [ref, width])
@@ -211,13 +239,15 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   useEffect(() => {
     window.addEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
     window.addEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
+    window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     window.addEventListener('hideProject', hideProject)
     return () => {
       window.removeEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
       window.removeEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
+      window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       window.removeEventListener('hideProject', hideProject)
     }
-  }, [showProject, swapProject])
+  }, [showProject, swapProject, handleKey])
 
   return <group>
     <Html
@@ -260,6 +290,10 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
         <p ref={r_description}/>
       </div>
       <div className="projectpage_carousel" ref={r_carousel}>
+        <img />
+        <img />
+        <img />
+        <img />
       </div>
       <div className="projectpage_carousel_nav">
         <button onClick={() => moveCarousel('left')}>←</button>
