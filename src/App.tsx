@@ -11,7 +11,7 @@ import Welcome from './sections/Welcome'
 import SelectedWorks from './sections/SelectedWorks'
 import { colors } from './utils/constants'
 // styles
-import cover from './assets/images/resize_cover.png'
+import cover from './assets/images/resize_cover.webp'
 import './styles/App.scss'
 
 function App() {
