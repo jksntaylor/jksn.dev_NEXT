@@ -50,8 +50,8 @@ const Welcome = () => {
       <div ref={r_definition} className="welcome_definition">
         <span>C<em>R</em>E•<em>A</em>•TI<em>V</em>E <em>D</em>E•V<em>EL</em>•O<em>P</em>•E<em>R</em></span>
         <span>(noun)</span>
-        <h4>A frontend dev who specializes in interactive animation and 3D for the web</h4>
-        <h5>See also: someone who has a knack<br/>for making laptops overheat</h5>
+        <p>A frontend dev who specializes in interactive animation and 3D for the web</p>
+        <p>See also: someone who has a knack<br/>for making laptops overheat</p>
       </div>
     </Html>
   </BorderedPlane>
