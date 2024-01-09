@@ -323,7 +323,7 @@ const SelectedWorks = () => {
           ref={r_sidebarText}
           style={{ width: width * 0.915 * factor, height: (height - width * 0.046) * factor }}
         >
-          <h4>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></h4>
+          <p>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></p>
         </Html>
       </BorderedPlane>
     </group>
