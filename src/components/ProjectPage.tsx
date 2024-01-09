@@ -280,7 +280,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
             <span>Role:</span><span ref={r_role}/>
           </div>
           <div>
-            <span>Link:</span><a ref={r_link}/>
+            <span>Link:</span><a ref={r_link} href="/"/>
           </div>
           <div>
             <span>Clients:</span><span ref={r_clients}/>
