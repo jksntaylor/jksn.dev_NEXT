@@ -8,8 +8,9 @@ import gsap from 'gsap'
 // modules
 import { t_SelectedWorksMaterial } from "../components/Materials"
 import BorderedPlane from "../components/BorderedPlane"
-import { t_project } from '../utils/types'
+import ProjectPage from '../components/ProjectPage'
 import { colors } from "../utils/constants"
+import { t_project } from '../utils/types'
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -44,17 +45,6 @@ const SelectedWorks = () => {
   const r_projects = useRef<THREE.Group>(null!)
   const r_projectsInner = useRef<HTMLDivElement>(null!)
   const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_SelectedWorksMaterial })[] }>(null!);
-  // Refs for dynamic content
-  const r_projPage = useRef<HTMLDivElement>(null!)
-  const r_projTitle = useRef<HTMLHeadingElement>(null!)
-  const r_projRole = useRef<HTMLSpanElement>(null!)
-  const r_projLink = useRef<HTMLAnchorElement>(null!)
-  const r_projClients = useRef<HTMLSpanElement>(null!)
-  const r_projYear = useRef<HTMLSpanElement>(null!)
-  const r_projDescription = useRef<HTMLDivElement>(null!)
-  const r_projVisit = useRef<HTMLAnchorElement>(null!)
-  const r_projCarousel = useRef<HTMLDivElement>(null!)
-  const r_projCarouselIndex = useRef(0)
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
@@ -68,140 +58,123 @@ const SelectedWorks = () => {
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && r_projectOpen.current !== -1) toggleProject(r_projectOpen.current)
-      else if (r_projectOpen.current > -1) {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'a') moveCarousel('left')
-        else if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'd') moveCarousel('right')
-      }
     }
 
     const handleResize = () => {
-      if (r_projectOpen.current !== -1) toggleProject(r_projectOpen.current)
+      // if (r_projectOpen.current !== -1) {
+      //   setTimeout(() => {
+      //     r_projectsImages.current.children[r_projectOpen.current].material.u_progress = 1
+      //     r_projectsImages.current.children[r_projectOpen.current].position.setX(-width/2)
+      //   }, 0);
+      // }
     }
 
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
-    const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_SelectedWorksMaterial }
-
-    if (r_projectOpen.current === i) {
-      r_projectOpen.current = -1
+    if (r_projectOpen.current === i || i === -1) {
+      // HIDE PROJECT PAGE
       container.style.overflow = 'hidden auto'
-      projectTL.current.reverse()
+      window.dispatchEvent(new CustomEvent('hideProject'))
+      projectTL.current.kill()
+      projectTL.current = gsap.timeline({
+        defaults: { ease: 'expo.out' },
+        onComplete: () => { r_projectOpen.current = -1 }
+      }).to(r_projectsInner.current, {
+        x: 0,
+        duration: 1.85
+      }, 1.5).to(r_top.current.position, {
+        y: 0,
+        duration: 0.5
+      }, 1.7).to(r_side.current.position, {
+        x: 0,
+        duration: 0.85
+      }, 1.9)
+
+      const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+      gsap.to(image.position, {
+        x: r_projectOpen.current % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
+        duration: 2.15,
+        ease: 'power2.inOut'
+      })
+      gsap.to(image.material, {
+        u_progress: 0,
+        duration: 2.15,
+        ease: 'power2.inOut'
+      })
+
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     } else {
-      r_projectOpen.current = i
-      // Dynamic Content
-      if (home) {
-        const {
-          project_title, project_link, project_link_text, client1, client2, role, year, project_description
-        } = home.data.case_studies[i].case_study.data as t_project
+      // SHOW PROJECT PAGE
+      setTimeout(() => {
 
-        r_projTitle.current.innerHTML = project_title[0].text.split('<br/>').map((el, i) => `<div>${i === 0 ? `<span>${el}</span>` : el}</div>`).join('')
-        r_projLink.current.href = project_link.url
-        r_projVisit.current.href = project_link.url
-        r_projLink.current.innerText = project_link_text
-        r_projClients.current.innerText = `${client1} ${client2 ? `, ${client2}` : ''}`
-        r_projRole.current.innerText = role
-        r_projYear.current.innerText = year
-        if (project_description) r_projDescription.current.innerText = project_description
-      }
-      // End Dynamic Content
-      container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.332) })
+        r_projectOpen.current = i
+        container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.332) })
+        window.dispatchEvent(new CustomEvent('showProject', { detail: { proj: home?.data.case_studies[i].case_study.data, i: i }}))
 
-      projectTL.current.kill()
+        projectTL.current.kill()
+        projectTL.current = gsap.timeline().to(r_side.current.position, {
+          x: -width * (0.285 + 0.2 /* padding */),
+          duration: 0.85,
+          ease: 'expo.inOut'
+        }).to(r_top.current.position, {
+          y: width * (0.046 + 0.5 /* padding */),
+          duration: 0.5,
+          ease: 'expo.inOut'
+        }, 0.4).to(r_projectsInner.current, {
+          x: width * 0.915 * factor,
+          duration: 1.85,
+          ease: 'expo.inOut'
+        }, 0.2)
 
-      projectTL.current = gsap.timeline().to(r_side.current.position, {
-        x: -width * (0.285 + 0.2 /* padding */),
-        duration: 0.85,
-        ease: 'expo.inOut'
-      }).to(r_top.current.position, {
-        y: width * (0.046 + 0.5 /* padding */),
-        duration: 0.5,
-        ease: 'expo.inOut'
-      }, 0.4).to(r_projectsInner.current, {
-        x: width * 0.915 * factor,
-        duration: 1.85,
-        ease: 'expo.inOut'
-      }, 0.2).to(image.position, {
-        x: -width / 2,
-        duration: 2.15,
-        ease: 'power2.inOut'
-      }, 0.5).to(image.material, {
-        u_progress: 1,
-        duration: 2.15,
-        ease: 'power2.inOut'
-      }, 0.5).set(r_projPage.current, {
-        visibility: 'visible'
-      }, 1.0).to('.projectpage_back', {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.25,
-        ease: 'expo.inOut'
-      }, 1.35).to([r_projTitle.current.children[0].children[0], r_projTitle.current.children[1].children[0]], {
-        y: 0,
-        duration: 0.85,
-        stagger: 0.2,
-        ease: 'expo.inOut'
-      }, 1.35).to('.projectpage_info > div > *', {
-        y: 0,
-        duration: 0.35,
-        stagger: 0.05,
-        ease: 'expo.inOut'
-      }, 1.95).to(r_projDescription.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.85,
-        ease: 'expo.inOut'
-      }, 2.15).to(r_projCarousel.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.85,
-        ease: 'expo.inOut'
-      }, 2.3).to('.projectpage_carousel_nav', {
-        y: 0,
-        opacity: 1,
-        duration: 0.35,
-        ease: 'expo.inOut'
-      }, 2.85).to('.projectpage_visit', {
-        y: 0,
-        scale: 1,
-        opacity: 1,
-        duration: 0.85,
-        ease: 'expo.inOut'
-      }, 2.95)
+        const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_SelectedWorksMaterial }
 
-      container.style.overflow = 'hidden'
-      window.addEventListener('resize', handleResize)
-      window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
+        gsap.to(image.position, {
+          x: -width / 2,
+          duration: 2.15,
+          ease: 'power2.inOut',
+          delay: 0.5
+        })
+        gsap.to(image.material, {
+          u_progress: 1,
+          duration: 2.15,
+          ease: 'power2.inOut',
+          delay: 0.5
+        })
+
+        container.style.overflow = 'hidden'
+        window.addEventListener('resize', handleResize)
+        window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
+      }, 0);
     }
-  }, [factor, home, width])
+  }, [factor, width, home])
 
-  const externalToggleProject = useCallback((i: number) => {
-    if (home) {
-      if (r_projectOpen.current === i || r_projectOpen.current === -1) toggleProject(i)
-      else {
-        projectTL.current.timeScale(2)
-        toggleProject(r_projectOpen.current)
-        setTimeout(() => { toggleProject(i) }, 2000);
-      }
+  const handleMenuClick = useCallback((i: number) => {
+    if (r_projectOpen.current === i) return
+    else if (r_projectOpen.current < 0) toggleProject(i)
+    else {
+      setTimeout(() => {
+        if (home) window.dispatchEvent(new CustomEvent('swapProject', { detail: { prev: r_projectOpen.current, next: i, proj: home.data.case_studies[i].case_study.data }}))
+      }, 10);
     }
   }, [toggleProject, home])
 
   useEffect(() => {
-    window.addEventListener('toggleProject', ((e: CustomEvent) => externalToggleProject(e.detail)) as EventListener)
+    window.addEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
+    window.addEventListener('handleMenuClick', ((e: CustomEvent) => handleMenuClick(e.detail)) as EventListener)
     return () => {
-      window.removeEventListener('toggleProject', ((e: CustomEvent) => externalToggleProject(e.detail)) as EventListener)
+      window.removeEventListener('toggleProject', ((e: CustomEvent) => toggleProject(e.detail)) as EventListener)
+      window.removeEventListener('handleMenuClick', ((e: CustomEvent) => handleMenuClick(e.detail)) as EventListener)
     }
-  }, [externalToggleProject])
+  }, [toggleProject, handleMenuClick])
 
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_SelectedWorksMaterial>(null!)
     const r_mesh = useRef<THREE.Mesh>(null!)
     const texture = useTexture(url)
-    useEffect(() => { r_mat.current.u_texture = texture }, [texture])
     useEffect(() => {
-        r_mesh.current.position.set(index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187, (height - width * 0.046) * -index, 0)
-    }, [index])
+      if (r_mat.current.u_texture !== texture) r_mat.current.u_texture = texture
+      r_mesh.current.position.set(index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187, (height - width * 0.046) * -index, 0)
+    }, [index, texture])
 
     useFrame(() => { if(r_mat.current.u_delta !== r_delta.current) r_mat.current.u_delta = r_delta.current })
 
@@ -287,14 +260,6 @@ const SelectedWorks = () => {
     }
   })
 
-  const moveCarousel = (direction: 'left' | 'right') => {
-    if (direction === 'right' && r_projCarouselIndex.current < 3 /* # of proj images - 1 */) {
-      ++r_projCarouselIndex.current
-    } else if (direction === 'left' && r_projCarouselIndex.current > 0) {
-      --r_projCarouselIndex.current
-    }
-  }
-
   return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
     <group ref={r_top}>
       <BorderedPlane // Section Number
@@ -363,54 +328,7 @@ const SelectedWorks = () => {
       </BorderedPlane>
     </group>
     {renderProjects()}
-    {home && <Html
-      center
-      // transform
-      // distanceFactor={3.4}
-      zIndexRange={[7, 8]}
-      className="projectpage"
-      ref={r_projPage}
-      portal={{ current: scrollData.fixed }}
-      style={{
-        height: height * factor,
-        width: width * 0.915 * factor,
-        pointerEvents: 'none',
-        visibility: 'hidden'
-      }}
-    >
-      <button className="projectpage_back" onClick={() => toggleProject(r_projectOpen.current)}>
-        ← <em>B</em>AC<em>K</em>
-      </button>
-      <div className="projectpage_top">
-        <h3 ref={r_projTitle} />
-        <div className="projectpage_info">
-          <div>
-            <span>Role:</span>
-            <span ref={r_projRole}/>
-          </div>
-          <div>
-            <span>Link:</span>
-            <a ref={r_projLink}/>
-          </div>
-          <div>
-            <span>Clients:</span>
-            <span ref={r_projClients}/>
-          </div>
-          <div>
-            <span>Year:</span>
-            <span ref={r_projYear}/>
-          </div>
-        </div>
-        <p ref={r_projDescription}/>
-      </div>
-      <div className="projectpage_carousel" ref={r_projCarousel}>
-      </div>
-      <div className="projectpage_carousel_nav">
-        <button onClick={() => moveCarousel('left')}>←</button>
-        <button onClick={() => moveCarousel('right')}>→</button>
-      </div>
-      <a className="projectpage_visit" ref={r_projVisit} target='_blank' rel='noopener noreferrer'>VI<em>S</em>IT S<em>ITE</em> →</a>
-    </Html>}
+    <ProjectPage ref={r_projectsImages}/>
   </group>
 }
 

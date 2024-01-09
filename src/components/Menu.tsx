@@ -23,46 +23,46 @@ const Menu = () => {
 
   const r_menuOpen = useRef(false)
 
-  const menuTL = gsap.timeline({ paused: true })
+  const menuTL = useRef(gsap.timeline({ paused: true }))
 
   useEffect(() => {
     setTimeout(() => {
-      menuTL.to([r_path1.current, r_path2.current, r_path3.current], {
+      menuTL.current.to([r_path1.current, r_path2.current, r_path3.current], {
         strokeDashoffset: "+=100%",
         stagger: 0.1,
-        duration: 0.5,
+        duration: 0.35,
         ease: 'power2.inOut'
       }).to(r_path1.current, {
         y: '200%',
         opacity: 0,
         duration: 0.5
-      }, 0.7).to(r_path3.current, {
+      }, 0.6).to(r_path3.current, {
         y: '-200%',
         opacity: 0,
         duration: 0.5
-      }, 0.7).to(r_path2.current, {
+      }, 0.6).to(r_path2.current, {
         strokeDasharray: '100% 0%',
         duration: 0.5
-      }, 0.7).to(r_path2b.current, {
+      }, 0.6).to(r_path2b.current, {
         opacity: 1,
         duration: 0.5
-      }, 0.7).to(r_path2.current, {
+      }, 0.6).to(r_path2.current, {
         rotate: -75,
         scaleX: 1.2,
         duration: 0.75,
         transformOrigin: 'center',
         ease: 'expo.inOut'
-      }, 0.95).to(r_path2b.current, {
+      }, 0.85).to(r_path2b.current, {
         rotate: -165,
         scaleX: 1.2,
         duration: 0.75,
         transformOrigin: 'center',
         ease: 'expo.inOut'
-      }, 0.95).to(r_drawer.current.position, {
+      }, 0.85).to(r_drawer.current.position, {
         x: width * 0.0275,
         duration: 0.75,
         ease: 'expo.inOut'
-      }, 0.95)
+      }, 0.85)
     }, 50);
 
   }, [menuTL, factor, width])
@@ -77,32 +77,35 @@ const Menu = () => {
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
     if (!r_menuOpen.current) {
       container.style.overflow = 'hidden'
-      menuTL.play()
+      menuTL.current.play()
       window.addEventListener('keydown', e => handleEscape(e))
     } else {
       container.style.overflow = 'hidden auto'
-      menuTL.reverse()
+      menuTL.current.reverse()
       window.removeEventListener('keydown', e => handleEscape(e))
     }
     r_menuOpen.current = !r_menuOpen.current
   }
 
   const mouseEnter = () => {
-    if (!r_menuOpen.current) menuTL.tweenTo(0.7)
+    if (!r_menuOpen.current) menuTL.current.tweenTo(0.55)
   }
 
   const mouseLeave = () => {
-    if (!r_menuOpen.current) menuTL.tweenTo(0)
+    if (!r_menuOpen.current) menuTL.current.tweenTo(0)
   }
 
   const handleLinkClick = (index: number) => {
-    const event = new CustomEvent('toggleProject', { detail: index })
-    window.dispatchEvent(event)
+    window.dispatchEvent(new CustomEvent('handleMenuClick', { detail: index }))
     toggleMenu()
   }
 
   // START MenuLink COMPONENT
-  const MenuLink: React.FC<{str: string, projIndex: number}> = ({str, projIndex}) => {
+  const MenuLink: React.FC<{
+    str: string,
+    projIndex: number,
+    altColor?: boolean
+  }> = ({str, projIndex, altColor }) => {
 
     const r_link = useRef<HTMLDivElement>(null!)
     const r_cursor = useRef({ target: 0, value: 0 })
@@ -151,7 +154,7 @@ const Menu = () => {
             scale(${char.el.innerHTML === 'i' || char.el.innerHTML === "'" ? 1 + strength : 1}, ${1 + strength / 2})
             translateY(${strength * 15}%)
           `
-          char.el.style.color = `color-mix(in srgb, ${colors.darkModeAccent} ${strength * 250}%, ${colors.dirtyWhite})`
+          char.el.style.color = `color-mix(in srgb, ${altColor ? colors.darkModeAccent : colors.darkModeAccent_2} ${strength * 250}%, ${colors.dirtyWhite})`
           if (char.el.innerHTML !== 'i' && char.el.innerHTML !== "&nbsp;") char.el.style.fontWeight = `${200 + strength * 600}`
         })
       }
@@ -200,15 +203,15 @@ const Menu = () => {
           <div className="menu_links-projects">
             <span>PROJECTS<hr/></span>
             <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
-            <MenuLink projIndex={1} str="Rre&nbsp;ventUreS"/>
+            <MenuLink projIndex={1} str="Rre&nbsp;ventUreS" altColor/>
             <MenuLink projIndex={2} str="gEnieS"/>
-            <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics"/>
+            <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics" altColor/>
             <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
-            <MenuLink projIndex={5} str="soURce&nbsp;7"/>
+            <MenuLink projIndex={5} str="soURce&nbsp;7" altColor/>
             <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
-            <MenuLink projIndex={7} str="BitsKi"/>
+            <MenuLink projIndex={7} str="BitsKi" altColor/>
             <MenuLink projIndex={8} str="bRaiNBasE"/>
-            <MenuLink projIndex={9} str="iNtrOvOke"/>
+            <MenuLink projIndex={9} str="iNtrOvOke" altColor/>
           </div>
           <div className="menu_links-experiments">
 

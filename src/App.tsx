@@ -1,6 +1,6 @@
 // libraries
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Suspense, useCallback, useEffect, useRef } from 'react'
+import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
 // import { OrbitControls } from '@react-three/drei'
 // modules
@@ -16,16 +16,15 @@ import cover from './assets/images/resize_cover.png'
 
 function App() {
 
-  const [showResizeCover, setShowResizeCover] = useState(false)
-
   const resetTimer = useRef(setTimeout(() => {}))
+  const r_cover = useRef<HTMLDivElement>(null!)
 
   const handleResize = useCallback(() => {
-    setShowResizeCover(true)
+    r_cover.current.style.visibility = 'visible'
     clearTimeout(resetTimer.current)
     resetTimer.current = setTimeout(() => {
-      setShowResizeCover(false)
-    }, 2000);
+      r_cover.current.style.visibility = 'hidden'
+    }, 500);
   }, [])
 
   useEffect(() => {
@@ -35,16 +34,12 @@ function App() {
     }
   }, [handleResize])
 
-  const DisableRender = () => useFrame(() => null, 1000)
-
-
   return <main>
     <Suspense fallback={null}>
       <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
         <color attach="background" args={[colors.fadedBlack]} />
         {/* <OrbitControls enableZoom={false}/> */}
         <ScrollControls pages={10} damping={0.2}>
-          {showResizeCover && <DisableRender />}
           <Menu />
           <Landing />
           <Welcome />
@@ -55,9 +50,9 @@ function App() {
         </ScrollControls>
       </Canvas>
     </Suspense>
-    {showResizeCover && <div className='resize_cover'>
+    <div className='resize_cover' ref={r_cover} style={{ visibility: 'hidden' }}>
       <img src={cover} alt="resizing cover" />
-    </div>}
+    </div>
   </main>
 }
 
