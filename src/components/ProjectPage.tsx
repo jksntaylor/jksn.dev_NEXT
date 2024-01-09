@@ -301,7 +301,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
         <button onClick={() => moveCarousel('left')}>←</button>
         <button onClick={() => moveCarousel('right')}>→</button>
       </div>
-      <a className="projectpage_visit" ref={r_visit} target='_blank' rel='noopener noreferrer'>VI<em>S</em>IT S<em>ITE</em> →</a>
+      <a className="projectpage_visit" ref={r_visit} href="/" target='_blank' rel='noopener noreferrer'>VI<em>S</em>IT S<em>ITE</em> →</a>
     </Html>
   </group>
 })
