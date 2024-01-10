@@ -1,4 +1,4 @@
-import { t_SelectedWorksMaterial } from "../components/Materials"
+import { t_selectedWorksMaterial } from "../components/Materials"
 
 export type t_project = {
   cover_image: { url: string }
@@ -14,4 +14,10 @@ export type t_project = {
   project_description: string
 }
 
-export type t_projectImages = THREE.Group & { children: ( THREE.Mesh & { material: t_SelectedWorksMaterial } )[] }
+export type t_experiment = {
+  cover_image: { url: string }
+  live_link: string
+  title: string
+}
+
+export type t_projectImages = THREE.Group & { children: ( THREE.Mesh & { material: t_selectedWorksMaterial } )[] }

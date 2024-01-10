@@ -73,7 +73,7 @@ const LandingMaterial = shaderMaterial({
   }
 `)
 
-export type t_LandingMaterial = {
+export type t_landingMaterial = {
   u_texture: Texture
   u_aspect: number
   u_mouse: Vector2
@@ -119,21 +119,73 @@ const SelectedWorksMaterial = shaderMaterial({
   }
 `)
 
-export type t_SelectedWorksMaterial = {
+export type t_selectedWorksMaterial = {
   u_texture: Texture
   u_progress: number
   u_zoom: number
   u_delta: number
 }
 
+const ExperimentsMaterial = shaderMaterial({
+  u_texture: new Texture(),
+  u_shift: 0,
+  u_mouse: new Vector2(0, 0),
+  u_mouse_rad: 0,
+  u_time: 0
+},`
+  uniform float u_shift;
+  varying vec2 v_uv;
+
+  void main() {
+    vec4 pos = vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * pos;
+    v_uv = uv;
+    v_uv.x = v_uv.x * 0.5 + u_shift;
+  }
+`,`
+  ${sNoise}
+  uniform sampler2D u_texture;
+  uniform float u_mouse_rad;
+  uniform vec2 u_mouse;
+  uniform float u_time;
+  uniform float u_shift;
+
+  varying vec2 v_uv;
+
+  void main() {
+    vec4 image = texture2D(u_texture, v_uv);
+    vec4 inverted = vec4(1. - image.r, 1. - image.g, 1. - image.b, 1.);
+
+    vec2 mouse = vec2(u_mouse.x, u_mouse.y);
+    mouse.x = mouse.x * 0.548 + u_shift;
+
+    float cursor_distance = distance(vec2(v_uv.x, v_uv.y), mouse);
+    float strength = smoothstep(u_mouse_rad, u_mouse_rad - 0.15, cursor_distance);
+    float offX = v_uv.x + sin(v_uv.y + u_time * .1);
+    float offY = v_uv.y - u_time * 0.1 - cos(u_time * 0.001) * 0.1;
+
+    float n = snoise(vec3(offX, offY, u_time * .1) * 9.);
+    float mask = smoothstep(0.55, 0.6, strength * (n + 1.));
+
+    gl_FragColor = mix(image, inverted, mask);
+  }
+`)
+
+export type t_experimentsMaterial = {
+  u_texture: Texture
+  u_offset: number
+  u_aspect: number
+}
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
-      landingMaterial: ReactThreeFiber.Object3DNode<t_LandingMaterial, typeof LandingMaterial>,
-      selectedWorksMaterial: ReactThreeFiber.Object3DNode<t_SelectedWorksMaterial, typeof SelectedWorksMaterial>
+      landingMaterial: ReactThreeFiber.Object3DNode<t_landingMaterial, typeof LandingMaterial>,
+      selectedWorksMaterial: ReactThreeFiber.Object3DNode<t_selectedWorksMaterial, typeof SelectedWorksMaterial>,
+      experimentsMaterial: ReactThreeFiber.Object3DNode<t_experimentsMaterial, typeof ExperimentsMaterial>
     }
   }
 }
 
-extend({ LandingMaterial, SelectedWorksMaterial })
+extend({ LandingMaterial, SelectedWorksMaterial, ExperimentsMaterial })

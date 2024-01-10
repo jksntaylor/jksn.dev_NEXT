@@ -6,7 +6,7 @@ import { useFrame, useThree } from "@react-three/fiber"
 import { Vector3 } from "three"
 import gsap from 'gsap'
 // modules
-import { t_SelectedWorksMaterial } from "../components/Materials"
+import { t_selectedWorksMaterial } from "../components/Materials"
 import BorderedPlane from "../components/BorderedPlane"
 import ProjectPage from '../components/ProjectPage'
 import { colors } from "../utils/constants"
@@ -44,7 +44,7 @@ const SelectedWorks = () => {
   const r_sidebarTextSpan = useRef<HTMLSpanElement>(null!)
   const r_projects = useRef<THREE.Group>(null!)
   const r_projectsInner = useRef<HTMLDivElement>(null!)
-  const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_SelectedWorksMaterial })[] }>(null!);
+  const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_selectedWorksMaterial })[] }>(null!);
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
@@ -89,7 +89,7 @@ const SelectedWorks = () => {
         duration: 0.85
       }, 1.9)
 
-      const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+      const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_selectedWorksMaterial }
       gsap.to(image.position, {
         x: r_projectOpen.current % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
         duration: 2.15,
@@ -126,7 +126,7 @@ const SelectedWorks = () => {
           ease: 'expo.inOut'
         }, 0.2)
 
-        const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+        const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_selectedWorksMaterial }
 
         gsap.to(image.position, {
           x: -width / 2,
@@ -169,7 +169,7 @@ const SelectedWorks = () => {
 
   // START IMAGE COMPONENT
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
-    const r_mat = useRef<t_SelectedWorksMaterial>(null!)
+    const r_mat = useRef<t_selectedWorksMaterial>(null!)
     const r_mesh = useRef<THREE.Mesh>(null!)
     const texture = useTexture(url)
 

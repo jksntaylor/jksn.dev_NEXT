@@ -5,7 +5,7 @@ import { forwardRef, useCallback, useEffect, useRef } from "react"
 import gsap from "gsap"
 // modules
 import { t_project, t_projectImages } from "../utils/types"
-import { t_SelectedWorksMaterial } from "./Materials"
+import { t_selectedWorksMaterial } from "./Materials"
 
 const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   const r_wrapper = useRef<HTMLDivElement>(null!)
@@ -63,9 +63,8 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     if (project_description) r_description.current.innerText = project_description
 
     r_carouselIndex.current = 0
-    gsap.set(r_carousel.current, {
-      x: 0
-    })
+    gsap.set(r_carousel.current, { x: 0 })
+
     for (let i = 0; i < 5; i++) {
       if (images[i] && images[i].project_image.url) {
         r_carousel.current.children[i].src = images[i].project_image.url
@@ -178,9 +177,9 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     }, 1100); // timed for animation
 
     // @ts-expect-error undefined
-    const prevImage = ref.current.children[indices.prev] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+    const prevImage = ref.current.children[indices.prev] as THREE.Mesh & { material: t_selectedWorksMaterial }
     // @ts-expect-error undefined
-    const nextImage = ref.current.children[indices.next] as THREE.Mesh & { material: t_SelectedWorksMaterial }
+    const nextImage = ref.current.children[indices.next] as THREE.Mesh & { material: t_selectedWorksMaterial }
 
     // zoom image out
     tl.current.to(prevImage.position, {
