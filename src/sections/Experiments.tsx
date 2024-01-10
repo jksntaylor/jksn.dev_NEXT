@@ -65,7 +65,7 @@ const Experiments = () => {
 
   const renderExperiments = () => {
     return <group ref={r_experiments} position={[0, -width * 0.023, 0]}>
-      {experiments && experiments.data.experiments.map((exp: t_experiment, i) => {
+      {experiments && experiments.data.experiments.map((exp: t_experiment, i: number) => {
         return <Image url={exp.cover_image.url} key={i} index={i} />
       })}
     </group>
