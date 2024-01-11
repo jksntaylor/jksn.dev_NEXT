@@ -36,7 +36,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     gsap.to(r_carousel.current, {
       x: `-${65 * r_carouselIndex.current}rem`,
       ease: 'expo.out',
-      duration: 2,
+      duration: 0.85,
     })
   }
 
@@ -170,11 +170,12 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     // scrollTo next index
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
     container.scrollTo({ top: window.innerHeight * (2.6 + indices.next * 0.332) })
+    container.style.overflow = 'hidden'
     // content switch
     setTimeout(() => {
       changeContent(indices.proj)
       r_projIndex.current = indices.next
-    }, 1100); // timed for animation
+    }, 800); // timed for animation
 
     // @ts-expect-error undefined
     const prevImage = ref.current.children[indices.prev] as THREE.Mesh & { material: t_selectedWorksMaterial }
@@ -237,12 +238,12 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
 
   useEffect(() => {
-    window.addEventListener('hideProject', () => hideProject())
+    window.addEventListener('hideProject', hideProject)
     window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     window.addEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
     window.addEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
     return () => {
-      window.removeEventListener('hideProject', () => hideProject())
+      window.removeEventListener('hideProject', hideProject)
       window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       window.removeEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
       window.removeEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)

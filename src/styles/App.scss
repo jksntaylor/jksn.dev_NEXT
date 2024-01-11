@@ -67,21 +67,36 @@ main {
 .menu_links {
   width: 100%;
   color: $color-dirtywhite;
-  display: flex;
+  // display: flex;
   padding: 4rem 5rem 5rem 5rem;
 }
 
-.menu_links-projects {
+.menu_links-projects, .menu_links-experiments {
+  height: 50%;
   display: flex;
   flex-direction: column;
   > span {
     display: flex;
     font: 400 2.5rem/100% 'Neue Montreal';
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     hr {
-      width: 65%;
+      width: 85%;
     }
   }
+}
+
+.menu_links-experiments {
+  width: 50%;
+  > span hr {
+    width: 65%;
+  }
+}
+
+.menu_links-flex {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 80%;
 }
 
 .menu_link {
@@ -90,20 +105,8 @@ main {
   text-transform: uppercase;
   display: inline-block;
   width: max-content;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   cursor: pointer;
-}
-
-.menu_drawer h4 {
-  color: $color-dirtywhite;
-  font: 400 1.6rem 'Neue Montreal';
-  writing-mode: vertical-lr;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 3rem;
-  // height: 100%;
-  padding: 5rem 1rem;
 }
 
 @keyframes spin {
@@ -112,6 +115,32 @@ main {
   }
   to {
     transform: rotate(360deg)
+  }
+}
+
+.menu_teaser {
+  color: $color-dirtywhite;
+  font: 400 1.6rem 'Neue Montreal';
+  writing-mode: vertical-lr;
+  width: 4.5rem;
+  // height: 100%;
+  padding: 2.5rem 1rem;
+  border-left: 1px solid $color-dirtywhite;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  div {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 2.5rem 0;
+  }
+  svg {
+    animation: spin 10s linear infinite;
+    &:last-of-type {
+      animation-direction: reverse;
+    }
   }
 }
 
@@ -126,10 +155,21 @@ main {
   letter-spacing: -0.03em;
 }
 
+.landing_content > div {
+  overflow: hidden;
+  border-right: 1px solid $color-dirtywhite;
+}
+
+.landing_slice {
+  background: $color-fadedblack;
+  border-left: 1px solid $color-dirtywhite;
+  border-bottom: 1px solid $color-dirtywhite;
+}
+
 .landing_slice h3 {
   color: $color-dirtywhite;
   width: 91.5vw;
-  font: 400 20rem 'Formula Condensed';
+  font: 400 20rem/85% 'Formula Condensed';
   padding: 6rem 0 0 3rem;
   text-shadow: 0.4rem 0 $color-accent1,
                0.8rem 0 $color-accent2;
@@ -137,15 +177,31 @@ main {
 
 .welcome {
   position: relative;
+  .section_number {
+    transform: translateY(45%);
+    border: 1px solid $color-dirtywhite;
+    background: $color-fadedblack;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 35rem
+  }
+}
+
+.welcome_content {
+  position: absolute;
+  top: 0;
+  left: 30%;
 }
 
 .welcome h1 {
   color: $color-dirtywhite;
   background: $color-fadedblack;
+  border: 1px solid $color-dirtywhite;
   font: 100 120rem/50% 'Formula Condensed';
   letter-spacing: -0.03em;
   padding: 36rem 0 0 0;
-  width: 335rem;
+  width: 338rem;
 }
 
 .welcome_definition {
@@ -153,9 +209,6 @@ main {
   background: $color-accent1;
   border: 2px solid $color-fadedblack;
   padding: 3rem;
-  position: absolute;
-  top: 40%;
-  left: 30%;
   span {
     display: block;
     font: 400 4rem/100% 'Formula Condensed';
@@ -224,11 +277,10 @@ main {
 .selectedworks_sidebar {
   color: $color-dirtywhite;
   padding: 2rem;
-  // font: 400 5.25rem 'Neue Montreal';
+  border-right: 1px solid $color-dirtywhite;
   font: 400 25rem/100% 'Neue Montreal';
   letter-spacing: -0.03em;
   span {
-    // font: 800 5rem 'Formula Condensed';
     font: 800 23.5rem/100% 'Formula Condensed';
     letter-spacing: 0.01em;
   }
@@ -525,11 +577,6 @@ main {
   }
 }
 
-.experiments {
-  width: 100%;
-  height: 100%;
-}
-
 .experiments_top {
   display: flex;
   .section_number {
@@ -537,6 +584,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-left: 1px solid $color-dirtywhite;
   }
   .section_title {
     flex-grow: 1;
@@ -556,6 +604,8 @@ main {
   padding: 2rem;
   overflow: hidden;
   background: $color-fadedblack;
+  border-left: 1px solid $color-dirtywhite;
+  border-right: 1px solid $color-dirtywhite;
 }
 
 .experiments_side_text {
@@ -575,6 +625,7 @@ main {
     align-items: flex-end;
     justify-content: center;
     text-decoration: none;
+    cursor: url('../assets/images/cursor.svg'), pointer;
     color: $color-dirtywhite;
     font: 700 5rem/100% 'Formula Condensed';
     letter-spacing: 0.03em;
@@ -585,6 +636,122 @@ main {
     }
     span {
       transform: translateY(110%);
+    }
+  }
+}
+
+.motto_slices {
+  border-left: 1px solid $color-dirtywhite;
+  .landing_slice {
+    height: 33.4%;
+    border-left: none;
+    border-right: 1px solid $color-dirtywhite;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.credits {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid $color-dirtywhite;
+}
+
+.credits_top {
+  background: $color-fadedblack;
+  color: $color-dirtywhite;
+  display: flex;
+  align-items: center;
+  .section_number {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid $color-dirtywhite;
+  }
+  p {
+    flex-grow: 1;
+    text-align: right;
+    margin-right: 2rem;
+    font: 400 2.5rem 'Neue Montreal';
+    letter-spacing: -0.075rem;
+    color: $color-dirtywhite;
+  }
+}
+
+.credits_bottom {
+  background: $color-dirtywhite;
+  color: $color-fadedblack;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  padding: 2rem;
+}
+
+.credits_project_links {
+  margin-bottom: auto;
+}
+
+.credits_project_link {
+  font: 400 3.5rem/100% 'Neue Montreal';
+  letter-spacing: -0.03rem;
+  text-transform: uppercase;
+  display: flex;
+  width: max-content;
+  margin-bottom: 1rem;
+  position: relative;
+  transition: color 300ms ease-in-out;
+  &::after {
+    content: "";
+    display: block;
+    width: 0%;
+    height: 0.2rem;
+    position: absolute;
+    background: $color-accent1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 300ms ease-in-out;
+  }
+  &:hover {
+    color: $color-accent1;
+    cursor: pointer;
+    &::after {
+      width: 100%;
+    }
+  }
+}
+
+.credits_contributor {
+  margin-top: 2rem;
+}
+
+.credits_role {
+  font: 400 2rem/120% 'Neue Montreal';
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.credits_name {
+  font: 300 3rem/100% 'Formula Condensed';
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.credits_social_links {
+  a {
+    margin-right: 1rem;
+    img {
+      height: 4rem;
+      width: auto;
+      transition: transform 300ms ease;
+    }
+    &:hover {
+      img {
+        transform: scale(1.1)
+      }
     }
   }
 }

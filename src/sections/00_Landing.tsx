@@ -5,11 +5,10 @@ import { Vector2, Vector3 } from 'three'
 import { useRef } from "react"
 // modules
 import { t_landingMaterial } from "../components/Materials.ts"
-import BorderedPlane from "../components/BorderedPlane.tsx"
 import { colors } from "../utils/constants.ts"
 import { lerp } from "../utils/functions.tsx"
 // assets
-import LandingArrow from '../assets/images/landing-arrow'
+import LandingArrow from '../assets/images/landing-arrow.tsx'
 import gsap from "gsap"
 
 const Landing = () => {
@@ -28,9 +27,9 @@ const Landing = () => {
   const r_text2 = useRef<typeof Text>(null!)
   const r_text3 = useRef<typeof Text>(null!)
   // "lets build something new" slices
-  const r_slice1 = useRef<THREE.Group>(null!)
-  const r_slice2 = useRef<THREE.Group>(null!)
-  const r_slice3 = useRef<THREE.Group>(null!)
+  const r_slice1 = useRef<HTMLDivElement>(null!)
+  const r_slice2 = useRef<HTMLDivElement>(null!)
+  const r_slice3 = useRef<HTMLDivElement>(null!)
   const r_slices = [r_slice1, r_slice2, r_slice3]
 
   const textOptions: {
@@ -61,26 +60,6 @@ const Landing = () => {
     <Text ref={r_text3} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + 0.1, 0]}>BASED IN SALT LAKE CITY</Text>
   </>
 
-  const renderSlices = (slices: React.ReactNode[]) => slices.map((slice, i) => <BorderedPlane
-    key={i}
-    width={width * 0.915}
-    height={width/6}
-    factor={factor}
-    position={new Vector3(width * (i + 1) + width * 0.085, height/2 - width/12 - (i * width/6) + ((i + 1) * 1/factor), 0)}
-    groupRef={r_slices[i]}
-  >
-    <Html
-      center
-      // transform
-      // distanceFactor={3.4}
-      zIndexRange={[2, 3]}
-      wrapperClass="landing_slice"
-      portal={{ current: scrollData.fixed }}
-    >
-      <h3>{slice}</h3>
-    </Html>
-  </BorderedPlane>)
-
   useFrame((_s, delta) => {
     const sliceOffset = scrollData.range(0, 0.05)
     const sectionOffset = scrollData.range(0.05, 0.05)
@@ -91,7 +70,8 @@ const Landing = () => {
         r_wrapper.current.position.x = 0
       }
     } else if (sliceOffset > 0 && sectionOffset < 1) {
-      r_slices.forEach((r_slice, i) => r_slice.current.position.x = width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
+      r_slices.forEach((r_slice, i) => r_slice.current.style.transform = `translateX(${(1 - sliceOffset) * (120 + 60 * i)}%)`)
+      // width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
       r_wrapper.current.position.x = -width * 0.915 * sectionOffset
       r_material.current.u_time += delta
 
@@ -104,8 +84,8 @@ const Landing = () => {
       if (r_wrapper.current.position.x !== -width * 0.915) {
         r_wrapper.current.position.x = -width * 0.915
       }
-      if (r_slices[0].current.position.x !== width * 0.0425) {
-        r_slices.forEach(slice => slice.current.position.x = width * 0.0425)
+      if (r_slices[0].current.style.transform !== `translateX(0%)`) {
+        r_slices.forEach(slice => slice.current.style.transform = `translateX(0%)`)
       }
     }
 
@@ -141,19 +121,36 @@ const Landing = () => {
         </RenderTexture>
       </landingMaterial>
     </mesh>
-    <group position={[0, 0, 0.0001]}>
-      {renderSlices([<>L<em>E</em>T'S B<em>U</em>ILD</>, <><em>S</em>O<em>MET</em>HI<em>NG</em></>, <>NE<em>W</em></>])}
-    </group>
+    <Html
+      center
+      // transform
+      // distanceFactor={3.4}
+      style={{ width: width * 0.915 * factor - 2, height: height * factor }}
+      position={[width * 0.0425 + 1/factor, 0, 0.001]}
+      wrapperClass="landing_content"
+      portal={{ current: scrollData.fixed }}
+      zIndexRange={[2, 3]}
+    >
+      <div ref={r_slice1} className="landing_slice" style={{ transform: `translateX(120%)`}}>
+        <h3>L<em>E</em>T'S B<em>U</em>ILD</h3>
+      </div>
+      <div ref={r_slice2} className="landing_slice" style={{ transform: `translateX(180%)`}}>
+        <h3><em>S</em>O<em>MET</em>HI<em>NG</em></h3>
+      </div>
+      <div ref={r_slice3} className="landing_slice" style={{ transform: `translateX(240%)`}}>
+        <h3>NE<em>W</em></h3>
+      </div>
+    </Html>
     <group ref={r_arrow} position={[width / 2 - width * 0.065, height/2 - width * 0.065, 0]}>
       <Html
-        center
-        // transform
-        // distanceFactor={3.4}
-        zIndexRange={[5, 6]}
-        wrapperClass="landing_arrow"
-        portal={{ current: scrollData.fixed }}
-        style={{ width: width * 0.097 * factor, height: width * 0.097 * factor}}
-        >
+      center
+      // transform
+      // distanceFactor={3.4}
+      zIndexRange={[5, 6]}
+      wrapperClass="landing_arrow"
+      portal={{ current: scrollData.fixed }}
+      style={{ width: width * 0.097 * factor, height: width * 0.097 * factor}}
+      >
         <LandingArrow innerRef={r_arrowInner}/>
       </Html>
     </group>

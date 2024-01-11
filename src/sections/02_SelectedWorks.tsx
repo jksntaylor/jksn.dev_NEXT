@@ -3,11 +3,9 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
-import { Vector3 } from "three"
 import gsap from 'gsap'
 // modules
 import { t_selectedWorksMaterial } from "../components/Materials"
-import BorderedPlane from "../components/BorderedPlane"
 import ProjectPage from '../components/ProjectPage'
 import { colors } from "../utils/constants"
 import { t_project } from '../utils/types'
@@ -36,10 +34,10 @@ const SelectedWorks = () => {
   // Refs for animation
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_top = useRef<THREE.Group>(null!)
-  const r_sidebar = useRef<THREE.Group & { children: [THREE.Mesh, THREE.Mesh] }>(null!)
-  const r_side = useRef<THREE.Group>(null!)
   const r_counter1 = useRef<HTMLDivElement>(null!)
   const r_counter2 = useRef<HTMLDivElement>(null!)
+  const r_side = useRef<THREE.Group>(null!)
+  const r_sidebar = useRef<THREE.Group>(null!)
   const r_sidebarText = useRef<HTMLDivElement>(null!)
   const r_sidebarTextSpan = useRef<HTMLSpanElement>(null!)
   const r_projects = useRef<THREE.Group>(null!)
@@ -55,7 +53,6 @@ const SelectedWorks = () => {
   const projectTL = useRef(gsap.timeline())
 
   const toggleProject = useCallback((i: number) => {
-
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && r_projectOpen.current !== -1) toggleProject(r_projectOpen.current)
     }
@@ -192,9 +189,9 @@ const SelectedWorks = () => {
       position= {[width * 0.0575, -width * 0.023, 0]}
     >
       <Html
-        // center
-        transform
-        distanceFactor={3.4}
+        center
+        // transform
+        // distanceFactor={3.4}
         className="selectedworks_projects"
         ref={r_projectsInner}
         portal={{ current: scrollData.fixed }}
@@ -238,17 +235,9 @@ const SelectedWorks = () => {
       if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
       if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
 
-      if (r_sidebar.current) { // sidebar width + position calculation
-        r_sidebar.current.scale.x = (1 - sidebarOffset)* 0.8 + 0.2
-        r_sidebar.current.children[2].scale.x = 1 / r_sidebar.current.scale.x
-        r_sidebar.current.children[0].scale.x = .008 * sidebarOffset + 1 // need to scale up background or the x-axis border is too thin
-        r_sidebar.current.position.x = (-width/2 + width * 0.135) * sidebarOffset -1/factor
-      }
-
-      if (r_sidebarText.current) { // sidebar text scaling
-        r_sidebarText.current.style.width = `${(1 - sidebarOffset) * (width * 0.732 * factor) + (width * 0.183 * factor)}px`
-        r_sidebarText.current.style.fontSize = `${(1 - sidebarOffset) * 19.75 + 5.25}rem`
-      }
+      r_sidebar.current.position.x = (-width/2 + width * 0.135) * sidebarOffset -1/factor
+      r_sidebarText.current.style.width = `${(1 - sidebarOffset) * (width * 0.732 * factor) + (width * 0.183 * factor)}px`
+      r_sidebarText.current.style.fontSize = `${(1 - sidebarOffset) * 19.75 + 5.25}rem`
 
       if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
 
@@ -264,57 +253,45 @@ const SelectedWorks = () => {
 
   return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
     <group ref={r_top}>
-      <BorderedPlane
-        width={width * 0.915}
-        height={width * 0.046}
-        factor={factor}
-        position={new Vector3(0, height / 2 - width * 0.023 + 1/factor, 0)}
+      <Html
+        center
+        // transform
+        // distanceFactor={3.4}
+        className="selectedworks_top"
+        position={[-1/factor, height / 2 - width * 0.023 + 1/factor, 0]}
+        portal={{ current: scrollData.fixed }}
+        zIndexRange={[5, 6]}
+        style={{
+          width: width * 0.915 * factor,
+          height: width * 0.046 * factor,
+          borderBottom: `1px solid ${colors.dirtyWhite}`
+        }}
       >
-        <Html
-          // center
-          transform
-          distanceFactor={3.4}
-          className="selectedworks_top"
-          portal={{ current: scrollData.fixed }}
-          style={{
-            width: width * 0.915 * factor,
-            height: width * 0.046 * factor,
-            borderBottom: `1px solid ${colors.dirtyWhite}`
-          }}
-          zIndexRange={[5, 6]}
-        >
-          <div className='section_number' style={{ width: width * 0.046 * factor }}>02</div>
-          <div className="selectedworks_counter">
-            <div className="selectedworks_counter-mask">
-              <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
-              <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
-              <span>/10</span>
-            </div>
+        <div className='section_number' style={{ width: width * 0.046 * factor }}>02</div>
+        <div className="selectedworks_counter">
+          <div className="selectedworks_counter-mask">
+            <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
+            <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
+            <span>/10</span>
           </div>
-        </Html>
-      </BorderedPlane>
+        </div>
+      </Html>
     </group>
     <group ref={r_side}>
-      <BorderedPlane // Sidebar
-        width={width * 0.915 + 1/factor}
-        height={height - width * 0.046 + 2/factor}
-        factor={factor}
-        position={new Vector3(-1/factor, -width * 0.023 + 1/factor, 0)}
-        groupRef={r_sidebar}
-      >
+      <group ref={r_sidebar} position={[-1/factor, -width * 0.023 + 1/factor, 0]}>
         <Html
-          // center
-          transform
-          distanceFactor={3.4}
+          center
+          // transform
+          // distanceFactor={3.4}
           className="selectedworks_sidebar"
           portal={{ current: scrollData.fixed }}
           zIndexRange={[1, 2]}
           ref={r_sidebarText}
           style={{ width: width * 0.915 * factor, height: (height - width * 0.046) * factor }}
-        >
+          >
           <p>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></p>
         </Html>
-      </BorderedPlane>
+      </group>
     </group>
     {renderProjects()}
     <ProjectPage ref={r_projectsImages}/>

@@ -1,19 +1,21 @@
 // libraries
 import { Suspense, useCallback, useEffect, useRef } from 'react'
-import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
 // import { OrbitControls } from '@react-three/drei'
 // modules
 import './components/Materials'
 import Menu from './components/Menu'
-import Landing from './sections/Landing'
-import Welcome from './sections/Welcome'
-import SelectedWorks from './sections/SelectedWorks'
+import Landing from './sections/00_Landing'
+import Welcome from './sections/01_Welcome'
+import SelectedWorks from './sections/02_SelectedWorks'
+import Experiments from './sections/03_Experiments'
+import CallToAction from './sections/04_CallToAction'
 import { colors } from './utils/constants'
 // styles
 import cover from './assets/images/resize_cover.webp'
 import './styles/App.scss'
-import Experiments from './sections/Experiments'
+import Credits from './sections/05_Credits'
 
 function App() {
 
@@ -46,8 +48,8 @@ function App() {
           <Welcome />
           <SelectedWorks />
           <Experiments />
-          {/* <CallToAction /> */}
-          {/* <Credits /> */}
+          <CallToAction />
+          <Credits />
         </ScrollControls>
       </Canvas>
     </Suspense>

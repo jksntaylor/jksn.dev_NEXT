@@ -1,16 +1,14 @@
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { Html, Text, useScroll, useTexture } from "@react-three/drei"
+import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useEffect, useRef } from "react"
-import { FrontSide, Vector2, Vector3 } from "three"
+import { Vector2, Vector3 } from "three"
 import gsap from "gsap"
 // modules
-import BorderedPlane from "../components/BorderedPlane"
 import { t_experimentsMaterial } from "../components/Materials"
 import { t_experiment } from "../utils/types"
 import { colors } from "../utils/constants"
 import { lerp } from "../utils/functions"
-
 
 const Experiments = () => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
@@ -39,9 +37,6 @@ const Experiments = () => {
         r_sidebarInner.current.children[0].style.transform = `scaleX(${3.25 - sidebarOffset * 2.85})`
         r_sidebarInner.current.children[0].style.fontWeight = `${700 - sidebarOffset * 200}`
 
-        r_sidebar.current.scale.x = (1 - sidebarOffset) * .8 + .2
-        r_sidebar.current.children[2].scale.x = 1 / r_sidebar.current.scale.x
-        r_sidebar.current.children[0].scale.x = .02 * sidebarOffset + 1
         r_sidebar.current.position.x = -width/2 + width * 0.0425 + width * (0.15 - sidebarOffset * 0.119)
       }
       r_experiments.current.position.x = contentOffset * -height * 0.45 * 4 + height * 0.04
@@ -58,13 +53,11 @@ const Experiments = () => {
     const texture = useTexture(url)
 
     const handlePointerEnter = () => {
-      gsap.set('main', { cursor: `pointer` })
       gsap.to(r_mat.current, { u_mouse_rad: 0.3, duration: 0.85 })
       gsap.to(r_link.current.children[0], { y: 0, ease: 'expo.out' })
     }
 
     const handlePointerLeave = () => {
-      gsap.set('main', { cursor: '' })
       gsap.to(r_mat.current, { u_mouse_rad: 0.0, duration: 0.85 })
       gsap.to(r_link.current.children[0], { y: '110%', ease: 'expo.out' })
     }
@@ -100,9 +93,9 @@ const Experiments = () => {
         <experimentsMaterial ref={r_mat} />
       </mesh>
       <Html
-        // center
-        transform
-        distanceFactor={3.4}
+        center
+        // transform
+        // distanceFactor={3.4}
         className="experiment_image"
         portal={{ current: scrollData.fixed }}
         style={{
@@ -131,52 +124,43 @@ const Experiments = () => {
   }
 
   return <group ref={r_wrapper} position={[width * .915, 0, 0]}>
-    <BorderedPlane // Top Section
-      width={width * .915}
-      height={width * .046}
-      factor={factor}
-      position={new Vector3(-1/factor, height / 2 - width * .023 + 1/factor, 0)}
+    <Html
+      center
+      // transform
+      // distanceFactor={3.4}
+      className="experiments_top"
+      portal={{ current: scrollData.fixed }}
+      position={[0, height / 2 - width * .023 + 1/factor, 0]}
+      style={{
+        width: width * .915 * factor,
+        height: width * .046 * factor,
+        borderBottom: `1px solid ${colors.dirtyWhite}`
+      }}
+      zIndexRange={[5, 6]}
+    >
+      <div className='section_number' style={{ width: width * 0.06 * factor }}>03</div>
+      <div className="section_title">Experiments</div>
+    </Html>
+    <group
+      position={new Vector3(-width/2 + width * 0.1925, -width * 0.023, 0.001)}
+      ref={r_sidebar}
     >
       <Html
-        // center
-        transform
-        distanceFactor={3.4}
-        className="experiments_top"
-        portal={{ current: scrollData.fixed }}
-        style={{
-          width: width * .915 * factor,
-          height: width * .046 * factor,
-          borderBottom: `1px solid ${colors.dirtyWhite}`
-        }}
-        zIndexRange={[5, 6]}
-      >
-        <div className='section_number' style={{ width: width * 0.06 * factor }}>03</div>
-        <div className="section_title">Experiments</div>
-      </Html>
-    </BorderedPlane>
-    <BorderedPlane // Sidebar
-      width={width * 0.3}
-      height={height - width * 0.046 + 2/factor}
-      factor={factor}
-      position={new Vector3(-width/2 + width * 0.1925, -width * 0.023 + 1/factor, 0.001)}
-      groupRef={r_sidebar}
-    >
-      <Html
-        // center
-        transform
-        distanceFactor={3.4}
+        center
+        // transform
+        // distanceFactor={3.4}
         className="experiments_side"
         portal={{ current: scrollData.fixed }}
         ref={r_sidebarInner}
         style={{
           width: width * 0.3 * factor + 2,
-          height: (height - width * 0.046) * factor + 4,
+          height: (height - width * 0.046) * factor + 2,
         }}
         zIndexRange={[5, 6]}
       >
         <p className="experiments_side_text">E<em>X</em>PERIME<em>N</em>TS</p>
       </Html>
-    </BorderedPlane>
+    </group>
     {renderExperiments()}
   </group>
 }

@@ -8,6 +8,8 @@ import gsap from "gsap"
 import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
 import { lerp } from "../utils/functions"
+// assets
+import Star from "../assets/images/star"
 
 const Menu = () => {
   const scrollData = useScroll()
@@ -79,7 +81,7 @@ const Menu = () => {
         duration: 0.75,
         ease: 'expo.inOut'
       }, 0.85)
-    }, 50);
+    }, 100);
       window.addEventListener('keydown', e => handleEscape(e))
     return () => {
       window.removeEventListener('keydown', e => handleEscape(e))
@@ -146,17 +148,21 @@ const Menu = () => {
 
     const animate = () => {
       if (r_cursor.current.target !== r_cursor.current.value) r_cursor.current.value = lerp(r_cursor.current.value, r_cursor.current.target, 0.1)
-      if (r_intensity.current.value > 0) {
-        r_chars.forEach(char => {
-          const strength = (0.75 - Math.min(Math.max(Math.abs(char.pos - r_cursor.current.value) * 3, 0), 0.75)) * r_intensity.current.value
-          char.el.style.transform = `
-            scale(${char.el.innerHTML === 'i' || char.el.innerHTML === "'" ? 1 + strength : 1}, ${1 + strength / 2})
-            translateY(${strength * 15}%)
-          `
-          char.el.style.color = `color-mix(in srgb, ${altColor ? colors.darkModeAccent : colors.darkModeAccent_2} ${strength * 250}%, ${colors.dirtyWhite})`
-          if (char.el.innerHTML !== 'i' && char.el.innerHTML !== "&nbsp;") char.el.style.fontWeight = `${200 + strength * 600}`
-        })
-      }
+      r_chars.forEach(char => {
+        if (r_intensity.current.value > 0) {
+            const strength = (0.75 - Math.min(Math.max(Math.abs(char.pos - r_cursor.current.value) * 3, 0), 0.75)) * r_intensity.current.value
+            char.el.style.transform = `
+              scale(${char.el.innerHTML === 'i' || char.el.innerHTML === "'" ? 1 + strength : 1}, ${1 + strength / 2})
+              translateY(${strength * 15}%)
+            `
+            char.el.style.color = `color-mix(in srgb, ${altColor ? colors.darkModeAccent : colors.darkModeAccent_2} ${strength * 250}%, ${colors.dirtyWhite})`
+            if (char.el.innerHTML !== 'i' && char.el.innerHTML !== "&nbsp;") char.el.style.fontWeight = `${200 + strength * 600}`
+          } else if (char.el.style.fontWeight !== '200') {
+            char.el.style.transform = `scale(1) translateY(0)`
+            char.el.style.color = colors.dirtyWhite
+            char.el.style.fontWeight = '200'
+          }
+      })
       requestAnimationFrame(animate)
     }
 
@@ -201,26 +207,39 @@ const Menu = () => {
         <div className="menu_links">
           <div className="menu_links-projects">
             <span>PROJECTS<hr/></span>
-            <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
-            <MenuLink projIndex={1} str="Rre&nbsp;ventUreS" altColor/>
-            <MenuLink projIndex={2} str="gEnieS"/>
-            <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics" altColor/>
-            <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
-            <MenuLink projIndex={5} str="soURce&nbsp;7" altColor/>
-            <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
-            <MenuLink projIndex={7} str="BitsKi" altColor/>
-            <MenuLink projIndex={8} str="bRaiNBasE"/>
-            <MenuLink projIndex={9} str="iNtrOvOke" altColor/>
+            <div className="menu_links-flex">
+              <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
+              <MenuLink projIndex={1} str="Rre&nbsp;ventUreS" altColor/>
+              <MenuLink projIndex={2} str="gEnieS"/>
+              <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics" altColor/>
+              <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
+              <MenuLink projIndex={5} str="soURce&nbsp;7" altColor/>
+              <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
+              <MenuLink projIndex={7} str="BitsKi" altColor/>
+              <MenuLink projIndex={8} str="bRaiNBasE"/>
+              <MenuLink projIndex={9} str="iNtrOvOke" altColor/>
+            </div>
           </div>
           <div className="menu_links-experiments">
-
+            <span>EXPERIMENTS<hr/></span>
+            <div className="menu_links-flex">
+              <MenuLink projIndex={0} str="GRanD&nbsp;PriX" altColor/>
+              <MenuLink projIndex={1} str="DisTOrtioN" />
+              <MenuLink projIndex={2} str="WatEr&nbsp;RiPplEs" altColor/>
+              <MenuLink projIndex={3} str="CaR&nbsp;CatWalK" />
+              <MenuLink projIndex={4} str="POrtaL" altColor/>
+            </div>
           </div>
         </div>
-        <h4>
-          <span>Available for Freelance</span>
-          <span>JACKSON TAYLOR</span>
-          <span>January 2024</span>
-        </h4>
+        <div className="menu_teaser">
+          <Star />
+          <div>
+            <span>Available for Freelance</span>
+            <span>JACKSON TAYLOR</span>
+            <span>February 2024</span>
+          </div>
+          <Star />
+        </div>
       </Html>
     </BorderedPlane>
     <BorderedPlane

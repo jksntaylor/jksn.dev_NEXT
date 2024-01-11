@@ -188,15 +188,90 @@ export type t_experimentsMaterial = {
   u_time: number
 }
 
+const SphereMaterial = shaderMaterial({
+  u_time: 0,
+  u_speed: 0.2,
+  u_noiseDensity: 0.9,
+  u_noiseStrength: 0.75,
+  u_frequency: 4,
+  u_amplitude: 12
+},`
+    varying float v_distort;
+    varying vec2 v_uv;
+
+    uniform float u_time;
+    uniform float u_speed;
+    uniform float u_noiseDensity;
+    uniform float u_noiseStrength;
+    uniform float u_frequency;
+    uniform float u_amplitude;
+
+    ${sNoise}
+
+    mat3 rotation3dY(float angle) {
+      float s = sin(angle);
+      float c = cos(angle);
+
+      return mat3(
+        c, 0., -s,
+        0., 1., 0.,
+        s, 0., c
+      );
+    }
+
+    vec3 rotateY(vec3 v, float angle) {
+      return rotation3dY(angle) * v;
+    }
+
+    void main() {
+      float t = u_time * u_speed;
+      float distortion = snoise((normal + t) * u_noiseDensity) * u_noiseStrength;
+      vec3 pos = position + (normal * distortion);
+      float angle = sin(uv.y * u_frequency + t) * u_amplitude;
+      pos = rotateY(pos, angle);
+      v_distort = distortion;
+      v_uv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.);
+    }
+`,`
+    varying float v_distort;
+    varying vec2 v_uv;
+
+    vec3 cosPalette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
+      return a + b * cos(6.28318 * (c * t + d));
+    }
+
+    void main() {
+      vec3 brightness = vec3(0.5, 0.5, 0.5);
+      vec3 contrast = vec3(0.5, 0.5, 0.5);
+      vec3 oscilation = vec3(1., 1., 1.);
+      vec3 phase = vec3(0.3, 0.2, 0.2);
+
+      // Pass the distortion as input of cospalette
+      vec3 color = cosPalette(v_distort, brightness, contrast, oscilation, phase);
+      gl_FragColor = vec4(color, 1.);
+    }
+`)
+
+export type t_sphereMaterial = {
+  u_time: number
+  u_speed: number
+  u_noiseDensity: number
+  u_noiseStrength: number
+  u_frequency: number
+  u_amplitude: number
+}
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       landingMaterial: ReactThreeFiber.Object3DNode<t_landingMaterial, typeof LandingMaterial>,
       selectedWorksMaterial: ReactThreeFiber.Object3DNode<t_selectedWorksMaterial, typeof SelectedWorksMaterial>,
-      experimentsMaterial: ReactThreeFiber.Object3DNode<t_experimentsMaterial, typeof ExperimentsMaterial>
+      experimentsMaterial: ReactThreeFiber.Object3DNode<t_experimentsMaterial, typeof ExperimentsMaterial>,
+      sphereMaterial: ReactThreeFiber.Object3DNode<t_sphereMaterial, typeof SphereMaterial>
     }
   }
 }
 
-extend({ LandingMaterial, SelectedWorksMaterial, ExperimentsMaterial })
+extend({ LandingMaterial, SelectedWorksMaterial, ExperimentsMaterial, SphereMaterial })
