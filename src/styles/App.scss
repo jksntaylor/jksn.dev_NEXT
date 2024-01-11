@@ -555,7 +555,7 @@ main {
 .experiments_side {
   padding: 2rem;
   overflow: hidden;
-  // border-right: 1px solid $color-dirtywhite;
+  background: $color-fadedblack;
 }
 
 .experiments_side_text {
@@ -565,4 +565,26 @@ main {
   letter-spacing: 0.5rem;
   transform: scaleX(3.2);
   transform-origin: left;
+}
+
+.experiment_image {
+  a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-decoration: none;
+    color: $color-dirtywhite;
+    font: 700 5rem/100% 'Formula Condensed';
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    overflow: hidden;
+    &:visited {
+      color: $color-dirtywhite;
+    }
+    span {
+      transform: translateY(110%);
+    }
+  }
 }

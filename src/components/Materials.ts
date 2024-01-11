@@ -160,7 +160,7 @@ const ExperimentsMaterial = shaderMaterial({
 
   void main() {
     vec4 image = texture2D(u_texture, v_uv);
-    vec4 inverted = vec4(vec3(2., 2., 2.) * (image.r, image.g, image.b) / 3., image.a);
+    vec4 inverted = vec4(vec3(2., 2., 2.) * (image.r, image.g, image.b) / 4., image.a);
 
     vec2 mouse = vec2(u_mouse.x, u_mouse.y);
     mouse.x = mouse.x * 0.548 + u_shift;

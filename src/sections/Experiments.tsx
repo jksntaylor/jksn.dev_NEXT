@@ -1,8 +1,8 @@
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { Html, useScroll, useTexture } from "@react-three/drei"
+import { Html, Text, useScroll, useTexture } from "@react-three/drei"
 import { useEffect, useRef } from "react"
-import { Vector2, Vector3 } from "three"
+import { FrontSide, Vector2, Vector3 } from "three"
 import gsap from "gsap"
 // modules
 import BorderedPlane from "../components/BorderedPlane"
@@ -54,16 +54,19 @@ const Experiments = () => {
   const Image: React.FC<{ url: string, index: number, link: string, text: string }> = ({ url, index, link, text }) => {
     const r_mat = useRef<t_experimentsMaterial>(null!)
     const r_mouse = useRef(new Vector2(0, 0))
+    const r_link = useRef<HTMLAnchorElement>(null!)
     const texture = useTexture(url)
 
     const handlePointerEnter = () => {
+      gsap.set('main', { cursor: `pointer` })
       gsap.to(r_mat.current, { u_mouse_rad: 0.3, duration: 0.85 })
-      gsap.set('main', { cursor: 'pointer' })
+      gsap.to(r_link.current.children[0], { y: 0, ease: 'expo.out' })
     }
 
     const handlePointerLeave = () => {
-      gsap.to(r_mat.current, { u_mouse_rad: 0.0, duration: 0.85 })
       gsap.set('main', { cursor: '' })
+      gsap.to(r_mat.current, { u_mouse_rad: 0.0, duration: 0.85 })
+      gsap.to(r_link.current.children[0], { y: '110%', ease: 'expo.out' })
     }
 
     const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
@@ -85,15 +88,38 @@ const Experiments = () => {
 
     const innerHeight = (height - width * 0.046)
 
-    return <mesh
+    return <group
       position={[index * innerHeight * 0.6, 0, 0]}
-      onPointerEnter={handlePointerEnter}
-      onPointerLeave={handlePointerLeave}
-      onPointerMove={e => handlePointerMove(e)}
     >
-      <planeGeometry args={[innerHeight * 0.5, innerHeight * 0.9]} />
-      <experimentsMaterial ref={r_mat} />
-    </mesh>
+      <mesh
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        onPointerMove={e => handlePointerMove(e)}
+        >
+        <planeGeometry args={[innerHeight * 0.5, innerHeight * 0.9]} />
+        <experimentsMaterial ref={r_mat} />
+      </mesh>
+      <Html
+        // center
+        transform
+        distanceFactor={3.4}
+        className="experiment_image"
+        portal={{ current: scrollData.fixed }}
+        style={{
+          width: innerHeight * 0.5 * factor,
+          height: innerHeight * 0.9 * factor
+        }}
+        zIndexRange={[3, 4]}
+      >
+        <a
+          href={link}
+          ref={r_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      </Html>
+    </group>
   }
 
   const renderExperiments = () => {
