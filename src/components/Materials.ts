@@ -1,25 +1,29 @@
 import { ReactThreeFiber, extend } from "@react-three/fiber"
+import { shaderMaterial } from "@react-three/drei"
 import { Texture, Vector2 } from "three"
 import { sNoise } from "../utils/constants"
-import { shaderMaterial } from "@react-three/drei"
 
 const LandingMaterial = shaderMaterial({
   u_texture: new Texture,
-  u_aspect: 1,
   u_mouse: new Vector2,
+  u_mouse_rad: 0,
+  u_aspect: 1,
   u_time: 0
 }, `
   varying vec2 v_uv;
+
   void main() {
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     v_uv = uv;
   }
 `,`
   ${sNoise}
-  uniform float u_time;
-  uniform vec2 u_mouse;
-  uniform float u_aspect;
   uniform sampler2D u_texture;
+  uniform float u_mouse_rad;
+  uniform vec2 u_mouse;
+  uniform float u_time;
+  uniform float u_aspect;
+
   varying vec2 v_uv;
 
   vec2 distortUV(vec2 uv, vec2 uv2, float intensity) {
@@ -41,9 +45,10 @@ const LandingMaterial = shaderMaterial({
 
     // mouse mask
     float cursor_distance = distance(vec2(v_uv.x, v_uv.y / u_aspect), vec2(u_mouse.x, u_mouse.y / u_aspect));
-    float strength = smoothstep(0.2, 0.1, cursor_distance);
+    float strength = smoothstep(u_mouse_rad, u_mouse_rad - .15, cursor_distance);
     float offX = v_uv.x + sin(v_uv.y + u_time * .1);
     float offY = v_uv.y - u_time * 0.01 - cos(u_time * 0.001) * 0.1;
+
     float n = snoise(vec3(offX, offY, u_time * .1) * 9.);
     float mask = smoothstep(0.05, 1., strength * (n + 1.) * 0.75) * (1. - distance(v_uv, u_mouse) * 5.);
 
@@ -77,6 +82,7 @@ export type t_landingMaterial = {
   u_texture: Texture
   u_aspect: number
   u_mouse: Vector2
+  u_mouse_rad: number
   u_time: number
 }
 
@@ -127,10 +133,10 @@ export type t_selectedWorksMaterial = {
 }
 
 const ExperimentsMaterial = shaderMaterial({
-  u_texture: new Texture(),
-  u_shift: 0,
+  u_shift: 0.45,
   u_mouse: new Vector2(0, 0),
   u_mouse_rad: 0,
+  u_texture: new Texture(),
   u_time: 0
 },`
   uniform float u_shift;
@@ -140,7 +146,7 @@ const ExperimentsMaterial = shaderMaterial({
     vec4 pos = vec4(position, 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * pos;
     v_uv = uv;
-    v_uv.x = v_uv.x * 0.5 + u_shift;
+    v_uv.x = v_uv.x * 0.55 + u_shift;
   }
 `,`
   ${sNoise}
@@ -154,7 +160,7 @@ const ExperimentsMaterial = shaderMaterial({
 
   void main() {
     vec4 image = texture2D(u_texture, v_uv);
-    vec4 inverted = vec4(1. - image.r, 1. - image.g, 1. - image.b, 1.);
+    vec4 inverted = vec4(vec3(2., 2., 2.) * (image.r, image.g, image.b) / 3., image.a);
 
     vec2 mouse = vec2(u_mouse.x, u_mouse.y);
     mouse.x = mouse.x * 0.548 + u_shift;
@@ -165,16 +171,21 @@ const ExperimentsMaterial = shaderMaterial({
     float offY = v_uv.y - u_time * 0.1 - cos(u_time * 0.001) * 0.1;
 
     float n = snoise(vec3(offX, offY, u_time * .1) * 9.);
-    float mask = smoothstep(0.55, 0.6, strength * (n + 1.));
+    float mask = smoothstep(0.6, 0.65, strength * (n + 1.));
 
-    gl_FragColor = mix(image, inverted, mask);
+    if (v_uv.x > 0.548 + u_shift || v_uv.x < 0.002 + u_shift || v_uv.y > 0.998 || v_uv.y < 0.002)
+      gl_FragColor = vec4(1.);
+    else
+      gl_FragColor = mix(image, inverted, mask);
   }
 `)
 
 export type t_experimentsMaterial = {
+  u_shift: number
+  u_mouse: Vector2
+  u_mouse_rad: number
   u_texture: Texture
-  u_offset: number
-  u_aspect: number
+  u_time: number
 }
 
 declare global {

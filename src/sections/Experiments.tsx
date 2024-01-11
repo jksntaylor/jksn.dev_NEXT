@@ -1,28 +1,28 @@
 import { useSinglePrismicDocument } from "@prismicio/react"
-import { useFrame, useThree } from "@react-three/fiber"
+import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useEffect, useRef } from "react"
-import { Vector3 } from "three"
+import { Vector2, Vector3 } from "three"
+import gsap from "gsap"
 // modules
-import { colors } from "../utils/constants"
-import { t_experiment } from "../utils/types"
 import BorderedPlane from "../components/BorderedPlane"
 import { t_experimentsMaterial } from "../components/Materials"
+import { t_experiment } from "../utils/types"
+import { colors } from "../utils/constants"
+import { lerp } from "../utils/functions"
 
 
 const Experiments = () => {
-  const scrollData = useScroll()
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
+  const scrollData = useScroll()
+
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_sidebar = useRef<THREE.Group>(null!)
   const r_sidebarInner = useRef<HTMLDivElement & { children: HTMLElement[] }>(null!)
   const r_experiments = useRef<THREE.Group>(null!)
+  const r_shift = useRef(0)
 
   const [experiments] = useSinglePrismicDocument('experiments')
-
-  // useEffect(() => {
-  //   console.log(experiments)
-  // }, [experiments])
 
   useFrame(() => {
     const sectionOffset = scrollData.range(.56, .05)
@@ -37,28 +37,61 @@ const Experiments = () => {
       if (r_sidebar.current) {
         r_sidebarInner.current.style.width = `${(width * .06 + (1 - sidebarOffset) * width * .24) * factor}px`
         r_sidebarInner.current.children[0].style.transform = `scaleX(${3.25 - sidebarOffset * 2.85})`
-        r_sidebarInner.current.children[0].style.fontWeight = `${800 - sidebarOffset * 200}`
+        r_sidebarInner.current.children[0].style.fontWeight = `${700 - sidebarOffset * 200}`
 
         r_sidebar.current.scale.x = (1 - sidebarOffset) * .8 + .2
         r_sidebar.current.children[2].scale.x = 1 / r_sidebar.current.scale.x
         r_sidebar.current.children[0].scale.x = .02 * sidebarOffset + 1
         r_sidebar.current.position.x = -width/2 + width * 0.0425 + width * (0.15 - sidebarOffset * 0.119)
       }
-      r_experiments.current.position.x = contentOffset * -height * 0.45 * 4
-
+      r_experiments.current.position.x = contentOffset * -height * 0.45 * 4 + height * 0.04
+      r_shift.current = 0.45 - (contentOffset * 0.45)
+    } else if (sectionOffset2 === 1 && r_wrapper.current.position.x !== -width * 0.915) {
+      r_wrapper.current.position.x = -width * 0.915
     }
   })
 
-  const Image: React.FC<{ url: string, index: number }> = ({ url, index }) => {
+  const Image: React.FC<{ url: string, index: number, link: string, text: string }> = ({ url, index, link, text }) => {
     const r_mat = useRef<t_experimentsMaterial>(null!)
+    const r_mouse = useRef(new Vector2(0, 0))
     const texture = useTexture(url)
+
+    const handlePointerEnter = () => {
+      gsap.to(r_mat.current, { u_mouse_rad: 0.3, duration: 0.85 })
+      gsap.set('main', { cursor: 'pointer' })
+    }
+
+    const handlePointerLeave = () => {
+      gsap.to(r_mat.current, { u_mouse_rad: 0.0, duration: 0.85 })
+      gsap.set('main', { cursor: '' })
+    }
+
+    const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+      if (e.uv) r_mouse.current.set(e.uv.x, e.uv.y)
+    }
 
     useEffect(() => {
       if (r_mat.current.u_texture !== texture) r_mat.current.u_texture = texture
     }, [texture])
 
-    return <mesh position={[index * height * 0.45, 0, 0]}>
-      <planeGeometry args={[height * 0.4, height * 0.85]} />
+    useFrame((_s, delta) => {
+      if (r_mat.current.u_mouse !== r_mouse.current) {
+        r_mat.current.u_mouse.x = lerp(r_mat.current.u_mouse.x, r_mouse.current.x, 0.15)
+        r_mat.current.u_mouse.y = lerp(r_mat.current.u_mouse.y, r_mouse.current.y, 0.15)
+      }
+      r_mat.current.u_time += delta
+      if (r_mat.current.u_shift !== r_shift.current) r_mat.current.u_shift = r_shift.current
+    })
+
+    const innerHeight = (height - width * 0.046)
+
+    return <mesh
+      position={[index * innerHeight * 0.6, 0, 0]}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      onPointerMove={e => handlePointerMove(e)}
+    >
+      <planeGeometry args={[innerHeight * 0.5, innerHeight * 0.9]} />
       <experimentsMaterial ref={r_mat} />
     </mesh>
   }
@@ -66,7 +99,7 @@ const Experiments = () => {
   const renderExperiments = () => {
     return <group ref={r_experiments} position={[0, -width * 0.023, 0]}>
       {experiments && experiments.data.experiments.map((exp: t_experiment, i: number) => {
-        return <Image url={exp.cover_image.url} key={i} index={i} />
+        return <Image url={exp.cover_image.url} key={i} index={i} link={exp.live_link} text={exp.title}/>
       })}
     </group>
   }
@@ -91,7 +124,7 @@ const Experiments = () => {
         }}
         zIndexRange={[5, 6]}
       >
-        <div className='section_number' style={{ width: width * 0.06 * factor }}>02</div>
+        <div className='section_number' style={{ width: width * 0.06 * factor }}>03</div>
         <div className="section_title">Experiments</div>
       </Html>
     </BorderedPlane>
@@ -99,7 +132,7 @@ const Experiments = () => {
       width={width * 0.3}
       height={height - width * 0.046 + 2/factor}
       factor={factor}
-      position={new Vector3(-width/2 + width * 0.1925, -width * 0.023 + 1/factor, 0)}
+      position={new Vector3(-width/2 + width * 0.1925, -width * 0.023 + 1/factor, 0.001)}
       groupRef={r_sidebar}
     >
       <Html

@@ -4,19 +4,20 @@ import { Html, PerspectiveCamera, RenderTexture, Text, useScroll } from "@react-
 import { Vector2, Vector3 } from 'three'
 import { useRef } from "react"
 // modules
+import { t_landingMaterial } from "../components/Materials.ts"
 import BorderedPlane from "../components/BorderedPlane.tsx"
-import { t_LandingMaterial } from "../components/Materials.ts"
 import { colors } from "../utils/constants.ts"
 import { lerp } from "../utils/functions.tsx"
 // assets
 import LandingArrow from '../assets/images/landing-arrow'
+import gsap from "gsap"
 
 const Landing = () => {
   const scrollData = useScroll()
   const { viewport } = useThree()
   const { width, height, factor } = viewport.getCurrentViewport()
   // distorted text material
-  const r_material = useRef<t_LandingMaterial>(null!)
+  const r_material = useRef<t_landingMaterial>(null!)
   const r_mouse = useRef({ target: new Vector2(2, 2), current: new Vector2(2, 2) })
   // wrapper ref
   const r_wrapper = useRef<THREE.Group>(null!)
@@ -98,7 +99,6 @@ const Landing = () => {
       if (r_arrowInner.current.parentElement) r_arrowInner.current.parentElement.style.transform = `rotate(${-360 * sliceOffset}deg)`
       r_arrow.current.position.x = width / 2 - width * 0.065 - width * 0.05 * sliceOffset
       r_arrow.current.position.y = height/2 - width * 0.065 - height * 0.7 * sliceOffset
-      // r_arrowInner.current.rotation.z = Math.PI * 2 * sliceOffset
       r_arrow.current.scale.set(sliceOffset * .5 + 1, sliceOffset *  .5 + 1, 1)
     } else if (sectionOffset === 1) {
       if (r_wrapper.current.position.x !== -width * 0.915) {
@@ -110,21 +110,30 @@ const Landing = () => {
     }
 
     if (r_mouse.current.target.distanceTo(r_mouse.current.current) > 0.01) {
-      const mouseX = lerp(r_mouse.current.current.x, r_mouse.current.target.x, 0.05)
-      const mouseY = lerp(r_mouse.current.current.y, r_mouse.current.target.y, 0.05)
+      const mouseX = lerp(r_mouse.current.current.x, r_mouse.current.target.x, 0.06)
+      const mouseY = lerp(r_mouse.current.current.y, r_mouse.current.target.y, 0.06)
       r_material.current.u_mouse.set(mouseX, mouseY)
       r_mouse.current.current.set(mouseX, mouseY)
     }
   })
+
+  const handlePointerEnter = () => gsap.to(r_material.current, { u_mouse_rad: 0.2, duration: 0.85 })
+
+  const handlePointerLeave = () => gsap.to(r_material.current, { u_mouse_rad: 0, duration: 0.85 })
 
   const handlePointer = (e: ThreeEvent<PointerEvent>) => {
     if (e.uv) r_mouse.current.target.set(e.uv?.x, e.uv.y)
   }
 
   return <group ref={r_wrapper}>
-    <mesh position={[width * 0.0425, 0, 0]} onPointerMove={e => handlePointer(e)}>
+    <mesh
+      position={[width * 0.0425, 0, 0]}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      onPointerMove={e => handlePointer(e)}
+    >
       <planeGeometry args={[width * 0.915, height, 64, 64]} />
-      <landingMaterial ref={r_material} u_mouse={new Vector2(2, 2)} u_aspect={width / height}>
+      <landingMaterial ref={r_material} u_mouse={new Vector2(2, 2)} u_mouse_rad={0} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
           <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
           <color attach="background" args={[colors.fadedBlack]} />

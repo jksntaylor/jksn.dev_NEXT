@@ -555,13 +555,13 @@ main {
 .experiments_side {
   padding: 2rem;
   overflow: hidden;
-  border-right: 1px solid $color-dirtywhite;
+  // border-right: 1px solid $color-dirtywhite;
 }
 
 .experiments_side_text {
   writing-mode: vertical-lr;
   color: $color-dirtywhite;
-  font: 800 15rem/0.5 'Formula Condensed';
+  font: 700 15rem/0.5 'Formula Condensed';
   letter-spacing: 0.5rem;
   transform: scaleX(3.2);
   transform-origin: left;
