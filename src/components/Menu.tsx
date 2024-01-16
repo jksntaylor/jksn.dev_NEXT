@@ -40,7 +40,10 @@ const Menu = () => {
   }, [])
 
   const handleEscape = useCallback((e: KeyboardEvent) => {
-    if (r_menuOpen.current && e.key === 'Escape') toggleMenu()
+    if (r_menuOpen.current && e.key === 'Escape') {
+      e.stopImmediatePropagation()
+      toggleMenu()
+    }
   }, [toggleMenu])
 
   useEffect(() => {
@@ -81,7 +84,7 @@ const Menu = () => {
         duration: 0.75,
         ease: 'expo.inOut'
       }, 0.85)
-    }, 100);
+    }, 500);
       window.addEventListener('keydown', e => handleEscape(e))
     return () => {
       window.removeEventListener('keydown', e => handleEscape(e))

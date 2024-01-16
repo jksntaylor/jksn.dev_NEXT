@@ -188,78 +188,129 @@ export type t_experimentsMaterial = {
   u_time: number
 }
 
-const SphereMaterial = shaderMaterial({
+const SphereInnerMaterial = shaderMaterial({
   u_time: 0,
-  u_speed: 0.2,
-  u_noiseDensity: 0.9,
+  u_speed: 0.1,
+  u_noiseDensity: 1.5,
   u_noiseStrength: 0.75,
   u_frequency: 4,
   u_amplitude: 12
-},`
-    varying float v_distort;
-    varying vec2 v_uv;
+},
+`
+  varying float v_distort;
+  varying vec2 v_uv;
 
-    uniform float u_time;
-    uniform float u_speed;
-    uniform float u_noiseDensity;
-    uniform float u_noiseStrength;
-    uniform float u_frequency;
-    uniform float u_amplitude;
+  uniform float u_time;
+  uniform float u_speed;
+  uniform float u_noiseDensity;
+  uniform float u_noiseStrength;
+  uniform float u_frequency;
+  uniform float u_amplitude;
 
-    ${sNoise}
+  ${sNoise}
 
-    mat3 rotation3dY(float angle) {
-      float s = sin(angle);
-      float c = cos(angle);
+  mat3 rotation3dY(float angle) {
+    float s = sin(angle);
+    float c = cos(angle);
 
-      return mat3(
-        c, 0., -s,
-        0., 1., 0.,
-        s, 0., c
-      );
-    }
+    return mat3(
+      c, 0., -s,
+      0., 1., 0.,
+      s, 0., c
+    );
+  }
 
-    vec3 rotateY(vec3 v, float angle) {
-      return rotation3dY(angle) * v;
-    }
+  vec3 rotateY(vec3 v, float angle) {
+    return rotation3dY(angle) * v;
+  }
 
-    void main() {
-      float t = u_time * u_speed;
-      float distortion = snoise((normal + t) * u_noiseDensity) * u_noiseStrength;
-      vec3 pos = position + (normal * distortion);
-      float angle = sin(uv.y * u_frequency + t) * u_amplitude;
-      pos = rotateY(pos, angle);
-      v_distort = distortion;
-      v_uv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.);
-    }
+  void main() {
+    float t = u_time * u_speed;
+    float distortion = snoise((normal + t) * u_noiseDensity) * u_noiseStrength;
+    vec3 pos = position + (normal * distortion);
+    float angle = sin(uv.y * u_frequency + t) * u_amplitude;
+    pos = rotateY(pos, angle);
+
+    v_distort = distortion;
+    v_uv = uv;
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.);
+  }
 `,`
-    varying float v_distort;
-    varying vec2 v_uv;
+  varying float v_distort;
+  varying vec2 v_uv;
 
-    vec3 cosPalette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
-      return a + b * cos(6.28318 * (c * t + d));
-    }
+  vec3 cosPalette(float t, vec3 a, vec3 b, vec3 c, vec3 d) {
+    return a + b * cos(6.28318 * (c * t + d));
+  }
 
-    void main() {
-      vec3 brightness = vec3(0.5, 0.5, 0.5);
-      vec3 contrast = vec3(0.5, 0.5, 0.5);
-      vec3 oscilation = vec3(1., 1., 1.);
-      vec3 phase = vec3(0.3, 0.2, 0.2);
+  void main() {
+    vec3 brightness = vec3(0.5, 0.5, 0.5);
+    vec3 contrast = vec3(0.5, 0.5, 0.5);
+    vec3 oscilation = vec3(1., 1., 1.);
+    vec3 phase = vec3(0.3, 0.2, 0.2);
 
-      // Pass the distortion as input of cospalette
-      vec3 color = cosPalette(v_distort, brightness, contrast, oscilation, phase);
-      gl_FragColor = vec4(color, 1.);
-    }
+    // Pass the distortion as input of cospalette
+    vec4 color = vec4(cosPalette(v_distort, brightness, contrast, oscilation, phase), 1.);
+    gl_FragColor = mix(vec4(vec3(0.), 1.), color, clamp(v_distort * 5., 0.8, 1.));
+  }
 `)
 
-export type t_sphereMaterial = {
+export type t_sphereInnerMaterial = {
   u_time: number
   u_speed: number
   u_noiseDensity: number
   u_noiseStrength: number
   u_frequency: number
   u_amplitude: number
+}
+
+const SphereOuterMaterial = shaderMaterial({
+  u_time: 0
+}, `
+  varying vec3 v_position;
+
+  void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.);
+    v_position = position;
+  }
+`,`
+  uniform float u_time;
+  varying vec3 v_position;
+
+  ${sNoise}
+
+  float lines(vec2 uv, float offset) {
+    return smoothstep(0.0, 0.5 + offset * 0.5, abs(0.5*(sin(uv.x*20.) + offset*2.)));
+  }
+
+  mat2 rotate2D(float angle) {
+    return mat2(cos(angle),-sin(angle),sin(angle),cos(angle));
+  }
+
+  void main() {
+    if (gl_FrontFacing == true) {
+      gl_FragColor = vec4(0., 0., 0., 1.);
+    }
+    float n = snoise(v_position * .3 + (u_time * 0.05));
+    vec3 color1 = vec3(0.196,0.871,0.929);
+    vec3 color2 = vec3(0.063,0.063,0.063);
+    vec3 color3 = vec3(1.,0.149,0.278);
+
+    vec2 base = rotate2D(n + 0.5)*v_position.xy*0.01;
+    float basePattern = lines(base, 0.3);
+    float secondPattern = lines(base, 0.05);
+
+    vec3 baseColor = mix(color3, color1, basePattern);
+    vec3 secondBaseColor = mix(baseColor, color2, secondPattern);
+
+    gl_FragColor = vec4(vec3(secondBaseColor), 1.);
+  }
+`)
+
+export type t_sphereOuterMaterial = {
+  u_time: 0
+  side: THREE.Side
 }
 
 declare global {
@@ -269,9 +320,10 @@ declare global {
       landingMaterial: ReactThreeFiber.Object3DNode<t_landingMaterial, typeof LandingMaterial>,
       selectedWorksMaterial: ReactThreeFiber.Object3DNode<t_selectedWorksMaterial, typeof SelectedWorksMaterial>,
       experimentsMaterial: ReactThreeFiber.Object3DNode<t_experimentsMaterial, typeof ExperimentsMaterial>,
-      sphereMaterial: ReactThreeFiber.Object3DNode<t_sphereMaterial, typeof SphereMaterial>
+      sphereInnerMaterial: ReactThreeFiber.Object3DNode<t_sphereInnerMaterial, typeof SphereInnerMaterial>
+      sphereOuterMaterial: ReactThreeFiber.Object3DNode<t_sphereOuterMaterial, typeof SphereOuterMaterial>
     }
   }
 }
 
-extend({ LandingMaterial, SelectedWorksMaterial, ExperimentsMaterial, SphereMaterial })
+extend({ LandingMaterial, SelectedWorksMaterial, ExperimentsMaterial, SphereInnerMaterial, SphereOuterMaterial })

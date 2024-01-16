@@ -22,6 +22,10 @@ const Credits = () => {
     }
   })
 
+  const handleClick = (i: number) => {
+    window.dispatchEvent(new CustomEvent('toggleProject', { detail: i }))
+  }
+
   return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
     <Html
       center
@@ -41,16 +45,16 @@ const Credits = () => {
       </div>
       <div className="credits_bottom">
         <div className="credits_project_links">
-          <div className="credits_project_link">Tiktok Top Moments</div>
-          <div className="credits_project_link">RRE Ventures</div>
-          <div className="credits_project_link">Genies</div>
-          <div className="credits_project_link">Source 7</div>
-          <div className="credits_project_link">Realtime Robotics</div>
-          <div className="credits_project_link">Levi's 501 Day</div>
-          <div className="credits_project_link">Source 7</div>
-          <div className="credits_project_link">Huge Inc</div>
-          <div className="credits_project_link">Bitski</div>
-          <div className="credits_project_link">Introvoke</div>
+          <div className="credits_project_link" onClick={() => handleClick(0)}>Tiktok Top Moments</div>
+          <div className="credits_project_link" onClick={() => handleClick(1)}>RRE Ventures</div>
+          <div className="credits_project_link" onClick={() => handleClick(2)}>Genies</div>
+          <div className="credits_project_link" onClick={() => handleClick(3)}>Source 7</div>
+          <div className="credits_project_link" onClick={() => handleClick(4)}>Realtime Robotics</div>
+          <div className="credits_project_link" onClick={() => handleClick(5)}>Levi's 501 Day</div>
+          <div className="credits_project_link" onClick={() => handleClick(6)}>Source 7</div>
+          <div className="credits_project_link" onClick={() => handleClick(7)}>Huge Inc</div>
+          <div className="credits_project_link" onClick={() => handleClick(8)}>Bitski</div>
+          <div className="credits_project_link" onClick={() => handleClick(9)}>Introvoke</div>
         </div>
         <div className="credits_contributor">
           <span className="credits_role">Development</span>
