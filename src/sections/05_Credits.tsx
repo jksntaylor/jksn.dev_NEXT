@@ -3,10 +3,10 @@ import { Html, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from "react"
 // assets
-import dribbble from '../assets/images/dribbble.svg'
-import linkedin from '../assets/images/linkedin.svg'
-import github from '../assets/images/github.svg'
-import insta from '../assets/images/insta.svg'
+import Github from '../assets/svg/github'
+import Insta from '../assets/svg/insta'
+import Linkedin from "../assets/svg/linkedin"
+import Dribbble from "../assets/svg/dribbble"
 
 const Credits = () => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
@@ -62,13 +62,13 @@ const Credits = () => {
           <span className="credits_name">J<em>ack</em>so<em>n</em> <em>T</em>ay<em>lor</em></span>
           <div className="credits_social_links">
             <a href="https://github.com/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="github">
-              <img alt="github" src={github}/>
+              <Github />
             </a>
             <a href="https://linkedin.com/in/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="linkedin">
-              <img alt="linkedin" src={linkedin} />
+              <Linkedin />
             </a>
             <a href="https://dribbble.com/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="dribbble">
-              <img alt="dribbble" src={dribbble} />
+              <Dribbble />
             </a>
           </div>
         </div>
@@ -77,13 +77,13 @@ const Credits = () => {
           <span className="credits_name"><em>B</em>ra<em>ndo</em>n <em>Z</em>a<em>ch</em>ari<em>as</em></span>
           <div className="credits_social_links">
             <a href="https://dribbble.com/brandonzacharias" target="_blank" rel="noopener noreferrer" aria-label="dribbble">
-              <img alt="dribbble" src={dribbble} />
+              <Dribbble />
             </a>
             <a href="https://linkedin.com/in/brandon-zacharias" target="_blank" rel="noopener noreferrer" aria-label="linkedin">
-              <img alt="linkedin" src={linkedin} />
+              <Linkedin />
             </a>
             <a href="https://instagram.com/bzachariasdesign" target="_blank" rel="noopener noreferrer" aria-label="instagram">
-              <img alt="instagram" src={insta} />
+              <Insta />
             </a>
           </div>
         </div>

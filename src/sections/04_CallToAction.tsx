@@ -78,7 +78,7 @@ const CallToAction = () => {
       <div ref={r_slice3} className="landing_slice"><h3>NE<em>W</em></h3></div>
     </Html>
 
-    <mesh ref={r_sphere} position={[width / 2 - height * 0.45, height / 2 - height * 0.6, 0]}>
+    <mesh ref={r_sphere} position={[width / 2 - width * 0.3, height / 2 - height * 0.6, 0]}>
       <icosahedronGeometry args={[height * 0.15, 128]} />
       <sphereMaterial ref={r_mat} />
     </mesh>
@@ -95,8 +95,8 @@ const CallToAction = () => {
       <MeshReflectorMaterial
         blur={[15, 15]}
         mixBlur={1}
-        mixStrength={100}
-        resolution={1024}
+        mixStrength={200}
+        resolution={2048}
         mirror={1}
         depthScale={1}
         reflectorOffset={-0.2}
@@ -105,7 +105,7 @@ const CallToAction = () => {
     </Text3D>
     <Environment resolution={16}>
       {/* Main */}
-      <Lightformer intensity={30} color="#ffd4d7" rotation-y={Math.PI / 2} position={[0, 1, 1]} target={[0, 0, 0]} scale={[1, 1, 1]} />
+      <Lightformer intensity={10} color="#ffd4d7" rotation-y={Math.PI / 2} position={[0, 1, 1]} target={[0, 0, 0]} scale={[1, 1, 1]} />
       {/* Key */}
       <Lightformer form="circle" color="#cff8ff" intensity={100} scale={2} position={[2, -2, -3]} target={[0, 0, 0]}/>
       <Lightformer form="circle" color="#cff8ff" intensity={10} scale={2} position={[-2, -2, -3]} target={[0, 0, 0]}/>

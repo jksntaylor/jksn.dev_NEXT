@@ -8,7 +8,7 @@ import { t_landingMaterial } from "../components/Materials.ts"
 import { colors } from "../utils/constants.ts"
 import { lerp } from "../utils/functions.tsx"
 // assets
-import LandingArrow from '../assets/images/landing-arrow.tsx'
+import LandingArrow from '../assets/svg/landing-arrow.tsx'
 import gsap from "gsap"
 
 const Landing = () => {
@@ -17,7 +17,7 @@ const Landing = () => {
   const { width, height, factor } = viewport.getCurrentViewport()
   // distorted text material
   const r_material = useRef<t_landingMaterial>(null!)
-  const r_mouse = useRef({ target: new Vector2(2, 2), current: new Vector2(2, 2) })
+  const r_mouse = useRef({ target: new Vector2(1, 0), current: new Vector2(1, 0) })
   // wrapper ref
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_arrow = useRef<THREE.Group>(null!)
@@ -109,7 +109,7 @@ const Landing = () => {
       onPointerMove={e => handlePointer(e)}
     >
       <planeGeometry args={[width * 0.915, height, 64, 64]} />
-      <landingMaterial ref={r_material} u_mouse={new Vector2(2, 2)} u_mouse_rad={0} u_aspect={width / height}>
+      <landingMaterial ref={r_material} u_mouse={new Vector2(0.9, 0)} u_mouse_rad={0.2} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
           <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
           <color attach="background" args={[colors.fadedBlack]} />

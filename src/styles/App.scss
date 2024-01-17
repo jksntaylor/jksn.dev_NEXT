@@ -101,7 +101,7 @@ main {
 }
 
 .menu_link {
-  font: 300 5rem/100% 'Formula Condensed';
+  font: 300 4.5rem/100% 'Formula Condensed';
   letter-spacing: 0.03em;
   text-transform: uppercase;
   display: inline-block;
@@ -402,14 +402,17 @@ form {
 // WELCOME SECTION
 .welcome {
   position: relative;
+  >div:not(.welcome_content) {
+    display: flex;
+    align-items: center;
+  }
   .section_number {
-    transform: translateY(45%);
     border: 1px solid $color-dirtywhite;
     background: $color-fadedblack;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 35rem
+    margin-bottom: 60%
   }
 }
 
@@ -417,6 +420,7 @@ form {
   position: absolute;
   top: 0;
   left: 30%;
+  height: 100dvh;
 }
 
 .welcome h1 {
@@ -439,7 +443,7 @@ form {
     font: 400 4rem/100% 'Formula Condensed';
   }
   span:last-of-type {
-    font: italic 700 1.6rem/120% 'Neue Montreal';
+    font: italic 700 1.8rem/120% 'Neue Montreal';
     margin-bottom: 2rem;
   }
   p:first-of-type {
@@ -833,15 +837,15 @@ form {
   padding: 2rem;
   overflow: hidden;
   background: $color-fadedblack;
-  border-left: 1px solid $color-dirtywhite;
-  border-right: 1px solid $color-dirtywhite;
+  border: 1px solid $color-dirtywhite;
+  border-bottom: none;
 }
 
 .experiments_side_text {
   writing-mode: vertical-lr;
   color: $color-dirtywhite;
-  font: 700 15rem/0.5 'Formula Condensed';
-  letter-spacing: 0.5rem;
+  font: 700 16vh/0.5 'Formula Condensed';
+  letter-spacing: 0.04em;
   transform: scaleX(3.2);
   transform-origin: left;
 }
@@ -990,7 +994,7 @@ form {
 }
 
 .credits_project_link {
-  font: 400 3.5rem/100% 'Neue Montreal';
+  font: 400 3rem/100% 'Neue Montreal';
   letter-spacing: -0.03rem;
   text-transform: uppercase;
   display: flex;
@@ -1030,7 +1034,7 @@ form {
 }
 
 .credits_name {
-  font: 300 3rem/100% 'Formula Condensed';
+  font: 500 3rem/100% 'Formula Condensed';
   text-transform: uppercase;
   display: block;
   margin-bottom: 1rem;
@@ -1039,13 +1043,13 @@ form {
 .credits_social_links {
   a {
     margin-right: 1rem;
-    img {
-      height: 4rem;
+    svg {
+      height: 3rem;
       width: auto;
       transition: transform 300ms ease;
     }
     &:hover {
-      img {
+      svg {
         transform: scale(1.1)
       }
     }

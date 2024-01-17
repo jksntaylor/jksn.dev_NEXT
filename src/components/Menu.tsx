@@ -1,7 +1,7 @@
 // libraries
 import { Html, useScroll } from "@react-three/drei"
 import { useThree } from "@react-three/fiber"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import { Vector3 } from "three"
 import gsap from "gsap"
 import emailjs from '@emailjs/browser'
@@ -10,8 +10,8 @@ import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
 import { lerp } from "../utils/functions"
 // assets
-import Email from "../assets/images/email"
-import Star from "../assets/images/star"
+import Email from "../assets/svg/email"
+import Star from "../assets/svg/star"
 
 const Menu = () => {
   const scrollData = useScroll()
@@ -153,7 +153,7 @@ const Menu = () => {
 
     const r_link = useRef<HTMLDivElement>(null!)
     const r_cursor = useRef({ target: 0, value: 0 })
-    const r_chars: { el: HTMLSpanElement, pos: number }[] = []
+    const r_chars: { el: HTMLSpanElement, pos: number }[] = useMemo(() => [], [])
     const r_intensity = useRef({ value: 0 })
 
     const intensityTL = gsap.timeline({ paused: true }).to(r_intensity.current, { value: 1, duration: 0.35 })

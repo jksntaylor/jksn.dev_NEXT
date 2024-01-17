@@ -7,7 +7,7 @@ import { Vector3 } from 'three'
 const Welcome = () => {
   const scrollData = useScroll()
   const { viewport } = useThree()
-  const { width, factor } = viewport.getCurrentViewport()
+  const { height, width, factor } = viewport.getCurrentViewport()
   const r_text = useRef<HTMLHeadingElement>(null!)
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_content = useRef<HTMLDivElement>(null!)
@@ -38,6 +38,7 @@ const Welcome = () => {
       zIndexRange={[4, 5]}
       wrapperClass="welcome"
       portal={{ current: scrollData.fixed }}
+      style={{ height: height * factor }}
     >
       <h1 ref={r_text}>WELCOME</h1>
       <div ref={r_content} className="welcome_content">
