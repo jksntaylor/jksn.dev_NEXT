@@ -9,6 +9,7 @@ import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
 import { lerp } from "../utils/functions"
 // assets
+import Email from "../assets/images/email"
 import Star from "../assets/images/star"
 
 const Menu = () => {
@@ -22,6 +23,8 @@ const Menu = () => {
   const r_path2 = useRef<SVGPathElement>(null!)
   const r_path2b = useRef<SVGPathElement>(null!)
   const r_path3 = useRef<SVGPathElement>(null!)
+
+  const r_sliderText = useRef<HTMLSpanElement>(null!)
 
   const r_menuOpen = useRef(false)
 
@@ -187,6 +190,20 @@ const Menu = () => {
   }
   // END MenuLink COMPONENT
 
+  const handleCloseForm = () => {
+
+  }
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const percentage = Math.max(Number(e.target.value) - 3, 0) / 0.47
+    r_sliderText.current.style.left = `${percentage * 0.95}%`
+    r_sliderText.current.innerText = `$${e.target.value}K`
+  }
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    console.log(e)
+  }
+
   return <group>
     <BorderedPlane
       width={width * 0.945}
@@ -204,7 +221,7 @@ const Menu = () => {
         portal={{ current: scrollData.fixed }}
         style={{
           width: width * 0.945 * factor,
-          height: height * factor + 4
+          height: height * factor + 2
         }}
       >
         <div className="menu_links">
@@ -242,6 +259,48 @@ const Menu = () => {
             <span>February 2024</span>
           </div>
           <Star />
+        </div>
+        <div className="contact_form">
+          <form onSubmit={e => handleFormSubmit(e)}>
+            <p className="form_heading"><em>Ge</em>t I<em>n</em> T<em>ou</em>c<em>h</em></p>
+            <div className="form_input">
+              <label htmlFor="contact_name">Name<Star /></label>
+              <input type="text" id="contact_name" /></div>
+            <div className="form_input">
+              <label htmlFor="contact_email">Email<Star /></label>
+              <input type="text" id="contact_email"/>
+            </div>
+            <div className="form_input">
+              <label htmlFor="contact_company">Company</label>
+              <input type="text" id="contact_company"/>
+            </div>
+            <div className="form_slider">
+              <label htmlFor="contact_budget">Estimated Budget</label>
+              <div className="slider_wrapper">
+                <span>$3K</span>
+                <div>
+                  <span ref={r_sliderText}>$10K</span>
+                  <input type="range" id="contact_budget" min={3} max={50} step={1} defaultValue={10} onChange={e => handleSliderChange(e)}/>
+                </div>
+                <span>$50K+</span>
+              </div>
+            </div>
+            <div className="form_textarea">
+              <label htmlFor="contact_brief">Project Brief<Star /></label>
+              <textarea id="contact_brief"/>
+            </div>
+            <div className="form_buttons">
+              <button className="form_close" type="button" onClick={handleCloseForm}><em>CLO</em>S<em>E</em></button>
+              <button className="form_send" formAction="submit"><em>S</em>E<em>ND</em>→</button>
+            </div>
+          </form>
+          <div className="email">
+            <p className="email_heading"><em>O</em>T<em>HE</em>R IN<em>QU</em>IRI<em>E</em>S:</p>
+            <a href="mailto:business@jksn.dev" className="email_link">
+              business@jksn.dev
+              <Email />
+            </a>
+          </div>
         </div>
       </Html>
     </BorderedPlane>

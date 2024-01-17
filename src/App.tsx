@@ -1,5 +1,5 @@
 // libraries
-import { Suspense, useCallback, useEffect, useRef } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useRef } from 'react'
 import { ScrollControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 // import { OrbitControls } from '@react-three/drei'
@@ -7,15 +7,16 @@ import { Canvas } from '@react-three/fiber'
 import './components/Materials'
 import Menu from './components/Menu'
 import Landing from './sections/00_Landing'
-import Welcome from './sections/01_Welcome'
-import SelectedWorks from './sections/02_SelectedWorks'
-import Experiments from './sections/03_Experiments'
-import CallToAction from './sections/04_CallToAction'
 import { colors } from './utils/constants'
+// lazy loading modules
+const Welcome = lazy(() => import('./sections/01_Welcome'))
+const SelectedWorks = lazy(() => import('./sections/02_SelectedWorks'))
+const Experiments = lazy(() => import('./sections/03_Experiments'))
+const CallToAction = lazy(() => import('./sections/04_CallToAction'))
+const Credits = lazy(() => import('./sections/05_Credits'))
 // styles
 import cover from './assets/images/resize_cover.webp'
 import './styles/App.scss'
-import Credits from './sections/05_Credits'
 
 function App() {
 
@@ -45,11 +46,13 @@ function App() {
         <ScrollControls pages={10} damping={0.2}>
           <Menu />
           <Landing />
-          <Welcome />
-          <SelectedWorks />
-          <Experiments />
-          <CallToAction />
-          <Credits />
+          <Suspense fallback={null}>
+            <Welcome />
+            <SelectedWorks />
+            <Experiments />
+            <CallToAction />
+            <Credits />
+          </Suspense>
         </ScrollControls>
       </Canvas>
     </Suspense>

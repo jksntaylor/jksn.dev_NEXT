@@ -41,6 +41,7 @@ main {
   }
 }
 
+// MENU COMPONENT
 .menu, .menu_drawer {
   border-right: 1px solid $color-dirtywhite;
   background: $color-fadedblack;
@@ -143,7 +144,190 @@ main {
     }
   }
 }
+// END MENU COMPONENT
 
+// CONTACT FORM COMPONENT
+.contact_form {
+  position: absolute;
+  left: 0;
+  top: 0%;
+  width: calc(100% - 3.1vw);
+  height: 100%;
+  background: $color-fadedblack;
+  color: $color-dirtywhite;
+  padding: 5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+form {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form_heading {
+  font: 600 8rem/120% 'Formula Condensed';
+  text-transform: uppercase;
+  border-bottom: 0.3rem solid $color-accent1;
+  width: max-content;
+  margin-bottom: 5rem;
+}
+
+.form_input {
+  display: flex;
+  width: 100%;
+  margin-bottom: 3rem;
+  label {
+    font: 400 2.5rem/100% 'Neue Montreal';
+    margin-right: 1.5rem;
+    svg {
+      transform: translate(.5rem, -.5rem);
+    }
+  }
+  input {
+    all: unset;
+    flex-grow: 1;
+    border-bottom: 1px solid  $color-dirtywhite;
+    font: 400 2.5rem/100% 'Neue Montreal';
+    padding-bottom: 0.5rem;
+    transform: translateY(-0.2rem);
+  }
+}
+
+.form_slider {
+  display: flex;
+  margin-bottom: 3rem;
+  label {
+    font: 400 2.5rem/100% 'Neue Montreal';
+    margin-right: 1.5rem;
+  }
+  .slider_wrapper {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    span {
+      font: 400 2rem/100% 'Neue Montreal';
+    }
+    div {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      position: relative;
+      span {
+        font-size: 1.5rem;
+        position: absolute;
+        top: -3rem;
+        left: 13%;
+      }
+    }
+    input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+      &::-webkit-slider-runnable-track {
+        background: $color-dirtywhite;
+        height: 1px;
+        border-radius: 1px
+      }
+      &::-webkit-slider-thumb {
+        appearance: none;
+        -webkit-appearance: none;
+        background: $color-dirtywhite;
+        height: 2rem;
+        width: 2rem;
+        border-radius: 1rem;
+        transform: translateY(-0.8rem);
+      }
+    }
+  }
+}
+
+.form_textarea {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-grow: 1;
+  margin-bottom: 3rem;
+  label {
+    display: block;
+    font: 400 2.5rem/100% 'Neue Montreal';
+    margin-right: 1.5rem;
+    margin-bottom: 1.5rem;
+    svg {
+      transform: translate(.5rem, -.5rem);
+    }
+  }
+  textarea {
+    resize: none;
+    background: $color-dirtywhite;
+    border-radius: 1rem;
+    font: 400 2rem/125% 'Neue Montreal';
+    padding: 1rem;
+    display: block;
+    flex-grow: 1;
+    &:focus {
+      outline: 0.2rem solid $color-accent1;
+    }
+  }
+}
+
+.form_buttons {
+  button {
+    cursor: pointer;
+    border: 0.1rem solid $color-accent1;
+    border-radius: 2.5rem;
+    box-sizing: border-box;
+    color: $color-accent1;
+    font: 200 2.8rem/100% 'Formula Condensed';
+    letter-spacing: 0.03em;
+    height: 5rem;
+    margin-right: 3rem;
+    padding: 1rem 2rem 0;
+    text-transform: uppercase;
+    transition: all 400ms ease;
+    &:hover {
+      box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+      color: $color-dirtywhite;
+    }
+    &:active {
+      box-shadow: none;
+      color: $color-dirtywhite;
+    }
+  }
+}
+
+.email_heading {
+  font: 300 4rem/120% 'Formula Condensed';
+  margin-bottom: 2rem;
+}
+
+.email_link {
+  all: unset;
+  cursor: pointer;
+  font: 300 3.5rem/100% 'Formula Condensed';
+  display: flex;
+  transition: color 400ms ease;
+  svg {
+    margin-left: 2rem;
+    height: 3rem;
+    width: auto;
+    overflow: visible;
+    #email_arrow {
+      transition: transform 400ms ease;
+    }
+  }
+  &:hover {
+    color: $color-accent1;
+    #email_arrow {
+      transform: translateX(1rem);
+    }
+  }
+}
+// END CONTACTFORM COMPONENT
+
+// LANDING SECTION
 .landing_arrow-outer {
   transform-origin: center center;
   animation: spin 20s linear infinite;
@@ -174,7 +358,9 @@ main {
   text-shadow: 0.4rem 0 $color-accent1,
                0.8rem 0 $color-accent2;
 }
+// END LANDING SECTION
 
+// WELCOME SECTION
 .welcome {
   position: relative;
   .section_number {
@@ -228,7 +414,9 @@ main {
     text-align: right;
   }
 }
+// END WELCOME SECTION
 
+// SELECTEDWORKS SECTION
 .selectedworks_top {
   display: flex;
   .section_number {
@@ -393,7 +581,9 @@ main {
     color: $color-dirtywhite;
   }
 }
+// END SELECTEDWORKS SECTION
 
+// PROJECTPAGE
 .projectpage {
   color: $color-dirtywhite;
   position: relative;
@@ -401,9 +591,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  >* {
-    pointer-events: all;
-  }
+  > * { pointer-events: all;}
 }
 
 .projectpage_top {
@@ -576,7 +764,9 @@ main {
     background: $color-fadedblack
   }
 }
+// END PROJECT PAGE
 
+// EXPERIMENTS SECTION
 .experiments_top {
   display: flex;
   .section_number {
@@ -639,7 +829,9 @@ main {
     }
   }
 }
+// END EXPERIMENTS SECTION
 
+// MOTTO SECTION
 .motto_cta {
   position: absolute;
   width: 60%;
@@ -713,8 +905,9 @@ main {
     color: $color-dirtywhite;
   }
 }
+// END MOTTO SECTION
 
-
+// CREDITS SECTION
 .credits {
   display: flex;
   flex-direction: column;
@@ -819,3 +1012,4 @@ main {
     }
   }
 }
+// END CREDITS SECTION
