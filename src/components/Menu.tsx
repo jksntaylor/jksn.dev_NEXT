@@ -4,6 +4,7 @@ import { useThree } from "@react-three/fiber"
 import { useCallback, useEffect, useRef } from "react"
 import { Vector3 } from "three"
 import gsap from "gsap"
+import emailjs from '@emailjs/browser'
 // modules
 import BorderedPlane from "./BorderedPlane"
 import { colors } from "../utils/constants"
@@ -18,6 +19,14 @@ const Menu = () => {
   const { height, width, factor } = viewport.getCurrentViewport(camera, [0, 0, 0])
 
   const r_drawer = useRef<THREE.Group>(null!)
+  const r_contact = useRef<HTMLDivElement>(null!)
+  const r_thanks = useRef<HTMLParagraphElement>(null!)
+  const r_contactForm = useRef<HTMLFormElement>(null!)
+  const r_contactName = useRef<HTMLInputElement>(null!)
+  const r_contactEmail = useRef<HTMLInputElement>(null!)
+  const r_contactCompany = useRef<HTMLInputElement>(null!)
+  const r_contactBudget = useRef<HTMLInputElement>(null!)
+  const r_contactBrief = useRef<HTMLTextAreaElement>(null!)
 
   const r_path1 = useRef<SVGPathElement>(null!)
   const r_path2 = useRef<SVGPathElement>(null!)
@@ -27,8 +36,26 @@ const Menu = () => {
   const r_sliderText = useRef<HTMLSpanElement>(null!)
 
   const r_menuOpen = useRef(false)
+  const r_contactOpen = useRef(false)
 
   const menuTL = useRef(gsap.timeline({ paused: true }))
+
+  const toggleContact = useCallback(() => {
+    if (!r_contactOpen.current) {
+      gsap.to(r_contact.current, {
+        top: 0,
+        ease: 'expo.out',
+        duration: 0.8
+      })
+    } else {
+      gsap.to(r_contact.current, {
+        top: '100%',
+        ease: 'expo.inOut',
+        duration: 0.8
+      })
+    }
+    r_contactOpen.current = !r_contactOpen.current
+  }, [])
 
   const toggleMenu = useCallback(() => {
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
@@ -42,12 +69,20 @@ const Menu = () => {
     r_menuOpen.current = !r_menuOpen.current
   }, [])
 
+  const handleToggleContact = useCallback(() => {
+    toggleContact()
+    toggleMenu()
+  }, [toggleContact, toggleMenu])
+
   const handleEscape = useCallback((e: KeyboardEvent) => {
-    if (r_menuOpen.current && e.key === 'Escape') {
+    if (e.key === 'Escape' && r_contactOpen.current) {
+      e.stopImmediatePropagation()
+      toggleContact()
+    } else if (e.key === 'Escape' && r_menuOpen.current) {
       e.stopImmediatePropagation()
       toggleMenu()
     }
-  }, [toggleMenu])
+  }, [toggleContact, toggleMenu])
 
   useEffect(() => {
     setTimeout(() => {
@@ -89,10 +124,12 @@ const Menu = () => {
       }, 0.85)
     }, 500);
       window.addEventListener('keydown', e => handleEscape(e))
+      window.addEventListener('toggleContact', (handleToggleContact) as EventListener)
     return () => {
       window.removeEventListener('keydown', e => handleEscape(e))
+      window.removeEventListener('toggleContact', (handleToggleContact) as EventListener)
     }
-  }, [menuTL, factor, width, handleEscape])
+  }, [menuTL, factor, width, handleEscape, handleToggleContact])
 
   const mouseEnter = () => {
     if (!r_menuOpen.current) menuTL.current.tweenTo(0.55)
@@ -152,7 +189,7 @@ const Menu = () => {
 
     const generateString = (str: string) => str.split('').map((c, i) => <Character char={c} key={i}/>)
 
-    const animate = () => {
+    const animate = useCallback(() => {
       if (r_cursor.current.target !== r_cursor.current.value) r_cursor.current.value = lerp(r_cursor.current.value, r_cursor.current.target, 0.1)
       r_chars.forEach(char => {
         if (r_intensity.current.value > 0) {
@@ -170,12 +207,11 @@ const Menu = () => {
           }
       })
       requestAnimationFrame(animate)
-    }
+    }, [altColor, r_chars])
 
     useEffect(() => {
       animate()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [animate])
 
     return <div
       ref={r_link}
@@ -190,10 +226,6 @@ const Menu = () => {
   }
   // END MenuLink COMPONENT
 
-  const handleCloseForm = () => {
-
-  }
-
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const percentage = Math.max(Number(e.target.value) - 3, 0) / 0.47
     r_sliderText.current.style.left = `${percentage * 0.95}%`
@@ -202,6 +234,28 @@ const Menu = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     console.log(e)
+    console.log(r_contactName, r_contactEmail, r_contactBudget, r_contactCompany, r_contactBrief)
+    if (r_contactName.current.value && r_contactEmail.current.value && r_contactBrief.current.value) {
+      emailjs.sendForm('default_service', import.meta.env.VITE_EMAIL_TEMPLATE, r_contactForm.current, import.meta.env.VITE_EMAIL_KEY).then(res => {
+        console.log('email sent', res)
+        gsap.to(r_contactForm.current.children, {
+          opacity: 0,
+          y: '10%',
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'power1.out',
+          pointerEvents: 'none'
+        })
+        gsap.to(r_thanks.current, {
+          y: 0,
+          opacity: 1,
+          delay: 0.8
+        })
+      }, res => {
+        console.log('send error', res)
+        // ADD ERROR HANDLING
+      })
+    }
   }
 
   return <group>
@@ -250,6 +304,7 @@ const Menu = () => {
               <MenuLink projIndex={4} str="POrtaL" altColor/>
             </div>
           </div>
+          <button className="menu_opencontact" onClick={toggleContact}>LET'<em>S</em> T<em>A</em>LK →</button>
         </div>
         <div className="menu_teaser">
           <Star />
@@ -260,19 +315,20 @@ const Menu = () => {
           </div>
           <Star />
         </div>
-        <div className="contact_form">
-          <form onSubmit={e => handleFormSubmit(e)}>
+        <div className="contact_form" ref={r_contact}>
+          <form onSubmit={e => handleFormSubmit(e)} ref={r_contactForm}>
             <p className="form_heading"><em>Ge</em>t I<em>n</em> T<em>ou</em>c<em>h</em></p>
             <div className="form_input">
               <label htmlFor="contact_name">Name<Star /></label>
-              <input type="text" id="contact_name" /></div>
+              <input type="text" id="contact_name" name="name" ref={r_contactName}/>
+            </div>
             <div className="form_input">
               <label htmlFor="contact_email">Email<Star /></label>
-              <input type="text" id="contact_email"/>
+              <input type="text" id="contact_email" name="email" ref={r_contactEmail}/>
             </div>
             <div className="form_input">
               <label htmlFor="contact_company">Company</label>
-              <input type="text" id="contact_company"/>
+              <input type="text" id="contact_company" name="company" ref={r_contactCompany}/>
             </div>
             <div className="form_slider">
               <label htmlFor="contact_budget">Estimated Budget</label>
@@ -280,20 +336,25 @@ const Menu = () => {
                 <span>$3K</span>
                 <div>
                   <span ref={r_sliderText}>$10K</span>
-                  <input type="range" id="contact_budget" min={3} max={50} step={1} defaultValue={10} onChange={e => handleSliderChange(e)}/>
+                  <input
+                    type="range" id="contact_budget" name="budget" ref={r_contactBudget}
+                    min={3} max={50} step={1} defaultValue={10}
+                    onChange={e => handleSliderChange(e)}
+                  />
                 </div>
                 <span>$50K+</span>
               </div>
             </div>
             <div className="form_textarea">
               <label htmlFor="contact_brief">Project Brief<Star /></label>
-              <textarea id="contact_brief"/>
+              <textarea id="contact_brief" name="description" ref={r_contactBrief}/>
             </div>
             <div className="form_buttons">
-              <button className="form_close" type="button" onClick={handleCloseForm}><em>CLO</em>S<em>E</em></button>
-              <button className="form_send" formAction="submit"><em>S</em>E<em>ND</em>→</button>
+              <button className="form_close" type="button" onClick={toggleContact}><em>CLO</em>S<em>E</em></button>
+              <button className="form_send" type="button" onClick={handleFormSubmit}><em>S</em>E<em>ND</em>→</button>
             </div>
           </form>
+          <p className="contact_thanks" ref={r_thanks}>Thanks for reaching out!<br/>I'll be in touch as soon as I can.</p>
           <div className="email">
             <p className="email_heading"><em>O</em>T<em>HE</em>R IN<em>QU</em>IRI<em>E</em>S:</p>
             <a href="mailto:business@jksn.dev" className="email_link">

@@ -23,9 +23,7 @@ const Welcome = () => {
     } else {
       r_wrapper.current.position.x = (-width * 3.35 * sectionOffset) + (width * 1.675) // 1.675 = 2.35/2 + 0.5
       if (r_content.current) r_content.current.style.left = `${60 * sectionOffset + 20}%`
-      if (r_text.current && fontWeightFactor > 0) {
-        r_text.current.style.fontWeight = `${fontWeightFactor * 700 + 100}`
-      }
+      if (r_text.current && fontWeightFactor > 0) r_text.current.style.fontWeight = `${fontWeightFactor * 700 + 100}`
     }
 
   })

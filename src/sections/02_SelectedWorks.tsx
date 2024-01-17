@@ -1,8 +1,8 @@
 // libraries
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useSinglePrismicDocument } from "@prismicio/react"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
+import { useSinglePrismicDocument } from "@prismicio/react"
 import gsap from 'gsap'
 // modules
 import { t_selectedWorksMaterial } from "../components/Materials"

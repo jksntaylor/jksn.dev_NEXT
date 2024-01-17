@@ -2,8 +2,8 @@
 import { Environment, Html, Lightformer, MeshReflectorMaterial, Text3D, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from "react"
-import { t_sphereMaterial } from "../components/Materials"
 // modules
+import { t_sphereMaterial } from "../components/Materials"
 
 const CallToAction = () => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
@@ -79,7 +79,7 @@ const CallToAction = () => {
     </Html>
 
     <mesh ref={r_sphere} position={[width / 2 - height * 0.45, height / 2 - height * 0.6, 0]}>
-      <icosahedronGeometry args={[height * 0.15, 256]} />
+      <icosahedronGeometry args={[height * 0.15, 128]} />
       <sphereMaterial ref={r_mat} />
     </mesh>
     <Text3D
@@ -103,12 +103,13 @@ const CallToAction = () => {
         envMapIntensity={0.15}
       />
     </Text3D>
-    <Environment resolution={512}>
-        {/* Main */}
-        <Lightformer intensity={20} color="#ffd4d7" rotation-y={Math.PI / 2} position={[0, 1, 1]} target={[0, 0, 0]} scale={[1, 1, 1]} />
-        {/* Key */}
-        <Lightformer form="circle" color="#cff8ff" intensity={100} scale={2} position={[2, -2, -3]} target={[0, 0, 0]}/>
-      </Environment>
+    <Environment resolution={16}>
+      {/* Main */}
+      <Lightformer intensity={30} color="#ffd4d7" rotation-y={Math.PI / 2} position={[0, 1, 1]} target={[0, 0, 0]} scale={[1, 1, 1]} />
+      {/* Key */}
+      <Lightformer form="circle" color="#cff8ff" intensity={100} scale={2} position={[2, -2, -3]} target={[0, 0, 0]}/>
+      <Lightformer form="circle" color="#cff8ff" intensity={10} scale={2} position={[-2, -2, -3]} target={[0, 0, 0]}/>
+    </Environment>
   </group>
 }
 

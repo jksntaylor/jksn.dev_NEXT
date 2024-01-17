@@ -66,24 +66,20 @@ const Landing = () => {
 
     if (sliceOffset === 0) {
       r_material.current.u_time += delta
-      if (r_wrapper.current.position.x !== 0) {
-        r_wrapper.current.position.x = 0
-      }
+      if (r_wrapper.current.position.x !== 0) r_wrapper.current.position.x = 0
     } else if (sliceOffset > 0 && sectionOffset < 1) {
       r_slices.forEach((r_slice, i) => r_slice.current.style.transform = `translateX(${(1 - sliceOffset) * (120 + 60 * i)}%)`)
-      // width * (i * .5 + 1) * (1 - sliceOffset) + 1/factor + width * 0.0425)
       r_wrapper.current.position.x = -width * 0.915 * sectionOffset
       r_material.current.u_time += delta
 
       r_arrowInner.current.style.transform = `scale(${Math.min(sliceOffset + 1, 1.4)}) `
       if (r_arrowInner.current.parentElement) r_arrowInner.current.parentElement.style.transform = `rotate(${-360 * sliceOffset}deg)`
+
       r_arrow.current.position.x = width / 2 - width * 0.065 - width * 0.05 * sliceOffset
       r_arrow.current.position.y = height/2 - width * 0.065 - height * 0.7 * sliceOffset
       r_arrow.current.scale.set(sliceOffset * .5 + 1, sliceOffset *  .5 + 1, 1)
     } else if (sectionOffset === 1) {
-      if (r_wrapper.current.position.x !== -width * 0.915) {
-        r_wrapper.current.position.x = -width * 0.915
-      }
+      if (r_wrapper.current.position.x !== -width * 0.915) r_wrapper.current.position.x = -width * 0.915
       if (r_slices[0].current.style.transform !== `translateX(0%)`) {
         r_slices.forEach(slice => slice.current.style.transform = `translateX(0%)`)
       }

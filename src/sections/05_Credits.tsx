@@ -1,7 +1,8 @@
+// libraries
 import { Html, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from "react"
-
+// assets
 import dribbble from '../assets/images/dribbble.svg'
 import linkedin from '../assets/images/linkedin.svg'
 import github from '../assets/images/github.svg'
