@@ -10,8 +10,8 @@ const ScreenProvider: React.FC<{children?: React.ReactNode}> = ({ children }) =>
 
   const aspectRatio = useRef(window.innerWidth / window.innerHeight)
   const [screen, setScreen] = useState({
-    fullWidth: aspectRatio.current >= 2,
-    desktop: aspectRatio.current > 1 && aspectRatio.current < 2,
+    fullWidth: aspectRatio.current >= 1.75,
+    desktop: aspectRatio.current > 1 && aspectRatio.current < 1.75,
     mobile: aspectRatio.current < 1
   })
 

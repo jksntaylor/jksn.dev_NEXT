@@ -57,7 +57,6 @@ main {
 
 .menu svg {
   cursor: pointer;
-  padding: 1rem;
   box-sizing: content-box;
 }
 
@@ -68,8 +67,10 @@ main {
 .menu_links {
   width: 100%;
   color: $color-dirtywhite;
-  // display: flex;
   padding: 4rem 5rem 5rem 5rem;
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 5vh;
+  }
 }
 
 .menu_links-projects, .menu_links-experiments {
@@ -84,6 +85,12 @@ main {
       width: 85%;
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    > span {
+      font-size: 3vh;
+      margin-bottom: 2.5vh;
+    }
+  }
 }
 
 .menu_links-experiments {
@@ -96,8 +103,12 @@ main {
 .menu_links-flex {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   flex-wrap: wrap;
   height: 80%;
+  @media screen and (aspect-ratio > 1.75) {
+    width: max-content;
+  }
 }
 
 .menu_link {
@@ -108,6 +119,10 @@ main {
   width: max-content;
   margin: 0.5rem 0;
   cursor: pointer;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 5vh;
+    margin: 1vh 30vh 1vh 0;
+  }
 }
 
 .menu_opencontact {
@@ -134,15 +149,19 @@ main {
     box-shadow: none;
     color: $color-dirtywhite;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    right: 5vh;
+    bottom: 5vh;
+    font-size: 3.5vh;
+    border-radius: 3vh;
+    height: 6vh;
+    padding: 1.5vh 2vh 0;
+  }
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg)
-  }
-  to {
-    transform: rotate(360deg)
-  }
+  from { transform: rotate(0deg) }
+  to { transform: rotate(360deg) }
 }
 
 .menu_teaser {
@@ -150,7 +169,6 @@ main {
   font: 400 1.6rem 'Neue Montreal';
   writing-mode: vertical-lr;
   width: 4.5rem;
-  // height: 100%;
   padding: 2.5rem 1rem;
   border-left: 1px solid $color-dirtywhite;
   display: flex;
@@ -164,9 +182,20 @@ main {
     margin: 2.5rem 0;
   }
   svg {
+    width: 2rem;
+    height: 2rem;
     animation: spin 10s linear infinite;
     &:last-of-type {
       animation-direction: reverse;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 2.2vh;
+    width: 6vh;
+    padding: 2vh 1.5vh;
+    svg {
+      width: 2.5vh;
+      height: 2.5vh;
     }
   }
 }
@@ -184,6 +213,10 @@ main {
   padding: 5rem;
   display: flex;
   justify-content: space-between;
+  @media screen and (aspect-ratio > 1.75) {
+    width: calc(100% - 6vh);
+    padding: 5vh;
+  }
 }
 
 form {
@@ -198,6 +231,10 @@ form {
   border-bottom: 0.3rem solid $color-accent1;
   width: max-content;
   margin-bottom: 5rem;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 8vh;
+    border-bottom: 0.5vh solid $color-accent1;
+  }
 }
 
 .form_input {
@@ -220,6 +257,17 @@ form {
     transform: translateY(-0.2rem);
     &:focus {
       border-bottom: 1px solid $color-accent1;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    margin-bottom: 3vh;
+    label {
+      margin-right: 2vh;
+      font-size: 3vh;
+    }
+    input {
+      font-size: 3vh;
+      padding-bottom: 0.5vh;
     }
   }
 }
@@ -256,8 +304,8 @@ form {
       width: 100%;
       background: transparent;
       &::-webkit-slider-runnable-track {
-        background: $color-dirtywhite;
-        height: 1px;
+        background: $color-accent1;
+        height: 2px;
         border-radius: 1px
       }
       &::-webkit-slider-thumb {
@@ -268,6 +316,26 @@ form {
         width: 2rem;
         border-radius: 1rem;
         transform: translateY(-0.9rem);
+      }
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    margin-bottom: 3vh;
+    label {
+      font-size: 3vh;
+      margin-right: 2vh;
+    }
+    .slider_wrapper {
+      span {
+        font-size: 2vh;
+      }
+      div span {
+        font-size: 2vh;
+        top: -3.5vh;
+      }
+      input::-webkit-slider-thumb {
+        height: 3vh;
+        width: 3vh;
       }
     }
   }
@@ -300,6 +368,19 @@ form {
       outline: 0.2rem solid $color-accent1;
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    margin-bottom: 3vh;
+    label {
+      font-size: 3vh;
+      margin-right: 2vh;
+      margin-bottom: 2vh;
+    }
+    textarea {
+      font-size: 2vh;
+      border-radius: 1vh;
+      padding: 1vh;
+    }
+  }
 }
 
 .form_buttons {
@@ -325,6 +406,14 @@ form {
       color: $color-dirtywhite;
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    button {
+      font-size: 3.5vh;
+      height: 6vh;
+      padding: 1.5vh 2.5vh 0.5vh;
+      border-radius: 3vh;
+    }
+  }
 }
 
 .contact_thanks {
@@ -335,11 +424,19 @@ form {
   letter-spacing: 0.03em;
   transform: translateY(-10%);
   opacity: 0;
+  @media screen and (aspect-ratio > 1.75) {
+    top: 5vh;
+    left: 5vh;
+    font-size: 4vh;
+  }
 }
 
 .email_heading {
   font: 300 4rem/120% 'Formula Condensed';
   margin-bottom: 2rem;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 5vh;
+  }
 }
 
 .email_link {
@@ -361,6 +458,13 @@ form {
     color: $color-accent1;
     #email_arrow {
       transform: translateX(1rem);
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 4vh;
+    svg {
+      margin-left: 3vh;
+      height: 4vh;
     }
   }
 }
