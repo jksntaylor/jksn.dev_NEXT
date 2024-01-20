@@ -308,7 +308,7 @@ const Menu = () => {
         <Star />
       </div>
       <div className="contact_form" ref={r_contact}>
-        <form onSubmit={e => handleFormSubmit(e)} ref={r_contactForm}>
+        <form onSubmit={handleFormSubmit} ref={r_contactForm}>
           <p className="form_heading"><em>Ge</em>t I<em>n</em> T<em>ou</em>c<em>h</em></p>
           <div className="form_input">
             <label htmlFor="contact_name">Name<Star /></label>
