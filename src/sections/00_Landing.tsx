@@ -55,6 +55,8 @@ const Landing = () => {
     anchorY: 'bottom'
   }
 
+  const sectionDistance = useMedia(width - height * 0.16, width * 0.915, 0)
+
   useFrame((_s, delta) => {
     const sliceOffset = scrollData.range(0, 0.05)
     const sectionOffset = scrollData.range(0.05, 0.05)
@@ -64,7 +66,7 @@ const Landing = () => {
       if (r_wrapper.current.position.x !== 0) r_wrapper.current.position.x = 0
     } else if (sliceOffset > 0 && sectionOffset < 1) {
       r_slices.forEach((r_slice, i) => r_slice.current.style.transform = `translateX(${(1 - sliceOffset) * (120 + 60 * i)}%)`)
-      r_wrapper.current.position.x = -width * 0.915 * sectionOffset
+      r_wrapper.current.position.x = -sectionDistance * sectionOffset
       r_material.current.u_time += delta
 
       r_arrowInner.current.style.transform = `scale(${Math.min(sliceOffset + 1, 1.4)}) `
@@ -74,7 +76,7 @@ const Landing = () => {
       r_arrow.current.position.y = height/2 - width * 0.065 - height * 0.7 * sliceOffset
       r_arrow.current.scale.set(sliceOffset * .5 + 1, sliceOffset *  .5 + 1, 1)
     } else if (sectionOffset === 1) {
-      if (r_wrapper.current.position.x !== -width * 0.915) r_wrapper.current.position.x = -width * 0.915
+      if (r_wrapper.current.position.x !== -sectionDistance) r_wrapper.current.position.x = -sectionDistance
       if (r_slices[0].current.style.transform !== `translateX(0%)`) {
         r_slices.forEach(slice => slice.current.style.transform = `translateX(0%)`)
       }

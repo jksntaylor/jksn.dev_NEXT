@@ -2,6 +2,7 @@
 import { Html, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from 'react'
+import { useMedia } from "../utils/hooks"
 import { Vector3 } from 'three'
 
 const Welcome = () => {
@@ -40,11 +41,11 @@ const Welcome = () => {
       portal={{ current: scrollData.fixed }}
       style={{ height: height * factor }}
     >
-      <h1 ref={r_text}>WELCOME</h1>
+      <h1 ref={r_text} style={{ transform: useMedia(`scaleY(${(window.innerHeight / window.innerWidth) * 1.8})`, 'none', 'none')}}>WELCOME</h1>
       <div ref={r_content} className="welcome_content">
         <div className='section_number' style={{
-          width: width * 0.046 * factor,
-          height: width * 0.046 * factor
+          width: useMedia(height * 0.08, width * 0.046, 0) * factor,
+          height: useMedia(height * 0.08, width * 0.046, 0) * factor
         }}>01</div>
         <div className="welcome_definition">
           <span>C<em>R</em>E•<em>A</em>•TI<em>V</em>E <em>D</em>E•V<em>EL</em>•O<em>P</em>•E<em>R</em></span>
