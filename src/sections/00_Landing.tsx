@@ -1,12 +1,13 @@
 // libraries
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { Html, PerspectiveCamera, RenderTexture, Text, useScroll } from "@react-three/drei"
-import { Vector2, Vector3 } from 'three'
+import { Vector2 } from 'three'
 import { useRef } from "react"
 // modules
 import { t_landingMaterial } from "../components/Materials.ts"
 import { colors } from "../utils/constants.ts"
 import { lerp } from "../utils/functions.tsx"
+import { useMedia } from "../utils/hooks.ts"
 // assets
 import LandingArrow from '../assets/svg/landing-arrow.tsx'
 import gsap from "gsap"
@@ -39,7 +40,7 @@ const Landing = () => {
     letterSpacing: number
     maxWidth: number
     font: string
-    scale: Vector3
+    scale: [x: number, y: number, z: number]
     anchorX: "left"
     anchorY: "bottom"
   } = {
@@ -49,16 +50,10 @@ const Landing = () => {
     letterSpacing: 0,
     maxWidth: 12,
     font: '/fonts/NeueMontreal400.woff',
-    scale: new Vector3(width / 12.5, width / 12, 1),
+    scale: useMedia([height / 7, height / 7, 1], [width / 12.5, width / 12, 1], [width / 12.5, width / 12, 1]),
     anchorX: 'left',
     anchorY: 'bottom'
   }
-
-  const renderText = () => <>
-    <Text ref={r_text1} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 12) * 2 + 0.1, 0]}>HEY, I'M JACKSON TAYLOR</Text>
-    <Text ref={r_text2} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + (width / 12) + 0.1, 0]}>A CREATIVE DEVELOPER</Text>
-    <Text ref={r_text3} {...textOptions} position={[-width / 2 + 0.1, -height / 2 + 0.1, 0]}>BASED IN SALT LAKE CITY</Text>
-  </>
 
   useFrame((_s, delta) => {
     const sliceOffset = scrollData.range(0, 0.05)
@@ -103,17 +98,31 @@ const Landing = () => {
 
   return <group ref={r_wrapper}>
     <mesh
-      position={[width * 0.0425, 0, 0]}
+      position={[useMedia(height * 0.08, width * 0.0425, 0), 0, 0]}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerMove={e => handlePointer(e)}
     >
-      <planeGeometry args={[width * 0.915, height, 64, 64]} />
+      <planeGeometry args={[useMedia(width - height * 0.16, width * 0.915, 0), height, 64, 64]} />
       <landingMaterial ref={r_material} u_mouse={new Vector2(0.9, 0)} u_mouse_rad={0.2} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
           <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
           <color attach="background" args={[colors.fadedBlack]} />
-          {renderText()}
+          <Text
+            ref={r_text1}
+            {...textOptions}
+            position={[-width / 2 + 0.1, -height / 2 + useMedia((height / 7) * 2, (width / 12) * 2, 0) + 0.1, 0]}
+          >HEY, I'M JACKSON TAYLOR</Text>
+          <Text
+            ref={r_text2}
+            {...textOptions}
+            position={[-width / 2 + 0.1, -height / 2 + useMedia((height / 7), (width / 12), 0) + 0.1, 0]}
+          >A CREATIVE DEVELOPER</Text>
+          <Text
+            ref={r_text3}
+            {...textOptions}
+            position={[-width / 2 + 0.1, -height / 2 + useMedia(0, 0, 0) + 0.1, 0]}
+          >BASED IN SALT LAKE CITY</Text>
         </RenderTexture>
       </landingMaterial>
     </mesh>
@@ -121,8 +130,8 @@ const Landing = () => {
       center
       // transform
       // distanceFactor={3.4}
-      style={{ width: width * 0.915 * factor - 2, height: height * factor }}
-      position={[width * 0.0425 + 1/factor, 0, 0.001]}
+      style={{ width: useMedia(width - height * 0.16, width * 0.915, 0) * factor - 2, height: height * factor }}
+      position={[useMedia(height * 0.08, width * 0.0425, 0) + 1/factor, 0, 0.001]}
       wrapperClass="landing_content"
       portal={{ current: scrollData.fixed }}
       zIndexRange={[2, 3]}

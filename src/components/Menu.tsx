@@ -264,7 +264,7 @@ const Menu = () => {
       className="menu_drawer"
       zIndexRange={[8, 9]}
       portal={{ current: scrollData.fixed }}
-      position={[useMedia(-width + height * 0.208, -width * 0.885, 0), 0, 0]}
+      position={[useMedia(-width + height * 0.2 + 6/factor, -width * 0.885, 0), 0, 0]}
       style={{
         width: useMedia((width - height * 0.1) * factor, width * 0.945 * factor, 0),
         height: useMedia(height * factor + 2, height * factor + 2, 0)

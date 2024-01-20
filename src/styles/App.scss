@@ -83,6 +83,7 @@ main {
     margin-bottom: 2rem;
     hr {
       width: 85%;
+      border-color: $color-accent1;
     }
   }
   @media screen and (aspect-ratio > 1.75) {
@@ -213,6 +214,7 @@ main {
   padding: 5rem;
   display: flex;
   justify-content: space-between;
+  border-top: 1px solid $color-dirtywhite;
   @media screen and (aspect-ratio > 1.75) {
     width: calc(100% - 6vh);
     padding: 5vh;
@@ -480,6 +482,9 @@ form {
   color: $color-dirtywhite;
   font: 400 2.5rem/100% 'Neue Montreal';
   letter-spacing: -0.03em;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3vh;
+  }
 }
 
 .landing_content > div {
@@ -500,6 +505,13 @@ form {
   padding: 6rem 0 0 3rem;
   text-shadow: 0.4rem 0 $color-accent1,
                0.8rem 0 $color-accent2;
+  @media screen and (aspect-ratio > 1.75) {
+    width: calc(100vw - 10vh);
+    font-size: 25vh;
+    padding: 8vh 0 0 4vh;
+    text-shadow: 0.8vh 0 $color-accent1,
+                 1.6vh 0 $color-accent2;
+  }
 }
 // END LANDING SECTION
 
