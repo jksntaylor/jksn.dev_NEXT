@@ -83,7 +83,7 @@ const Menu = () => {
     }
   }, [toggleContact, toggleMenu])
 
-  const drawerWidth = useMedia(width - height * 0.156, width * 0.915 , 0)
+  const drawerWidth = useMedia(width - height * 0.16, width * 0.915 , 0)
 
   useEffect(() => {
     setTimeout(() => {
@@ -264,7 +264,7 @@ const Menu = () => {
       className="menu_drawer"
       zIndexRange={[8, 9]}
       portal={{ current: scrollData.fixed }}
-      position={[useMedia(-width + height * 0.2 + 6/factor, -width * 0.885, 0), 0, 0]}
+      position={[useMedia(height * 0.05 - (width - height * 0.16), -width * 0.885, 0), 0, 0]}
       style={{
         width: useMedia((width - height * 0.1) * factor, width * 0.945 * factor, 0),
         height: useMedia(height * factor + 2, height * factor + 2, 0)

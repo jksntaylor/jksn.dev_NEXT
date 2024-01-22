@@ -9,6 +9,7 @@ import { t_selectedWorksMaterial } from "../components/Materials"
 import ProjectPage from '../components/ProjectPage'
 import { colors } from "../utils/constants"
 import { t_project } from '../utils/types'
+import { useMedia } from '../utils/hooks'
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -47,9 +48,6 @@ const SelectedWorks = () => {
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
 
-  const projContainerHeight = useMemo(() => (height - width * 0.046) * 10 * factor, [height, width, factor])
-  const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
-
   const projectTL = useRef(gsap.timeline())
 
   const toggleProject = useCallback((i: number) => {
@@ -80,15 +78,15 @@ const SelectedWorks = () => {
         duration: 1.85
       }, 1.5).to(r_top.current.position, {
         y: 0,
-        duration: 0.5
+        duration: .5
       }, 1.7).to(r_side.current.position, {
         x: 0,
-        duration: 0.85
+        duration: .85
       }, 1.9)
 
       const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_selectedWorksMaterial }
       gsap.to(image.position, {
-        x: r_projectOpen.current % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
+        x: r_projectOpen.current % 2 ? -width * .3125 + width * .187 : width * .3125 - width * .187,
         duration: 2.15,
         ease: 'power2.inOut'
       })
@@ -103,39 +101,38 @@ const SelectedWorks = () => {
     } else {
       // SHOW PROJECT PAGE
       setTimeout(() => {
-
         r_projectOpen.current = i
-        container.scrollTo({ top: window.innerHeight * (2.6 + i * 0.332) })
+        container.scrollTo({ top: window.innerHeight * 2.6 + (window.innerHeight * 0.332 * i) })
         window.dispatchEvent(new CustomEvent('showProject', { detail: { proj: home?.data.case_studies[i].case_study.data, i: i }}))
 
         projectTL.current.kill()
         projectTL.current = gsap.timeline().to(r_side.current.position, {
-          x: -width * (0.285 + 0.2 /* padding */),
-          duration: 0.85,
+          x: -width * (.285 + .2 /* padding */),
+          duration: .85,
           ease: 'expo.inOut'
         }).to(r_top.current.position, {
-          y: width * (0.046 + 0.5 /* padding */),
-          duration: 0.5,
+          y: width * (.046 + .5 /* padding */),
+          duration: .5,
           ease: 'expo.inOut'
-        }, 0.4).to(r_projectsInner.current, {
-          x: width * 0.915 * factor,
+        }, .4).to(r_projectsInner.current, {
+          x: width * .915 * factor,
           duration: 1.85,
           ease: 'expo.inOut'
-        }, 0.2)
+        }, .2)
 
         const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_selectedWorksMaterial }
 
         gsap.to(image.position, {
-          x: -width / 2,
+          x: -width / 2 - width * 0.05,
           duration: 2.15,
           ease: 'power2.inOut',
-          delay: 0.5
+          delay: .5
         })
         gsap.to(image.material, {
           u_progress: 1,
           duration: 2.15,
           ease: 'power2.inOut',
-          delay: 0.5
+          delay: .5
         })
 
         container.style.overflow = 'hidden'
@@ -165,29 +162,129 @@ const SelectedWorks = () => {
   }, [toggleProject, handleMenuClick])
 
   // START IMAGE COMPONENT
+  const imageSizes = useMedia({ w: height * .632, h: height * .75 }, { w: width * 0.374, h: width * .444 }, { w: 0, h: 0 })
+  const imageOffset = useMedia(height * .92, height - width * .046, 0)
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_selectedWorksMaterial>(null!)
     const r_mesh = useRef<THREE.Mesh>(null!)
     const texture = useTexture(url)
 
+    const posX = useMedia((width - height * .96)/2 - height * 0.316, width * .1255, 0)
+
     useEffect(() => {
       if (r_mat.current.u_texture !== texture) r_mat.current.u_texture = texture
-      r_mesh.current.position.set(index % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187, (height - width * 0.046) * -index, 0)
-    }, [index, texture])
+      r_mesh.current.position.set(index % 2 ? -posX : posX, -imageOffset * index, 0)
+    }, [posX, index, texture])
 
     useFrame(() => { if(r_mat.current.u_delta !== r_delta.current) r_mat.current.u_delta = r_delta.current })
 
     return <mesh ref={r_mesh}>
-      <planeGeometry args={[viewport.width * 0.374 , viewport.width * 0.444, 48, 1]} />
-      <selectedWorksMaterial ref={r_mat} u_zoom={viewport.height / (viewport.width * 0.444) + 0.05}/>
+      <planeGeometry args={[imageSizes.w , imageSizes.h, 48, 1]} />
+      <selectedWorksMaterial ref={r_mat} u_zoom={(height / imageSizes.h) + .1}/>
     </mesh>
   } // END IMAGE COMPONENT
 
-  const renderProjects = () => {
-    return <group
-      ref={r_projects}
-      position= {[width * 0.0575, -width * 0.023, 0]}
-    >
+  const wrapperOffsets = useMedia({
+    start: width - height * .16,
+    move: width - height * .08,
+    end: width - height * .24
+  }, {
+    start: width * .915,
+    move: width * .9575,
+    end: width * .8725
+  }, {
+    start: 0,
+    move: 0,
+    end: 0
+  })
+
+  const sidebarPosition = useMedia(height * .28, width * .135, 0)
+  const sidebarWidths = useMedia({ initial: width - height * 0.56, end: height * 0.4 }, { initial: width * .723, end: width * .183 }, { initial: 0, end: 0 })
+  const fontSize1 = useMedia({ initial: '30.5vh', end: '9.5vh' }, { initial: '19.75rem', end: '5.25rem' }, { initial: '0px', end : '0px' })
+  const fontSize2 = useMedia({ initial: '28vh', end: '9vh' }, { initial: '18.5rem', end: '5rem' }, { initial: '0px', end : '0px' })
+
+  const projContainerHeight = useMedia((height * 0.92) * 10 * factor, (height - width * .046) * 10 * factor, 0)
+  const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
+
+  useFrame(() => {
+    const sectionOffset = scrollData.range(.1784, .05)
+    const sidebarOffset = scrollData.range(.2284, .025)
+    const projectsOffset = scrollData.range(.26, .3)
+    const counterOffset = scrollData.range(.525, .035) // just for counter first column (0 - 1)
+    const sectionOffset2 = scrollData.range(.56, .05)
+
+    if (sectionOffset === 0 && r_wrapper.current.position.x !== wrapperOffsets.move) {
+      r_wrapper.current.position.x = wrapperOffsets.move
+    } else if (sectionOffset > 0 && sectionOffset2 < 1) {
+      // section horizontal movement
+      // console.log(scrollData.scroll.current)
+      r_wrapper.current.position.x = -wrapperOffsets.start * sectionOffset + wrapperOffsets.move - wrapperOffsets.start * sectionOffset2
+
+      if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
+      if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
+
+      r_sidebar.current.position.x = (-width / 2 + sidebarPosition) * sidebarOffset
+      r_sidebarText.current.style.width = `${(1 - sidebarOffset) * sidebarWidths.initial * factor + sidebarWidths.end * factor}px`
+      r_sidebarText.current.style.fontSize = `calc(${(1 - sidebarOffset)} * ${fontSize1.initial} + ${fontSize1.end})`
+
+      if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `calc(${(1 - sidebarOffset)} * ${fontSize2.initial} + ${fontSize2.end})`
+
+      if (r_projects.current) { // project "scrolling"
+        r_projects.current.position.x = (width * (1 - sidebarOffset) * .7125) + width * .1
+        r_delta.current = (r_projects.current.position.y - (projectsOffset * projContainerOffsetY)) / 100
+        r_projects.current.position.y = projectsOffset * projContainerOffsetY
+      }
+    } else if (sectionOffset2 === 1 && r_wrapper.current.position.x !== -wrapperOffsets.end) {
+      r_wrapper.current.position.x = -wrapperOffsets.end
+    }
+  })
+
+  return <group ref={r_wrapper} position={[width * .9575, 0, 0]}>
+    <group ref={r_top}>
+      <Html
+        center
+        // transform
+        // distanceFactor={3.4}
+        className="selectedworks_top"
+        position={[-1/factor, height / 2 - useMedia(height * 0.04, width * .023, 0) + 1/factor, 0]}
+        portal={{ current: scrollData.fixed }}
+        zIndexRange={[5, 6]}
+        style={{
+          width: useMedia(width - height * 0.16, width * .915, 0) * factor,
+          height: useMedia(height * .08, width * .046, 0) * factor,
+          borderBottom: `1px solid ${colors.dirtyWhite}`
+        }}
+      >
+        <div className='section_number' style={{ width: useMedia(height * 0.08, width * .046, 0) * factor }}>02</div>
+        <div className="selectedworks_counter">
+          <div className="selectedworks_counter-mask">
+            <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
+            <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
+            <span>/10</span>
+          </div>
+        </div>
+      </Html>
+    </group>
+    <group ref={r_side}>
+      <group ref={r_sidebar} position={[-1/factor, useMedia(-height * 0.04, -width * .023, 0) + 1/factor, 0]}>
+        <Html
+          center
+          // transform
+          // distanceFactor={3.4}
+          className="selectedworks_sidebar"
+          portal={{ current: scrollData.fixed }}
+          zIndexRange={[1, 2]}
+          ref={r_sidebarText}
+          style={{
+            width: useMedia(width - height * .16, width * .915, 0) * factor,
+            height: useMedia(height * .92, height - width * .046, 0) * factor
+          }}
+          >
+          <p>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></p>
+        </Html>
+      </group>
+    </group>
+    <group ref={r_projects} position= {[width * .0575, 0, 0]}>
       <Html
         center
         // transform
@@ -195,8 +292,8 @@ const SelectedWorks = () => {
         className="selectedworks_projects"
         ref={r_projectsInner}
         portal={{ current: scrollData.fixed }}
-        style={{ width: width * 0.625 * factor, height: projContainerHeight }}
-        position={[0, -projContainerHeight/factor/2 + (height - width * 0.046)/4, 0]}
+        style={{ width: useMedia(width - height * 0.96, width * .625, 0) * factor, height: projContainerHeight }}
+        position={[0, -projContainerHeight/2/factor + height / 2 - useMedia(height * 0.08, width * .046, 0), 0]}
         zIndexRange={[0, 100]} >
         {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => {
           const { awards, client1, client2, year, role, project_link, project_link_text, project_title } = proj.case_study.data
@@ -213,87 +310,10 @@ const SelectedWorks = () => {
           </div>
         })}
       </Html>
-      <group position={[0, 0, 0]} ref={r_projectsImages}>
+      <group position={[0, useMedia(-height * .04, -width * .023, 0), 0]} ref={r_projectsImages}>
         {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => <Image url={proj.case_study.data.cover_image.url} key={i} index={i}/>)}
       </group>
     </group>
-  }
-
-  useFrame(() => {
-    const sectionOffset = scrollData.range(0.1784, 0.05)
-    const sidebarOffset = scrollData.range(0.2284, 0.025)
-    const projectsOffset = scrollData.range(0.26, 0.3)
-    const counterOffset = scrollData.range(0.525, 0.035) // just for counter first column (0 - 1)
-    const sectionOffset2 = scrollData.range(0.56, 0.05)
-
-    if (sectionOffset === 0 && r_wrapper.current.position.x !== width * 0.9575) {
-      r_wrapper.current.position.x = width * 0.9575
-    } else if (sectionOffset > 0 && sectionOffset2 < 1) {
-      // section horizontal movement
-      r_wrapper.current.position.x = -width * 0.915 * sectionOffset + width * 0.9575 - width * 0.915 * sectionOffset2
-
-      if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
-      if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
-
-      r_sidebar.current.position.x = (-width/2 + width * 0.135) * sidebarOffset -1/factor
-      r_sidebarText.current.style.width = `${(1 - sidebarOffset) * (width * 0.732 * factor) + (width * 0.183 * factor)}px`
-      r_sidebarText.current.style.fontSize = `${(1 - sidebarOffset) * 19.75 + 5.25}rem`
-
-      if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `${(1 - sidebarOffset) * 18.5 + 5}rem`
-
-      if (r_projects.current) { // project "scrolling"
-        r_projects.current.position.x = (width * (1 - sidebarOffset) * 0.7125) + width * 0.1
-        r_delta.current = (r_projects.current.position.y - (projectsOffset * projContainerOffsetY)) / 100
-        r_projects.current.position.y = projectsOffset * projContainerOffsetY
-      }
-    } else if (sectionOffset2 === 1 && r_wrapper.current.position.x !== -width * 0.8725) {
-      r_wrapper.current.position.x = -width * 0.8725
-    }
-  })
-
-  return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
-    <group ref={r_top}>
-      <Html
-        center
-        // transform
-        // distanceFactor={3.4}
-        className="selectedworks_top"
-        position={[-1/factor, height / 2 - width * 0.023 + 1/factor, 0]}
-        portal={{ current: scrollData.fixed }}
-        zIndexRange={[5, 6]}
-        style={{
-          width: width * 0.915 * factor,
-          height: width * 0.046 * factor,
-          borderBottom: `1px solid ${colors.dirtyWhite}`
-        }}
-      >
-        <div className='section_number' style={{ width: width * 0.046 * factor }}>02</div>
-        <div className="selectedworks_counter">
-          <div className="selectedworks_counter-mask">
-            <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
-            <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
-            <span>/10</span>
-          </div>
-        </div>
-      </Html>
-    </group>
-    <group ref={r_side}>
-      <group ref={r_sidebar} position={[-1/factor, -width * 0.023 + 1/factor, 0]}>
-        <Html
-          center
-          // transform
-          // distanceFactor={3.4}
-          className="selectedworks_sidebar"
-          portal={{ current: scrollData.fixed }}
-          zIndexRange={[1, 2]}
-          ref={r_sidebarText}
-          style={{ width: width * 0.915 * factor, height: (height - width * 0.046) * factor }}
-          >
-          <p>Selected<br/><span ref={r_sidebarTextSpan}><em>W</em>ORKS &copy;</span></p>
-        </Html>
-      </group>
-    </group>
-    {renderProjects()}
     <ProjectPage ref={r_projectsImages}/>
   </group>
 }

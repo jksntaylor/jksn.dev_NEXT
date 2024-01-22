@@ -4,6 +4,7 @@ import { useThree } from "@react-three/fiber"
 import { forwardRef, useCallback, useEffect, useRef } from "react"
 import gsap from "gsap"
 // modules
+import { useMedia } from "../utils/hooks"
 import { t_project, t_projectImages } from "../utils/types"
 import { t_selectedWorksMaterial } from "./Materials"
 
@@ -27,6 +28,8 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
 
+  const carouselOffset = useMedia({ width: 80, unit: 'vh' }, { width: 65, unit: 'rem' }, { width: 0, unit: 'vw'})
+
   const moveCarousel = (direction: 'left' | 'right') => {
     if (direction === 'right' && r_carouselIndex.current < 3 /* # of proj images - 1 */) {
       r_carouselIndex.current += 1
@@ -34,7 +37,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       r_carouselIndex.current -= 1
     }
     gsap.to(r_carousel.current, {
-      x: `-${65 * r_carouselIndex.current}rem`,
+      x: `-${carouselOffset.width * r_carouselIndex.current}${carouselOffset.unit}`,
       ease: 'expo.out',
       duration: 0.85,
     })

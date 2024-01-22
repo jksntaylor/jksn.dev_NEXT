@@ -13,18 +13,20 @@ const Welcome = () => {
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_content = useRef<HTMLDivElement>(null!)
 
-  useFrame(() => {
-    const sectionOffset = scrollData.range(0.05, 0.183)
-    const fontWeightFactor = scrollData.range(0.06, 0.12)
+  const wrapperOffset = useMedia(-width * 3.36, -width * 3.35, 0)
 
-    if (sectionOffset === 0 && r_wrapper.current.position.x !== width * 1.675) {
+  useFrame(() => {
+    const wrapperRange = scrollData.range(0.05, 0.183)
+    const fontWeightRange = scrollData.range(0.06, 0.12)
+
+    if (wrapperRange === 0 && r_wrapper.current.position.x !== width * 1.675) {
       r_wrapper.current.position.x = width * 1.675
-    } else if (sectionOffset === 1 && r_wrapper.current.position.x !== -width * 1.675) {
+    } else if (wrapperRange === 1 && r_wrapper.current.position.x !== -width * 1.675) {
       r_wrapper.current.position.x = -width * 1.675
     } else {
-      r_wrapper.current.position.x = (-width * 3.35 * sectionOffset) + (width * 1.675) // 1.675 = 2.35/2 + 0.5
-      if (r_content.current) r_content.current.style.left = `${60 * sectionOffset + 20}%`
-      if (r_text.current && fontWeightFactor > 0) r_text.current.style.fontWeight = `${fontWeightFactor * 700 + 100}`
+      r_wrapper.current.position.x = wrapperOffset * wrapperRange + width * 1.675 // 1.675 = 2.35/2 + 0.5
+      if (r_content.current) r_content.current.style.left = `${60 * wrapperRange + 20}%`
+      if (r_text.current && fontWeightRange > 0) r_text.current.style.fontWeight = `${fontWeightRange * 700 + 200}`
     }
 
   })
@@ -41,7 +43,7 @@ const Welcome = () => {
       portal={{ current: scrollData.fixed }}
       style={{ height: height * factor }}
     >
-      <h1 ref={r_text} style={{ transform: useMedia(`scaleY(${(window.innerHeight / window.innerWidth) * 1.8})`, 'none', 'none')}}>WELCOME</h1>
+      <h1 ref={r_text} style={{ transform: useMedia(`scaleY(${(window.innerHeight / window.innerWidth) * 1.6})`, 'none', 'none')}}>WELCOME</h1>
       <div ref={r_content} className="welcome_content">
         <div className='section_number' style={{
           width: useMedia(height * 0.08, width * 0.046, 0) * factor,

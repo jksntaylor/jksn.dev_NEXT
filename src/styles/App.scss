@@ -97,6 +97,14 @@ main {
   }
 }
 
+.menu_links-projects {
+  @media screen and (aspect-ratio > 1.75) {
+    width: 75%;
+    margin-right: 3%;
+    height: 70%;
+  }
+}
+
 .menu_links-experiments {
   width: 50%;
   > span hr {
@@ -111,12 +119,12 @@ main {
   flex-wrap: wrap;
   height: 80%;
   @media screen and (aspect-ratio > 1.75) {
-    width: max-content;
+    width: 100%;
   }
 }
 
 .menu_link {
-  font: 300 4.5rem/100% 'Formula Condensed';
+  font: 200 4.5rem/100% 'Formula Condensed';
   letter-spacing: 0.03em;
   text-transform: uppercase;
   display: inline-block;
@@ -124,8 +132,8 @@ main {
   margin: 0.5rem 0;
   cursor: pointer;
   @media screen and (aspect-ratio > 1.75) {
-    font-size: 6vh;
-    margin: 2vh 0;
+    font-size: 6.5vh;
+    margin: 1vh 0;
   }
 }
 
@@ -331,8 +339,14 @@ form {
       margin-right: 2vh;
     }
     .slider_wrapper {
-      span {
+      > span {
         font-size: 2vh;
+        &:first-of-type {
+          margin-right: 1vh;
+        }
+        &:last-of-type {
+          margin-left: 1vh;
+        }
       }
       div span {
         font-size: 2vh;
@@ -492,7 +506,7 @@ form {
 
 .landing_content > div {
   overflow: hidden;
-  border-right: 1px solid $color-dirtywhite;
+  // border-right: 1px solid $color-dirtywhite;
 }
 
 .landing_slice {
@@ -533,14 +547,14 @@ form {
     justify-content: center;
     margin-bottom: 60%;
     @media screen and (aspect-ratio > 1.75) {
-      margin-bottom: 30%;
+      margin-bottom: 40vh;
     }
   }
 }
 
 .welcome_content {
   position: absolute;
-  top: 0;
+  top: -1px;
   left: 30%;
   height: 100dvh;
 }
@@ -553,8 +567,6 @@ form {
   letter-spacing: -0.03em;
   padding: 36rem 0 0 0;
   width: 338rem;
-  @media screen and (aspect-ratio > 1.75) {
-  }
 }
 
 .welcome_definition {
@@ -655,6 +667,10 @@ form {
     font: 800 23.5rem/100% 'Formula Condensed';
     letter-spacing: 0.01em;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 2vh;
+    line-height: 90%;
+  }
 }
 
 .selectedworks_projects {
@@ -667,6 +683,11 @@ form {
   color: $color-dirtywhite;
   height: calc(100dvh - 4.6vw);
   position: relative;
+  padding-top: 20%;
+  @media screen and (aspect-ratio > 1.75) {
+    height: 92vh;
+    padding-top: 15vh;
+  }
 }
 
 .selectedworks_project-right {
@@ -680,6 +701,14 @@ form {
     margin-left: unset;
     margin-right: 5rem;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    .selectedworks_project_info {
+      padding-right: 10vh;
+    }
+    .selectedworks_project_button {
+      margin-right: 10vh;
+    }
+  }
 }
 
 .selectedworks_project_awards {
@@ -687,11 +716,15 @@ form {
   letter-spacing: 0.03em;
   text-transform: uppercase;
   position: absolute;
-  text-align: center;
-  top: -7.5rem;
-  right: 5rem;
+  text-align: left;
+  top: 5%;
+  left: 0;
   span {
     display: block;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 1.8vh;
+    top: 2vh;
   }
 }
 
@@ -729,6 +762,13 @@ form {
       }
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 2vh;
+    padding-left: 10vh;
+    span:first-of-type {
+      margin-right: 2.5vh;
+    }
+  }
 }
 
 .selectedworks_project_title {
@@ -739,6 +779,13 @@ form {
   span {
     font: 700 15rem/100% 'Formula Condensed';
     letter-spacing: 0.015em;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 18vh;
+    margin: 3vh auto;
+    span {
+      font-size: 18vh;
+    }
   }
 }
 
@@ -763,6 +810,12 @@ form {
     box-shadow: none;
     color: $color-dirtywhite;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 6vh;
+    padding: 1.5vh 2.5vh 0.5vh;
+    border-radius: 3vh;
+  }
 }
 // END SELECTEDWORKS SECTION
 
@@ -775,6 +828,9 @@ form {
   flex-direction: column;
   justify-content: space-between;
   > * { pointer-events: all;}
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 4vh 5vh 5vh;
+  }
 }
 
 .projectpage_top {
@@ -786,6 +842,13 @@ form {
     letter-spacing: 0.03em;
     transform: translateY(50%);
     opacity: 0;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    padding-left: 45vh;
+    p {
+      font-size: 2vh;
+      max-width: 100vh;
+    }
   }
 }
 
@@ -813,6 +876,14 @@ form {
   }
   transform: translateY(50%) scale(0.8);
   opacity: 0;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 6vh;
+    padding: 1.5vh 2.5vh 0.5vh;
+    border-radius: 3vh;
+    top: 5vh;
+    left: 5vh;
+  }
 }
 
 .projectpage h3 {
@@ -829,6 +900,13 @@ form {
     span {
       display: inline-block;
       transform: translateY(110%);
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 8vh;
+    margin-right: 10vh;
+    div:last-of-type span {
+      font-size: 8vh;
     }
   }
 }
@@ -873,6 +951,19 @@ form {
       }
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 2vh;
+    padding-top: 2vh;
+    div {
+      margin-bottom: 0.5vh;
+      span, a {
+        transform: translateY(2.5vh)
+      }
+      span:first-of-type {
+        width: 10vh;
+      }
+    }
+  }
 }
 
 .projectpage_carousel {
@@ -891,6 +982,13 @@ form {
     margin-right: 5rem;
     border: 1px solid $color-dirtywhite;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    height: 50vh;
+    img {
+      width: 75vh;
+      margin-right: 5vh;
+    }
+  }
 }
 
 .projectpage_carousel_nav {
@@ -898,6 +996,7 @@ form {
   padding-left: 45rem;
   opacity: 0;
   button {
+    box-sizing: border-box;
     font: 300 4.8rem/100% 'Formula Condensed';
     color: $color-accent1;
     border: 1px solid $color-accent1;
@@ -913,6 +1012,15 @@ form {
     &:active {
       box-shadow: none;
       color: $color-dirtywhite;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    padding-left: 40%;
+    button {
+      font-size: 6vh;
+      height: 6vh;
+      padding: 0.5vh 1.5vh 0;
+      border-radius: 3vh;
     }
   }
 }
@@ -945,6 +1053,14 @@ form {
     color: $color-accent1;
     border: 1px solid $color-accent1;
     background: $color-fadedblack
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 6vh;
+    padding: 1.5vh 2.5vh 0.5vh;
+    border-radius: 3vh;
+    bottom: 5vh;
+    right: 5vh;
   }
 }
 // END PROJECT PAGE

@@ -96,7 +96,7 @@ const CallToAction = () => {
         blur={[15, 15]}
         mixBlur={1}
         mixStrength={200}
-        resolution={2048}
+        resolution={512}
         mirror={1}
         depthScale={1}
         reflectorOffset={-0.2}
