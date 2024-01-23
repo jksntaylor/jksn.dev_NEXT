@@ -26,6 +26,12 @@ const CallToAction = () => {
     { start: 0, move: 0 }
   )
 
+  const sphereSize = useMedia(
+    { rad: height * .2, position: height * .7, offset: height * .2 },
+    { rad: height * .15, position: height * .45, offset: height * .15},
+    { rad: 0, position: 0, offset: 0 }
+  )
+
   const creditsWidth = useMedia(height * .8, width * .4575, 0)
 
   useFrame((_, delta) => {
@@ -41,6 +47,7 @@ const CallToAction = () => {
       r_slices.forEach((r_slice, i) => r_slice.current.style.transform = `translateX(${sliceRange * -(120 + 60 * i)}%)`)
       if (sliceRange > 0) {
         r_sphere.current.rotation.x = sphereRange * Math.PI / 5 + Math.PI / 5
+        r_sphere.current.position.x = (width/2 - sphereSize.position) + sectionRange2 * sphereSize.offset
       }
     } else if (sectionRange2 === 1 && r_wrapper.current.position.x !== -wrapperOffsets.start/2) {
       r_wrapper.current.position.x = -wrapperOffsets.start * 1 - creditsWidth + wrapperOffsets.move
@@ -86,13 +93,13 @@ const CallToAction = () => {
       <div ref={r_slice3} className="landing_slice"><h3>NE<em>W</em></h3></div>
     </Html>
 
-    <mesh ref={r_sphere} position={[width / 2 - useMedia(height * .7, height * .45, 0), height / 2 - height * 0.6, 0]}>
-      <icosahedronGeometry args={[useMedia(height * .2, height * .15, 0), 128]} />
+    <mesh ref={r_sphere} position={[width / 2 - sphereSize.position, height / 2 - height * 0.6, 0]}>
+      <icosahedronGeometry args={[sphereSize.rad, 128]} />
       <sphereMaterial ref={r_mat} />
     </mesh>
     <Text3D
       ref={r_text}
-      position={[useMedia(-width/2 - height * .125, -width / 2, 0), height / 2 - height * .25, useMedia(-height * .2, -height * .15, 0)]}
+      position={[-width/2, height / 2 - height * .25, useMedia(-height * .2, -height * .15, 0)]}
       size={height * .25}
       rotation={[Math.PI * 0.005, useMedia(Math.PI * 0.005, 0, 0), 0]}
       lineHeight={.7}

@@ -198,11 +198,11 @@ const Menu = () => {
               translateY(${strength * 15}%)
             `
             char.el.style.color = `color-mix(in srgb, ${altColor ? colors.darkModeAccent : colors.darkModeAccent_2} ${strength * 250}%, ${colors.dirtyWhite})`
-            if (char.el.innerHTML !== 'i' && char.el.innerHTML !== "&nbsp;") char.el.style.fontWeight = `${200 + strength * 600}`
-          } else if (char.el.style.fontWeight !== '200') {
+            if (char.el.innerHTML !== 'i' && char.el.innerHTML !== "&nbsp;") char.el.style.fontWeight = `${350 + strength * 450}`
+          } else if (char.el.style.fontWeight !== '350') {
             char.el.style.transform = `scale(1) translateY(0)`
             char.el.style.color = colors.dirtyWhite
-            char.el.style.fontWeight = '200'
+            char.el.style.fontWeight = '350'
           }
       })
       requestAnimationFrame(animate)

@@ -1189,7 +1189,7 @@ form {
     }
   }
   @media screen and (aspect-ratio > 1.75) {
-    padding: 5vh;
+    padding: 5vh 15vh;
     p {
       font-size: 4vh;
       margin-bottom: 6vh;
@@ -1367,7 +1367,7 @@ form {
 }
 
 .credits_name {
-  font: 500 3rem/100% 'Formula Condensed';
+  font: 200 3rem/100% 'Formula Condensed';
   text-transform: uppercase;
   display: block;
   margin-bottom: 1rem;
