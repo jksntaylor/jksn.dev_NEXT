@@ -184,24 +184,31 @@ const SelectedWorks = () => {
     </mesh>
   } // END IMAGE COMPONENT
 
-  const wrapperOffsets = useMedia({
-    start: width - height * .16,
-    move: width - height * .08,
-    end: width - height * .24
-  }, {
-    start: width * .915,
-    move: width * .9575,
-    end: width * .8725
-  }, {
-    start: 0,
-    move: 0,
-    end: 0
-  })
+  const wrapperOffsets = useMedia(
+    { start: width - height * .16, move: width - height * .08, end: width - height * .24 },
+    { start: width * .915, move: width * .9575, end: width * .8725 },
+    { start: 0, move: 0, end: 0 }
+  )
 
   const sidebarPosition = useMedia(height * .28, width * .135, 0)
-  const sidebarWidths = useMedia({ initial: width - height * 0.56, end: height * 0.4 }, { initial: width * .723, end: width * .183 }, { initial: 0, end: 0 })
-  const fontSize1 = useMedia({ initial: '30.5vh', end: '9.5vh' }, { initial: '19.75rem', end: '5.25rem' }, { initial: '0px', end : '0px' })
-  const fontSize2 = useMedia({ initial: '28vh', end: '9vh' }, { initial: '18.5rem', end: '5rem' }, { initial: '0px', end : '0px' })
+
+  const sidebarWidths = useMedia(
+    {initial: width - height * 0.56, end: height * 0.4 },
+    { initial: width * .723, end: width * .183 },
+    { initial: 0, end: 0 }
+  )
+
+  const fontSize1 = useMedia(
+    { initial: '30.5vh', end: '9.5vh' },
+    { initial: '19.75rem', end: '5.25rem' },
+    { initial: '0px', end : '0px' }
+  )
+
+  const fontSize2 = useMedia(
+    { initial: '28vh', end: '9vh' },
+    { initial: '18.5rem', end: '5rem' },
+    { initial: '0px', end : '0px'}
+  )
 
   const projContainerHeight = useMedia((height * 0.92) * 10 * factor, (height - width * .046) * 10 * factor, 0)
   const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])

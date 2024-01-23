@@ -96,7 +96,7 @@ const CallToAction = () => {
         blur={[15, 15]}
         mixBlur={1}
         mixStrength={200}
-        resolution={512}
+        resolution={1024}
         mirror={1}
         depthScale={1}
         reflectorOffset={-0.2}
@@ -105,7 +105,7 @@ const CallToAction = () => {
     </Text3D>
     <Environment resolution={16}>
       {/* Main */}
-      <Lightformer intensity={10} color="#ffd4d7" rotation-y={Math.PI / 2} position={[0, 1, 1]} target={[0, 0, 0]} scale={[1, 1, 1]} />
+      <Lightformer intensity={25} color="#ffd4d7" rotation-y={Math.PI / 2} position={[0, 1, 1]} target={[0, 0, 0]} scale={[1, 1, 1]} />
       {/* Key */}
       <Lightformer form="circle" color="#cff8ff" intensity={100} scale={2} position={[2, -2, -3]} target={[0, 0, 0]}/>
       <Lightformer form="circle" color="#cff8ff" intensity={10} scale={2} position={[-2, -2, -3]} target={[0, 0, 0]}/>

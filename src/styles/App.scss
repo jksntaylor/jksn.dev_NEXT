@@ -646,6 +646,13 @@ form {
     color: $color-dirtywhiteHalf;
     font-size: 1.5rem;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 3vh;
+    span {
+      font-size: 2.5vh;
+    };
+  }
 }
 
 .selectedworks_counter_column {
@@ -654,6 +661,9 @@ form {
   text-align: center;
   &:first-of-type {
     text-align: right;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    width: 2vh;
   }
 }
 
@@ -1087,6 +1097,12 @@ form {
     letter-spacing: -0.075rem;
     color: $color-dirtywhite;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    .section_title {
+      font-size: 3vh;
+      margin-right: 3vh;
+    }
+  }
 }
 
 .experiments_side {
@@ -1095,6 +1111,9 @@ form {
   background: $color-fadedblack;
   border: 1px solid $color-dirtywhite;
   border-bottom: none;
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 3vh;
+  }
 }
 
 .experiments_side_text {
@@ -1125,6 +1144,11 @@ form {
     }
     span {
       transform: translateY(110%);
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    a {
+      font-size: 6vh;
     }
   }
 }

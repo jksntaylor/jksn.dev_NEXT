@@ -2,11 +2,12 @@ import { useSinglePrismicDocument } from "@prismicio/react"
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useEffect, useRef } from "react"
-import { Vector2, Vector3 } from "three"
+import { Vector2 } from "three"
 import gsap from "gsap"
 // modules
 import { t_experimentsMaterial } from "../components/Materials"
 import { t_experiment } from "../utils/types"
+import { useMedia } from "../utils/hooks"
 import { colors } from "../utils/constants"
 import { lerp } from "../utils/functions"
 
@@ -22,27 +23,54 @@ const Experiments = () => {
 
   const [experiments] = useSinglePrismicDocument('experiments')
 
+  const innerHeight = useMedia(height * .92, height - width * .046, 0)
+  const wrapperOffsets = useMedia(
+    { start: width - height * .16, move: width - height * .08 },
+    { start: width * .915, move: width * .9575 },
+    { start: 0, move: 0 }
+  )
+
+  const sidebarOpts = useMedia(
+    { start: height * .48, end: height * .15 + 1/factor, posX: height * .319 },
+    { start: width * .3, end: width * .06 + 1/factor, posX: width * 0.1925 },
+    { start: 0, end: 0, posX: 0 }
+  )
+
+  const fontScale = useMedia(
+    { start: 3.25, end: 0.7 },
+    { start: 3.25, end: 0.4 },
+    { start: 0, end: 0 }
+  )
+
+  const experimentsPosition = useMedia(
+    { start: -width/2 + height * .84, offset: height * .62 + (innerHeight * .6 * 5 - width)},
+    { start: -width/2 + width * .331 + height * .3, offset: (height - width * .046) * 2 },
+    { start: 0, offset: 0 },
+  )
+
   useFrame(() => {
-    const sectionOffset = scrollData.range(.56, .05)
-    const sidebarOffset = scrollData.range(.61, .04)
-    const contentOffset = scrollData.range(.61, .19)
-    const sectionOffset2 = scrollData.range(.8, .05)
+    const sectionRange = scrollData.range(.56, .05)
+    const sidebarRange = scrollData.range(.61, .04)
+    const contentRange = scrollData.range(.61, .19)
+    const sectionRange2 = scrollData.range(.8, .05)
 
-    if (sectionOffset === 0 && r_wrapper.current.position.x !== width * .9575) {
-      r_wrapper.current.position.x = width * .9575
-    } else if (sectionOffset > 0 && sectionOffset2 < 1) {
-      r_wrapper.current.position.x = -width * 0.915 * sectionOffset + width * 0.9575 - width * 0.915 * sectionOffset2
+    if (sectionRange === 0 && r_wrapper.current.position.x !== wrapperOffsets.move) {
+      r_wrapper.current.position.x = wrapperOffsets.move
+    } else if (sectionRange > 0 && sectionRange2 < 1) {
+      r_wrapper.current.position.x = -wrapperOffsets.start * sectionRange + wrapperOffsets.move - wrapperOffsets.start * sectionRange2
       if (r_sidebar.current) {
-        r_sidebarInner.current.style.width = `${(width * .06 + (1 - sidebarOffset) * width * .24) * factor}px`
-        r_sidebarInner.current.children[0].style.transform = `scaleX(${3.25 - sidebarOffset * 2.85})`
-        r_sidebarInner.current.children[0].style.fontWeight = `${700 - sidebarOffset * 200}`
+        r_sidebarInner.current.style.width = `${(sidebarOpts.end + (1 - sidebarRange) * (sidebarOpts.start - sidebarOpts.end)) * factor}px`
+        r_sidebarInner.current.children[0].style.transform = `scaleX(${fontScale.start - sidebarRange * (fontScale.start - fontScale.end)})`
+        r_sidebarInner.current.children[0].style.fontWeight = `${700 - sidebarRange * 200}`
 
-        r_sidebar.current.position.x = -width/2 + width * 0.0425 + width * (0.15 - sidebarOffset * 0.119)
+        r_sidebar.current.position.x = -width/2 + sidebarOpts.posX - (sidebarOpts.start - sidebarOpts.end) / 2 * sidebarRange
       }
-      r_experiments.current.position.x = contentOffset * -height * 0.45 * 4 + height * 0.04
-      r_shift.current = 0.45 - (contentOffset * 0.45)
-    } else if (sectionOffset2 === 1 && r_wrapper.current.position.x !== -width * 0.915) {
-      r_wrapper.current.position.x = -width * 0.915
+
+      r_experiments.current.position.x = experimentsPosition.start - experimentsPosition.offset * contentRange
+0      // r_experiments.current.position.x = -contentRange * (innerHeight * .6 * 4)
+      r_shift.current = .45 - (contentRange * .45)
+    } else if (sectionRange2 === 1 && r_wrapper.current.position.x !== -wrapperOffsets.start) {
+      r_wrapper.current.position.x = -wrapperOffsets.start
     }
   })
 
@@ -62,24 +90,18 @@ const Experiments = () => {
       gsap.to(r_link.current.children[0], { y: '110%', ease: 'expo.out' })
     }
 
-    const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-      if (e.uv) r_mouse.current.set(e.uv.x, e.uv.y)
-    }
+    const handlePointerMove = (e: ThreeEvent<PointerEvent>) => { if (e.uv) r_mouse.current.set(e.uv.x, e.uv.y) }
 
-    useEffect(() => {
-      if (r_mat.current.u_texture !== texture) r_mat.current.u_texture = texture
-    }, [texture])
+    useEffect(() => { if (r_mat.current.u_texture !== texture) r_mat.current.u_texture = texture }, [texture])
 
     useFrame((_s, delta) => {
       if (r_mat.current.u_mouse !== r_mouse.current) {
         r_mat.current.u_mouse.x = lerp(r_mat.current.u_mouse.x, r_mouse.current.x, 0.15)
         r_mat.current.u_mouse.y = lerp(r_mat.current.u_mouse.y, r_mouse.current.y, 0.15)
       }
-      r_mat.current.u_time += delta
       if (r_mat.current.u_shift !== r_shift.current) r_mat.current.u_shift = r_shift.current
+      if (r_mat.current.u_mouse_rad > 0) r_mat.current.u_time += delta
     })
-
-    const innerHeight = (height - width * 0.046)
 
     return <group
       position={[index * innerHeight * 0.6, 0, 0]}
@@ -115,34 +137,26 @@ const Experiments = () => {
     </group>
   }
 
-  const renderExperiments = () => {
-    return <group ref={r_experiments} position={[0, -width * 0.023, 0]}>
-      {experiments && experiments.data.experiments.map((exp: t_experiment, i: number) => {
-        return <Image url={exp.cover_image.url} key={i} index={i} link={exp.live_link} text={exp.title}/>
-      })}
-    </group>
-  }
-
-  return <group ref={r_wrapper} position={[width * .915, 0, 0]}>
+  return <group ref={r_wrapper} position={[useMedia(width - height * .16, width * .915, 0), 0, 0]}>
     <Html
       center
       // transform
       // distanceFactor={3.4}
       className="experiments_top"
       portal={{ current: scrollData.fixed }}
-      position={[0, height / 2 - width * .023 + 1/factor, 0]}
+      position={[useMedia(-1/factor, 0, 0), height / 2 - useMedia(height * .04, width * .023, 0) + 1/factor, 0]}
       style={{
-        width: width * .915 * factor,
-        height: width * .046 * factor,
+        width: useMedia(width - height * .16, width * .915, 0) * factor,
+        height: useMedia(height * .08, width * .046, 0) * factor,
         borderBottom: `1px solid ${colors.dirtyWhite}`
       }}
       zIndexRange={[5, 6]}
     >
-      <div className='section_number' style={{ width: width * 0.06 * factor }}>03</div>
+      <div className='section_number' style={{ width: useMedia(height * .15, width * 0.06, 0) * factor }}>03</div>
       <div className="section_title">Experiments</div>
     </Html>
     <group
-      position={new Vector3(-width/2 + width * 0.1925, -width * 0.023, 0.001)}
+      position={[-width/2 + useMedia(height * .319, width * 0.1925, 0), useMedia(-height * .04, -width * .023, 0), 0.001]}
       ref={r_sidebar}
     >
       <Html
@@ -153,15 +167,29 @@ const Experiments = () => {
         portal={{ current: scrollData.fixed }}
         ref={r_sidebarInner}
         style={{
-          width: width * 0.3 * factor + 2,
-          height: (height - width * 0.046) * factor + 2,
+          width: sidebarOpts.start * factor + 2,
+          height: (height - useMedia(height * .08, width * 0.046, 0)) * factor + 4,
         }}
         zIndexRange={[5, 6]}
       >
         <p className="experiments_side_text">E<em>X</em>PERIME<em>N</em>TS</p>
       </Html>
     </group>
-    {renderExperiments()}
+    <group ref={r_experiments} position={[
+      experimentsPosition.start,
+      useMedia(-height * .04, -width * .023, 0),
+      0
+      ]}>
+      {experiments && experiments.data.experiments.map((exp: t_experiment, i: number) => {
+        return <Image
+          key={i}
+          index={i}
+          text={exp.title}
+          link={exp.live_link}
+          url={exp.cover_image.url}
+        />
+      })}
+    </group>
   </group>
 }
 

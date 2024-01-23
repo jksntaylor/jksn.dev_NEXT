@@ -276,7 +276,7 @@ const Menu = () => {
           <div className="menu_links-flex">
             <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
             <MenuLink projIndex={1} str="Rre&nbsp;ventUreS" altColor/>
-            <MenuLink projIndex={2} str="gEnieS"/>
+            <MenuLink projIndex={2} str="gEnieS&nbsp;FasHioN"/>
             <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics" altColor/>
             <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
             <MenuLink projIndex={5} str="soURce&nbsp;7" altColor/>
