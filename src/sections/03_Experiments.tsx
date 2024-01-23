@@ -43,7 +43,7 @@ const Experiments = () => {
   )
 
   const experimentsPosition = useMedia(
-    { start: -width/2 + height * .84, offset: height * .62 + (innerHeight * .6 * 5 - width)},
+    { start: -width/2 + height * .84, offset: height * .67 + (innerHeight * .6 * 5 - width)},
     { start: -width/2 + width * .331 + height * .3, offset: (height - width * .046) * 2 },
     { start: 0, offset: 0 },
   )

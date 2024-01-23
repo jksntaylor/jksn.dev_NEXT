@@ -134,6 +134,7 @@ main {
   @media screen and (aspect-ratio > 1.75) {
     font-size: 6.5vh;
     margin: 1vh 0;
+    letter-spacing: 0;
   }
 }
 
@@ -1187,6 +1188,19 @@ form {
       color: $color-dirtywhite;
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 5vh;
+    p {
+      font-size: 4vh;
+      margin-bottom: 6vh;
+    }
+    button {
+      font-size: 3.5vh;
+      height: 6vh;
+      padding: 1.5vh 2.5vh 0.5vh;
+      border-radius: 3vh;
+    }
+  }
 }
 
 .motto_slices {
@@ -1202,6 +1216,11 @@ form {
       padding: 6rem 3rem 0 0;
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    .landing_slice {
+      height: calc((100% - 8vh) / 3 + 1px);
+    }
+  }
 }
 
 .motto_top {
@@ -1213,7 +1232,6 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-left: 1px solid $color-dirtywhite;
   }
   .section_title {
     flex-grow: 1;
@@ -1226,6 +1244,12 @@ form {
     font: 400 2.5rem 'Neue Montreal';
     letter-spacing: -0.075rem;
     color: $color-dirtywhite;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    .section_title {
+      padding-right: 3vh;
+      font-size: 3vh;
+    }
   }
 }
 // END MOTTO SECTION
@@ -1257,6 +1281,11 @@ form {
     letter-spacing: -0.075rem;
     color: $color-dirtywhite;
   }
+  @media screen and (aspect-ratio > 1.75) {
+    p {
+      font-size: 3vh;
+    }
+  }
 }
 
 .credits_bottom {
@@ -1265,8 +1294,13 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: flex-start;
   flex-grow: 1;
   padding: 2rem;
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 2vh;
+    // flex-direction: row;
+  }
 }
 
 .credits_project_links {
@@ -1274,7 +1308,7 @@ form {
 }
 
 .credits_project_link {
-  font: 400 3rem/100% 'Neue Montreal';
+  font: 400 4rem/100% 'Neue Montreal';
   letter-spacing: -0.03rem;
   text-transform: uppercase;
   display: flex;
@@ -1301,16 +1335,35 @@ form {
       width: 100%;
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 5vh;
+  }
+}
+
+.credits_contributors {
+  @media screen and (aspect-ratio > 1.75) {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .credits_contributor {
   margin-top: 2rem;
+  @media screen and (aspect-ratio > 1.75) {
+    margin-top: unset;
+    margin-bottom: 5vh;
+    margin-right: 5vh;
+  }
 }
 
 .credits_role {
-  font: 400 2rem/120% 'Neue Montreal';
+  font: 400 2.5rem/120% 'Neue Montreal';
   display: block;
   margin-bottom: 1rem;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3vh;
+    margin-bottom: 1vh;
+  }
 }
 
 .credits_name {
@@ -1318,6 +1371,9 @@ form {
   text-transform: uppercase;
   display: block;
   margin-bottom: 1rem;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+  }
 }
 
 .credits_social_links {

@@ -2,6 +2,8 @@
 import { Html, useScroll } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from "react"
+// modules
+import { useMedia } from "../utils/hooks"
 // assets
 import Github from '../assets/svg/github'
 import Insta from '../assets/svg/insta'
@@ -14,12 +16,21 @@ const Credits = () => {
 
   const r_wrapper = useRef<THREE.Group>(null!)
 
+  const wrapperOffset = useMedia(
+    { start: width/2 + height * .4, move: height * .8 },
+    { start: width/2 + width * .4575/2, move: width * 0.4575 },
+    { start: 0, move: 0 },
+  )
+
   useFrame(() => {
     const sectionOffset = scrollData.range(0.975, 0.025)
-    if (sectionOffset === 0 && r_wrapper.current.position.x !== width * .915) {
-      r_wrapper.current.position.x = width * .73
+    if (sectionOffset === 0 && r_wrapper.current.position.x !== wrapperOffset.start) {
+      r_wrapper.current.position.x = wrapperOffset.start
     } else if (sectionOffset > 0 && sectionOffset < 1) {
-      r_wrapper.current.position.x = width * .73 - width * 0.4575 * sectionOffset
+      r_wrapper.current.position.x = wrapperOffset.start - wrapperOffset.move * sectionOffset
+    }
+    else if (sectionOffset === 1 && r_wrapper.current.position.x !== wrapperOffset.start - wrapperOffset.move) {
+      r_wrapper.current.position.x = wrapperOffset.start - wrapperOffset.move
     }
   })
 
@@ -27,7 +38,7 @@ const Credits = () => {
     window.dispatchEvent(new CustomEvent('toggleProject', { detail: i }))
   }
 
-  return <group ref={r_wrapper} position={[width * 0.9575, 0, 0]}>
+  return <group ref={r_wrapper} position={[width/2 + useMedia(height * .4, width * .4575/2, 0), 0, 0]}>
     <Html
       center
       // transform
@@ -36,12 +47,12 @@ const Credits = () => {
       zIndexRange={[3, 4]}
       portal={{ current: scrollData.fixed }}
       style={{
-        width: width * 0.4575 * factor,
+        width: useMedia(height * .8, width * 0.4575, 0) * factor,
         height: height * factor
       }}
     >
-      <div className="credits_top" style={{ height: width * 0.046 * factor }}>
-        <div className="section_number" style={{ width: width * 0.046 * factor }}>05</div>
+      <div className="credits_top" style={{ height: useMedia(height * .08, width * 0.046, 0) * factor }}>
+        <div className="section_number" style={{ width: useMedia(height * .08, width * 0.046, 0) * factor }}>05</div>
         <p>Credits</p>
       </div>
       <div className="credits_bottom">
@@ -57,34 +68,36 @@ const Credits = () => {
           <div className="credits_project_link" onClick={() => handleClick(8)}>Bitski</div>
           <div className="credits_project_link" onClick={() => handleClick(9)}>Introvoke</div>
         </div>
-        <div className="credits_contributor">
-          <span className="credits_role">Development</span>
-          <span className="credits_name">J<em>ack</em>so<em>n</em> <em>T</em>ay<em>lor</em></span>
-          <div className="credits_social_links">
-            <a href="https://github.com/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="github">
-              <Github />
-            </a>
-            <a href="https://linkedin.com/in/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="linkedin">
-              <Linkedin />
-            </a>
-            <a href="https://dribbble.com/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="dribbble">
-              <Dribbble />
-            </a>
+        <div className="credits_contributors">
+          <div className="credits_contributor">
+            <span className="credits_role">Development</span>
+            <span className="credits_name">J<em>ack</em>so<em>n</em> <em>T</em>ay<em>lor</em></span>
+            <div className="credits_social_links">
+              <a href="https://github.com/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="github">
+                <Github />
+              </a>
+              <a href="https://linkedin.com/in/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="linkedin">
+                <Linkedin />
+              </a>
+              <a href="https://dribbble.com/jksntaylor" target="_blank" rel="noopener noreferrer" aria-label="dribbble">
+                <Dribbble />
+              </a>
+            </div>
           </div>
-        </div>
-        <div className="credits_contributor">
-          <span className="credits_role">Creative Direction &amp; Design</span>
-          <span className="credits_name"><em>B</em>ra<em>ndo</em>n <em>Z</em>a<em>ch</em>ari<em>as</em></span>
-          <div className="credits_social_links">
-            <a href="https://dribbble.com/brandonzacharias" target="_blank" rel="noopener noreferrer" aria-label="dribbble">
-              <Dribbble />
-            </a>
-            <a href="https://linkedin.com/in/brandon-zacharias" target="_blank" rel="noopener noreferrer" aria-label="linkedin">
-              <Linkedin />
-            </a>
-            <a href="https://instagram.com/bzachariasdesign" target="_blank" rel="noopener noreferrer" aria-label="instagram">
-              <Insta />
-            </a>
+          <div className="credits_contributor">
+            <span className="credits_role">Creative Direction / Design</span>
+            <span className="credits_name"><em>B</em>ra<em>ndo</em>n <em>Z</em>a<em>ch</em>ari<em>as</em></span>
+            <div className="credits_social_links">
+              <a href="https://dribbble.com/brandonzacharias" target="_blank" rel="noopener noreferrer" aria-label="dribbble">
+                <Dribbble />
+              </a>
+              <a href="https://linkedin.com/in/brandon-zacharias" target="_blank" rel="noopener noreferrer" aria-label="linkedin">
+                <Linkedin />
+              </a>
+              <a href="https://instagram.com/bzachariasdesign" target="_blank" rel="noopener noreferrer" aria-label="instagram">
+                <Insta />
+              </a>
+            </div>
           </div>
         </div>
       </div>
