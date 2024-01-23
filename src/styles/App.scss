@@ -1390,5 +1390,13 @@ form {
       }
     }
   }
+  @media screen and (aspect-ratio > 1.75) {
+    a {
+      margin-right: 1vh;
+      svg {
+        height: 5vh;
+      }
+    }
+  }
 }
 // END CREDITS SECTION
