@@ -47,11 +47,11 @@ function App() {
           <Suspense fallback={null}>
             <Menu />
             <Landing />
-            <Welcome />
-            <SelectedWorks />
-            <Experiments />
-            <CallToAction />
-            <Credits />
+            {/* <Welcome /> */}
+            {/* <SelectedWorks /> */}
+            {/* <Experiments /> */}
+            {/* <CallToAction /> */}
+            {/* <Credits /> */}
           </Suspense>
         </ScrollControls>
       </Canvas>

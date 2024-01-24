@@ -17,6 +17,7 @@ const Menu = () => {
   const { camera, viewport } = useThree()
   const { height, width, factor } = viewport.getCurrentViewport(camera, [0, 0, 0])
 
+  const r_drawerWrapper = useRef<THREE.Group>(null!)
   const r_drawer = useRef<HTMLDivElement>(null!)
   const r_path1 = useRef<SVGPathElement>(null!)
   const r_path2 = useRef<SVGPathElement>(null!)
@@ -84,6 +85,8 @@ const Menu = () => {
   }, [toggleContact, toggleMenu])
 
   const drawerWidth = useMedia(width - height * 0.16, width * 0.915 , 0)
+  const drawerHeight = useMedia(0, 0, height - width * .15)
+  const drawerOffset = useMedia({ x: height * .05, y: 0 }, { x: width * .03, y: 0 }, { x: 0, y: width * .08 - 1/factor })
 
   useEffect(() => {
     setTimeout(() => {
@@ -118,19 +121,20 @@ const Menu = () => {
         duration: 0.75,
         transformOrigin: 'center',
         ease: 'expo.inOut'
-      }, 0.85).to(r_drawer.current, {
-        x: drawerWidth * factor,
+      }, 0.85).to(r_drawerWrapper.current.position, {
+        x: drawerOffset.x,
+        y: drawerOffset.y,
         duration: 0.75,
         ease: 'expo.inOut'
       }, 0.85)
-    }, 500);
+    }, 100);
       window.addEventListener('keydown', e => handleEscape(e))
       window.addEventListener('toggleContact', (handleToggleContact) as EventListener)
     return () => {
       window.removeEventListener('keydown', e => handleEscape(e))
       window.removeEventListener('toggleContact', (handleToggleContact) as EventListener)
     }
-  }, [menuTL, factor, width, drawerWidth, handleEscape, handleToggleContact])
+  }, [menuTL, factor, height, width, drawerWidth, drawerOffset, handleEscape, handleToggleContact])
 
   const mouseEnter = () => {
     if (!r_menuOpen.current) menuTL.current.tweenTo(0.55)
@@ -256,106 +260,112 @@ const Menu = () => {
   }
 
   return <group>
-    <Html
-      center
-      // transform
-      // distanceFactor={3.4}
-      ref={r_drawer}
-      className="menu_drawer"
-      zIndexRange={[8, 9]}
-      portal={{ current: scrollData.fixed }}
-      position={[useMedia(height * 0.05 - (width - height * 0.16), -width * 0.885, 0), 0, 0]}
-      style={{
-        width: useMedia((width - height * 0.1) * factor, width * 0.945 * factor, 0),
-        height: useMedia(height * factor + 2, height * factor + 2, 0)
-      }}
-    >
-      <div className="menu_links">
-        <div className="menu_links-projects">
-          <span>PROJECTS<hr/></span>
-          <div className="menu_links-flex">
-            <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
-            <MenuLink projIndex={1} str="Rre&nbsp;ventUreS" altColor/>
-            <MenuLink projIndex={2} str="gEnieS&nbsp;FasHioN"/>
-            <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics" altColor/>
-            <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
-            <MenuLink projIndex={5} str="soURce&nbsp;7" altColor/>
-            <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
-            <MenuLink projIndex={7} str="BitsKi" altColor/>
-            <MenuLink projIndex={8} str="bRaiNBasE"/>
-            <MenuLink projIndex={9} str="iNtrOvOke" altColor/>
-          </div>
-        </div>
-        <div className="menu_links-experiments">
-          <span>EXPERIMENTS<hr/></span>
-          <div className="menu_links-flex">
-            <MenuLink projIndex={0} str="GRanD&nbsp;PriX" altColor/>
-            <MenuLink projIndex={1} str="DisTOrtioN" />
-            <MenuLink projIndex={2} str="WatEr&nbsp;RiPplEs" altColor/>
-            <MenuLink projIndex={3} str="CaR&nbsp;CatWalK" />
-            <MenuLink projIndex={4} str="POrtaL" altColor/>
-          </div>
-        </div>
-        <button className="menu_opencontact" onClick={toggleContact}>LET'<em>S</em> T<em>A</em>LK →</button>
-      </div>
-      <div className="menu_teaser">
-        <Star />
-        <div>
-          <span>Available for Freelance</span>
-          <span>JACKSON TAYLOR</span>
-          <span>February 2024</span>
-        </div>
-        <Star />
-      </div>
-      <div className="contact_form" ref={r_contact}>
-        <form onSubmit={handleFormSubmit} ref={r_contactForm}>
-          <p className="form_heading"><em>Ge</em>t I<em>n</em> T<em>ou</em>c<em>h</em></p>
-          <div className="form_input">
-            <label htmlFor="contact_name">Name<Star /></label>
-            <input type="text" id="contact_name" name="name" ref={r_contactName}/>
-          </div>
-          <div className="form_input">
-            <label htmlFor="contact_email">Email<Star /></label>
-            <input type="text" id="contact_email" name="email" ref={r_contactEmail}/>
-          </div>
-          <div className="form_input">
-            <label htmlFor="contact_company">Company</label>
-            <input type="text" id="contact_company" name="company" ref={r_contactCompany}/>
-          </div>
-          <div className="form_slider">
-            <label htmlFor="contact_budget">Estimated Budget</label>
-            <div className="slider_wrapper">
-              <span>$3K</span>
-              <div>
-                <span ref={r_sliderText}>$10K</span>
-                <input
-                  type="range" id="contact_budget" name="budget" ref={r_contactBudget}
-                  min={3} max={50} step={1} defaultValue={10}
-                  onChange={e => handleSliderChange(e)}
-                />
-              </div>
-              <span>$50K+</span>
+    <group ref={r_drawerWrapper} position={[
+      useMedia(height * 0.05 - (width - height * 0.16), -width * 0.885, 0),
+      useMedia(0, 0, width * .15 - drawerHeight - 1/factor),
+      0
+    ]}>
+      <Html
+        center
+        // transform
+        // distanceFactor={3.4}
+        ref={r_drawer}
+        className="menu_drawer"
+        zIndexRange={[8, 9]}
+        portal={{ current: scrollData.fixed }}
+
+        style={{
+          width: useMedia(width - height * 0.1, width * 0.945, width) * factor,
+          height: useMedia(height, height, drawerHeight) * factor + 2
+        }}
+        >
+        <div className="menu_links">
+          <div className="menu_links-projects">
+            <span>PROJECTS<hr/></span>
+            <div className="menu_links-flex">
+              <MenuLink projIndex={0} str="tiKtok&nbsp;tOp&nbsp;moMents"/>
+              <MenuLink projIndex={1} str="Rre&nbsp;ventUreS" altColor/>
+              <MenuLink projIndex={2} str="gEnieS&nbsp;FasHioN"/>
+              <MenuLink projIndex={3} str="reaLtiMe&nbsp;roBoTics" altColor/>
+              <MenuLink projIndex={4} str="leVi's&nbsp;501&nbsp;Day"/>
+              <MenuLink projIndex={5} str="soURce&nbsp;7" altColor/>
+              <MenuLink projIndex={6} str="huGe&nbsp;iNc"/>
+              <MenuLink projIndex={7} str="BitsKi" altColor/>
+              <MenuLink projIndex={8} str="bRaiNBasE"/>
+              <MenuLink projIndex={9} str="iNtrOvOke" altColor/>
             </div>
           </div>
-          <div className="form_textarea">
-            <label htmlFor="contact_brief">Project Brief<Star /></label>
-            <textarea id="contact_brief" name="description" ref={r_contactBrief}/>
+          <div className="menu_links-experiments">
+            <span>EXPERIMENTS<hr/></span>
+            <div className="menu_links-flex">
+              <MenuLink projIndex={0} str="GRanD&nbsp;PriX" altColor/>
+              <MenuLink projIndex={1} str="DisTOrtioN" />
+              <MenuLink projIndex={2} str="WatEr&nbsp;RiPplEs" altColor/>
+              <MenuLink projIndex={3} str="CaR&nbsp;CatWalK" />
+              <MenuLink projIndex={4} str="POrtaL" altColor/>
+            </div>
           </div>
-          <div className="form_buttons">
-            <button className="form_close" type="button" onClick={toggleContact}><em>CLO</em>S<em>E</em></button>
-            <button className="form_send" type="button" onClick={handleFormSubmit}><em>S</em>E<em>ND</em>→</button>
-          </div>
-        </form>
-        <p className="contact_thanks" ref={r_thanks}>Thanks for reaching out!<br/>I'll be in touch as soon as I can.</p>
-        <div className="email">
-          <p className="email_heading"><em>O</em>T<em>HE</em>R IN<em>QU</em>IRI<em>E</em>S:</p>
-          <a href="mailto:business@jksn.dev" className="email_link">
-            business@jksn.dev
-            <Email />
-          </a>
+          <button className="menu_opencontact" onClick={toggleContact}>LET'<em>S</em> T<em>A</em>LK →</button>
         </div>
-      </div>
-    </Html>
+        <div className="menu_teaser">
+          <Star />
+          <div>
+            <span>Available for Freelance</span>
+            <span>JACKSON TAYLOR</span>
+            <span>February 2024</span>
+          </div>
+          <Star />
+        </div>
+        <div className="contact_form" ref={r_contact}>
+          <form onSubmit={handleFormSubmit} ref={r_contactForm}>
+            <p className="form_heading"><em>Ge</em>t I<em>n</em> T<em>ou</em>c<em>h</em></p>
+            <div className="form_input">
+              <label htmlFor="contact_name">Name<Star /></label>
+              <input type="text" id="contact_name" name="name" ref={r_contactName}/>
+            </div>
+            <div className="form_input">
+              <label htmlFor="contact_email">Email<Star /></label>
+              <input type="text" id="contact_email" name="email" ref={r_contactEmail}/>
+            </div>
+            <div className="form_input">
+              <label htmlFor="contact_company">Company</label>
+              <input type="text" id="contact_company" name="company" ref={r_contactCompany}/>
+            </div>
+            <div className="form_slider">
+              <label htmlFor="contact_budget">Estimated Budget</label>
+              <div className="slider_wrapper">
+                <span>$3K</span>
+                <div>
+                  <span ref={r_sliderText}>$10K</span>
+                  <input
+                    type="range" id="contact_budget" name="budget" ref={r_contactBudget}
+                    min={3} max={50} step={1} defaultValue={10}
+                    onChange={e => handleSliderChange(e)}
+                    />
+                </div>
+                <span>$50K+</span>
+              </div>
+            </div>
+            <div className="form_textarea">
+              <label htmlFor="contact_brief">Project Brief<Star /></label>
+              <textarea id="contact_brief" name="description" ref={r_contactBrief}/>
+            </div>
+            <div className="form_buttons">
+              <button className="form_close" type="button" onClick={toggleContact}><em>CLO</em>S<em>E</em></button>
+              <button className="form_send" type="button" onClick={handleFormSubmit}><em>S</em>E<em>ND</em>→</button>
+            </div>
+          </form>
+          <p className="contact_thanks" ref={r_thanks}>Thanks for reaching out!<br/>I'll be in touch as soon as I can.</p>
+          <div className="email">
+            <p className="email_heading"><em>O</em>T<em>HE</em>R IN<em>QU</em>IRI<em>E</em>S:</p>
+            <a href="mailto:business@jksn.dev" className="email_link">
+              business@jksn.dev
+              <Email />
+            </a>
+          </div>
+        </div>
+      </Html>
+    </group>
     <Html
       center
       // transform
@@ -363,10 +373,10 @@ const Menu = () => {
       className="menu"
       zIndexRange={[10, 11]}
       portal={{ current: scrollData.fixed }}
-      position={[useMedia(-width / 2 + height * 0.05, -width/2 + width * 0.03 - 2/factor, 0), 0, 0.001]}
+      position={[useMedia(-width / 2 + height * 0.05, -width/2 + width * 0.03 - 2/factor, 0), useMedia(0, 0, -height/2 + width * .075), 0.001]}
       style={{
-        width: useMedia(height * 0.1 * factor, width * 0.055 * factor + 8, 0),
-        height: useMedia(height * factor, height * factor, 0)
+        width: useMedia(height * 0.1, width * 0.055 + 8/factor, width) * factor,
+        height: useMedia(height, height, width * .15) * factor
       }}
     >
       <svg onClick={toggleMenu} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} x="0" y="0" width="41" height="44" viewBox="0 0 41 44" fill="none" xmlns="http://www.w3.org/2000/svg">

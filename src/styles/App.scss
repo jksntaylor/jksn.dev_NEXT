@@ -53,15 +53,28 @@ main {
   align-items: center;
   border-left: 1px solid $color-dirtywhite;
   z-index: 50;
+  @media screen and (aspect-ratio < 1) {
+    border-left: none;
+    border-top: 1px solid $color-dirtywhite;
+    border-bottom: 1px solid $color-dirtywhite;
+  }
 }
 
 .menu svg {
   cursor: pointer;
   box-sizing: content-box;
+  @media screen and (aspect-ratio < 1) {
+    height: 8vw;
+    width: auto;
+  }
 }
 
 .menu_drawer {
   display: flex;
+  @media screen and (aspect-ratio < 1) {
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+  }
 }
 
 .menu_links {
@@ -72,6 +85,9 @@ main {
     padding: 5vh;
     display: flex;
     justify-content: space-between;
+  }
+  @media screen and (aspect-ratio < 1) {
+    padding: 5vw;
   }
 }
 
@@ -84,8 +100,9 @@ main {
     font: 400 2.5rem/100% 'Neue Montreal';
     margin-bottom: 2rem;
     hr {
-      width: 85%;
+      width: 100%;
       border-color: $color-accent1;
+      margin-left: 1.5rem;
     }
   }
   @media screen and (aspect-ratio > 1.75) {
@@ -93,6 +110,16 @@ main {
     > span {
       font-size: 3vh;
       margin-bottom: 2.5vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    > span {
+      font-size: 3vw;
+      margin-bottom: 4vw;
+      hr {
+        width: 100%;
+        margin-left: 2vw;
+      }
     }
   }
 }
@@ -103,12 +130,22 @@ main {
     margin-right: 3%;
     height: 70%;
   }
+  @media screen and (aspect-ratio < 1) {
+    height: max-content;
+    margin-bottom: 2vw;
+  }
 }
 
 .menu_links-experiments {
   width: 50%;
   > span hr {
     width: 65%;
+  }
+  @media screen and (aspect-ratio < 1) {
+    width: 100%;
+    > span hr {
+      width: 100%;
+    }
   }
 }
 
@@ -135,6 +172,10 @@ main {
     font-size: 6.5vh;
     margin: 1vh 0;
     letter-spacing: 0;
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: clamp(0px, 7vw, 3vh);
+    margin: 0 0 clamp(0px, 2vw, 1vh) 0;
   }
 }
 
@@ -170,6 +211,15 @@ main {
     height: 6vh;
     padding: 1.5vh 2vh 0;
   }
+  @media screen and (aspect-ratio < 1) {
+    right: 5vw;
+    bottom: 5vw;
+    font-size: 6vw;
+    border-radius: 6vw;
+    height: 11vw;
+    padding: 2vw 6vw 0;
+    margin-right: 0;
+  }
 }
 
 @keyframes spin {
@@ -182,11 +232,11 @@ main {
   font: 400 1.6rem 'Neue Montreal';
   writing-mode: vertical-lr;
   width: 4.5rem;
-  padding: 2.5rem 1rem;
+  padding: 2.5rem 0;
   border-left: 1px solid $color-dirtywhite;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   div {
     flex-grow: 1;
     display: flex;
@@ -211,6 +261,26 @@ main {
       height: 2.5vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    writing-mode: unset;
+    font-size: 4vw;
+    padding: 0 1.5vw;
+    width: 100%;
+    height: 8vw;
+    border-left: unset;
+    border-top: 1px solid $color-dirtywhite;
+    border-bottom: 1px solid $color-dirtywhite;
+    div {
+      margin: 0 1.5vw;
+      span:nth-of-type(2) {
+        display: none;
+      }
+    }
+    svg {
+      width: 4vw;
+      height: 4vw;
+    }
+  }
 }
 // END MENU COMPONENT
 
@@ -231,12 +301,20 @@ main {
     width: calc(100% - 6vh);
     padding: 5vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    width: 100%;
+    flex-direction: column;
+  }
 }
 
 form {
   width: 70%;
   display: flex;
   flex-direction: column;
+  @media screen and (aspect-ratio < 1) {
+    width: 100%;
+    flex-grow: 1;
+  }
 }
 
 .form_heading {
@@ -248,6 +326,11 @@ form {
   @media screen and (aspect-ratio > 1.75) {
     font-size: 8vh;
     border-bottom: 0.5vh solid $color-accent1;
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 10vw;
+    width: 100%;
+    margin-bottom: 5vw;
   }
 }
 
@@ -282,6 +365,22 @@ form {
     input {
       font-size: 3vh;
       padding-bottom: 0.5vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    margin-bottom: 5vw;
+    label {
+      font-size: clamp(16px, 4vw, 4vw);
+      margin-right: 2vw;
+      svg {
+        height: 3vw;
+        width: auto;
+        transform: translate(0, -2vw);
+      }
+    }
+    input {
+      font-size: clamp(16px, 4vw, 4vw);
+      padding-bottom: 1vw;
     }
   }
 }
@@ -328,7 +427,7 @@ form {
         background: $color-dirtywhite;
         height: 2rem;
         width: 2rem;
-        border-radius: 1rem;
+        border-radius: 50%;
         transform: translateY(-0.9rem);
       }
     }
@@ -356,6 +455,35 @@ form {
       input::-webkit-slider-thumb {
         height: 3vh;
         width: 3vh;
+        transform: translateY(-1.4vh);
+      }
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    margin-bottom: 5vw;
+    label {
+      font-size: clamp(16px, 4vw, 4vw);
+      margin-right: 2vw;
+    }
+    .slider_wrapper {
+      > span {
+        font-size: clamp(14px, 3vw, 3vw);
+        &:first-of-type {
+          margin-right: 1vw;
+        }
+        &:last-of-type {
+          margin-left: 1vw;
+        }
+      }
+      div span {
+        font-size: clamp(14px, 3vw, 3vw);
+        top: -5vw;
+        transform: translateX(-3vw);
+      }
+      input::-webkit-slider-thumb {
+        height: 3vw;
+        width: 3vw;
+        transform: translateY(-1.3vw);
       }
     }
   }
@@ -401,6 +529,23 @@ form {
       padding: 1vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    margin-bottom: 5vw;
+    label {
+      font-size: clamp(16px, 4vw, 4vw);
+      margin-right: 2vw;
+      margin-bottom: 2vw;
+      svg {
+        height: 3vw;
+        width: auto;
+        transform: translate(0, -2vw);
+      }
+    }
+    textarea {
+      font-size: clamp(16px, 4vw, 4vw);
+      padding-bottom: 1vw;
+    }
+  }
 }
 
 .form_buttons {
@@ -434,6 +579,15 @@ form {
       border-radius: 3vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    button {
+      font-size: 6vw;
+      border-radius: 6vw;
+      height: 11vw;
+      padding: 2vw 6vw 0;
+      margin-right: 5vw;
+    }
+  }
 }
 
 .contact_thanks {
@@ -449,6 +603,21 @@ form {
     left: 5vh;
     font-size: 4vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    top: 5vw;
+    left: 5vw;
+    font-size: 4vw;
+  }
+}
+
+.email {
+  @media screen and (aspect-ratio < 1) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5vw;
+    order: -1;
+  }
 }
 
 .email_heading {
@@ -456,6 +625,10 @@ form {
   margin-bottom: 2rem;
   @media screen and (aspect-ratio > 1.75) {
     font-size: 5vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 5vw;
+    margin: 0;
   }
 }
 
@@ -485,6 +658,13 @@ form {
     svg {
       margin-left: 3vh;
       height: 4vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 6vw;
+    svg {
+      margin-left: 3vw;
+      height: 4vw;
     }
   }
 }
