@@ -1,0 +1,49 @@
+$color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
+$color-fadedblack: #010101;
+$color-accent1: #FF2647;
+$color-accent2: #32DEED;
+
+// LANDING SECTION
+.landing_arrow svg {
+  width: 100%;
+  height: 100%;
+}
+.landing_arrow-outer {
+  transform-origin: center center;
+  animation: spin 20s linear infinite;
+}
+
+.landing_content > div {
+  overflow: hidden;
+  // border-right: 1px solid $color-dirtywhite;
+}
+
+.landing_slice {
+  background: $color-fadedblack;
+  border-left: 1px solid $color-dirtywhite;
+  border-bottom: 1px solid $color-dirtywhite;
+}
+
+.landing_slice h3 {
+  color: $color-dirtywhite;
+  width: 91.5vw;
+  font: 400 20rem/85% 'Formula Condensed';
+  padding: 6rem 0 0 3rem;
+  text-shadow: 0.4rem 0 $color-accent1, 0.8rem 0 $color-accent2;
+  @media screen and (aspect-ratio > 1.75) {
+    width: calc(100vw - 17vh);
+    font-size: 25vh;
+    padding: 8vh 0 0 4vh;
+    text-shadow: 0.8vh 0 $color-accent1, 1.6vh 0 $color-accent2;
+  }
+  @media screen and (aspect-ratio < 1) {
+    width: 100vw;
+    font-size: clamp(32px, 28vw, 10vh);
+    line-height: 100%;
+    padding: clamp(0px, 8vw, 4vh) 0 0 clamp(0px, 4vw, 2vh);
+    text-shadow: 1vw 0 $color-accent1, 2vw 0 $color-accent2;
+    letter-spacing: 1.5vw;
+  }
+}
+// END LANDING SECTION

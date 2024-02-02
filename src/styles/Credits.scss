@@ -1,0 +1,152 @@
+$color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
+$color-fadedblack: #010101;
+$color-accent1: #FF2647;
+$color-accent2: #32DEED;
+
+// CREDITS SECTION
+.credits {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid $color-dirtywhite;
+}
+
+.credits_top {
+  background: $color-fadedblack;
+  color: $color-dirtywhite;
+  display: flex;
+  align-items: center;
+  .section_number {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid $color-dirtywhite;
+  }
+  p {
+    flex-grow: 1;
+    text-align: right;
+    margin-right: 2rem;
+    font: 400 2.5rem 'Neue Montreal';
+    letter-spacing: -0.075rem;
+    color: $color-dirtywhite;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    p {
+      font-size: 3vh;
+    }
+  }
+}
+
+.credits_bottom {
+  background: $color-dirtywhite;
+  color: $color-fadedblack;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-grow: 1;
+  padding: 2rem;
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 2vh;
+    // flex-direction: row;
+  }
+}
+
+.credits_project_links {
+  margin-bottom: auto;
+}
+
+.credits_project_link {
+  font: 400 4rem/100% 'Neue Montreal';
+  letter-spacing: -0.03rem;
+  text-transform: uppercase;
+  display: flex;
+  width: max-content;
+  margin-bottom: 1rem;
+  position: relative;
+  transition: color 300ms ease-in-out;
+  &::after {
+    content: "";
+    display: block;
+    width: 0%;
+    height: 0.2rem;
+    position: absolute;
+    background: $color-accent1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 300ms ease-in-out;
+  }
+  &:hover {
+    color: $color-accent1;
+    cursor: pointer;
+    &::after {
+      width: 100%;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 5vh;
+  }
+}
+
+.credits_contributors {
+  @media screen and (aspect-ratio > 1.75) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.credits_contributor {
+  margin-top: 2rem;
+  @media screen and (aspect-ratio > 1.75) {
+    margin-top: unset;
+    margin-bottom: 5vh;
+    margin-right: 5vh;
+  }
+}
+
+.credits_role {
+  font: 400 2.5rem/120% 'Neue Montreal';
+  display: block;
+  margin-bottom: 1rem;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3vh;
+    margin-bottom: 1vh;
+  }
+}
+
+.credits_name {
+  font: 200 3rem/100% 'Formula Condensed';
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1rem;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+  }
+}
+
+.credits_social_links {
+  a {
+    margin-right: 1rem;
+    svg {
+      height: 3rem;
+      width: auto;
+      transition: transform 300ms ease;
+    }
+    &:hover {
+      svg {
+        transform: scale(1.1)
+      }
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    a {
+      margin-right: 1vh;
+      svg {
+        height: 5vh;
+      }
+    }
+  }
+}
+// END CREDITS SECTION

@@ -5,6 +5,8 @@ import { useRef } from "react"
 // modules
 import { t_sphereMaterial } from "../components/Materials"
 import { useMedia } from "../utils/hooks"
+// assets
+import '../styles/CallToAction.scss'
 
 const CallToAction = () => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()

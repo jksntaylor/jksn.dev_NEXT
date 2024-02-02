@@ -4,6 +4,8 @@ import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from 'react'
 import { useMedia } from "../utils/hooks"
 import { Vector3 } from 'three'
+// assets
+import '../styles/Welcome.scss'
 
 const Welcome = () => {
   const scrollData = useScroll()

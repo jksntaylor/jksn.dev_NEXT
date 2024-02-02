@@ -5,6 +5,7 @@ import { useRef } from "react"
 // modules
 import { useMedia } from "../utils/hooks"
 // assets
+import '../styles/Credits.scss'
 import Github from '../assets/svg/github'
 import Insta from '../assets/svg/insta'
 import Linkedin from "../assets/svg/linkedin"

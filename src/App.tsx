@@ -6,9 +6,9 @@ import { Canvas } from '@react-three/fiber'
 // modules
 import './components/Materials'
 import { colors } from './utils/constants'
-// lazy loading modules
-const Menu = lazy(() => import('./components/Menu'))
-const Landing = lazy(() => import('./sections/00_Landing'))
+import Menu  from './components/Menu'
+import Landing from './sections/00_Landing'
+// lazy loaded modules
 const Welcome = lazy(() => import('./sections/01_Welcome'))
 const SelectedWorks = lazy(() => import('./sections/02_SelectedWorks'))
 const Experiments = lazy(() => import('./sections/03_Experiments'))
@@ -57,7 +57,7 @@ function App() {
       </Canvas>
     </Suspense>
     <div className='resize_cover' ref={r_cover} style={{ visibility: 'hidden' }}>
-      <img src={cover} alt="resizing cover" />
+      <img src={cover} alt="resizing cover" width="1000px" height="1000px"/>
     </div>
   </main>
 }

@@ -9,6 +9,7 @@ import { colors } from "../utils/constants"
 import { useMedia } from "../utils/hooks"
 import { lerp } from "../utils/functions"
 // assets
+import '../styles/Menu.scss'
 import Email from "../assets/svg/email"
 import Star from "../assets/svg/star"
 

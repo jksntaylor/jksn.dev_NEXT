@@ -1,0 +1,104 @@
+$color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
+$color-fadedblack: #010101;
+$color-accent1: #FF2647;
+$color-accent2: #32DEED;
+
+// MOTTO SECTION
+.motto_cta {
+  position: absolute;
+  width: 60%;
+  bottom: 0;
+  padding: 5rem;
+  color: $color-dirtywhite;
+  p {
+    font: 400 3.5rem/110% 'Neue Montreal';
+    letter-spacing: -0.03em;
+    margin-bottom: 5rem;
+  }
+  button {
+    background: $color-fadedblack;
+    border: 1px solid $color-accent1;
+    border-radius: 2.5rem;
+    box-sizing: border-box;
+    color: $color-accent1;
+    cursor: pointer;
+    font: 300 2.8rem/100% 'Formula Condensed';
+    height: 5rem;
+    padding: 1rem 2rem 0;
+    transition: background 400ms ease, box-shadow 400ms ease, color 400ms ease;
+    &:hover {
+      background: $color-fadedblack;
+      box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+      color: $color-dirtywhite;
+    }
+    &:active {
+      box-shadow: none;
+      color: $color-dirtywhite;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 5vh 15vh;
+    p {
+      font-size: 4vh;
+      margin-bottom: 6vh;
+    }
+    button {
+      font-size: 3.5vh;
+      height: 6vh;
+      padding: 1.5vh 2.5vh 0.5vh;
+      border-radius: 3vh;
+    }
+  }
+}
+
+.motto_slices {
+  border-left: 1px solid $color-dirtywhite;
+  .landing_slice {
+    height: calc((100% - 4.4vw) / 3);
+    border-left: none;
+    border-right: 1px solid $color-dirtywhite;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    h3 {
+      padding: 6rem 3rem 0 0;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    .landing_slice {
+      height: calc((100% - 8vh) / 3 + 1px);
+    }
+  }
+}
+
+.motto_top {
+  display: flex;
+  border-bottom: 1px solid $color-dirtywhite;
+  .section_number {
+    background: $color-fadedblack;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .section_title {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 2rem;
+    background: $color-fadedblack;
+    border-left: 1px solid $color-dirtywhite;
+    font: 400 2.5rem 'Neue Montreal';
+    letter-spacing: -0.075rem;
+    color: $color-dirtywhite;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    .section_title {
+      padding-right: 3vh;
+      font-size: 3vh;
+    }
+  }
+}
+// END MOTTO SECTION

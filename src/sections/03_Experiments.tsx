@@ -10,6 +10,8 @@ import { t_experiment } from "../utils/types"
 import { useMedia } from "../utils/hooks"
 import { colors } from "../utils/constants"
 import { lerp } from "../utils/functions"
+// assets
+import '../styles/Experiments.scss'
 
 const Experiments = () => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()

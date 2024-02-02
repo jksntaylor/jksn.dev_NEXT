@@ -289,7 +289,11 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
         <p ref={r_description}/>
       </div>
       <div className="projectpage_carousel" ref={r_carousel}>
-        <img /><img /><img /><img /><img />
+        <img />
+        <img />
+        <img />
+        <img />
+        <img />
       </div>
       <div className="projectpage_carousel_nav">
         <button onClick={() => moveCarousel('left')}>←</button>

@@ -1,0 +1,84 @@
+$color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
+$color-fadedblack: #010101;
+$color-accent1: #FF2647;
+$color-accent2: #32DEED;
+
+// EXPERIMENTS SECTION
+.experiments_top {
+  display: flex;
+  .section_number {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid $color-dirtywhite;
+  }
+  .section_title {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 2rem;
+    background: $color-fadedblack;
+    border-left: 1px solid $color-dirtywhite;
+    font: 400 2.5rem 'Neue Montreal';
+    letter-spacing: -0.075rem;
+    color: $color-dirtywhite;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    .section_title {
+      font-size: 3vh;
+      margin-right: 3vh;
+    }
+  }
+}
+
+.experiments_side {
+  padding: 2rem;
+  overflow: hidden;
+  background: $color-fadedblack;
+  border: 1px solid $color-dirtywhite;
+  border-bottom: none;
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 3vh;
+  }
+}
+
+.experiments_side_text {
+  writing-mode: vertical-lr;
+  color: $color-dirtywhite;
+  font: 700 16vh/0.5 'Formula Condensed';
+  letter-spacing: 0.04em;
+  transform: scaleX(3.2);
+  transform-origin: left;
+}
+
+.experiment_image {
+  a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-decoration: none;
+    cursor: url('../assets/images/cursor.svg'), pointer;
+    color: $color-dirtywhite;
+    font: 700 5rem/100% 'Formula Condensed';
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    overflow: hidden;
+    &:visited {
+      color: $color-dirtywhite;
+    }
+    span {
+      transform: translateY(110%);
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    a {
+      font-size: 6vh;
+    }
+  }
+}
+// END EXPERIMENTS SECTION

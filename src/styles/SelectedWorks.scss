@@ -1,0 +1,469 @@
+$color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
+$color-fadedblack: #010101;
+$color-accent1: #FF2647;
+$color-accent2: #32DEED;
+
+// SELECTEDWORKS SECTION
+.selectedworks_top {
+  display: flex;
+  .section_number {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+
+.selectedworks_counter {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 2rem;
+  background: $color-fadedblack;
+  border-left: 1px solid $color-dirtywhite;
+}
+
+.selectedworks_counter-mask {
+  color: $color-accent1;
+  font: 400 2.5rem/100% 'Neue Montreal';
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  height: 2.2rem;
+  width: 100%;
+  overflow: hidden;
+  span {
+    color: $color-dirtywhiteHalf;
+    font-size: 1.5rem;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 3vh;
+    span {
+      font-size: 2.5vh;
+    };
+  }
+}
+
+.selectedworks_counter_column {
+  width: 1.5rem;
+  word-break: break-all;
+  text-align: center;
+  &:first-of-type {
+    text-align: right;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    width: 2vh;
+  }
+}
+
+.selectedworks_sidebar {
+  color: $color-dirtywhite;
+  padding: 2rem;
+  border-right: 1px solid $color-dirtywhite;
+  font: 400 25rem/100% 'Neue Montreal';
+  letter-spacing: -0.03em;
+  span {
+    font: 800 23.5rem/100% 'Formula Condensed';
+    letter-spacing: 0.01em;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 2vh;
+    line-height: 90%;
+  }
+}
+
+.selectedworks_projects {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.selectedworks_project {
+  color: $color-dirtywhite;
+  height: calc(100dvh - 4.6vw);
+  position: relative;
+  padding-top: 20%;
+  @media screen and (aspect-ratio > 1.75) {
+    height: 92vh;
+    padding-top: 15vh;
+  }
+}
+
+.selectedworks_project-right {
+  text-align: right;
+  .selectedworks_project_info {
+    justify-content: flex-end;
+    padding-left: unset;
+    padding-right: 5rem;
+  }
+  .selectedworks_project_button {
+    margin-left: unset;
+    margin-right: 5rem;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    .selectedworks_project_info {
+      padding-right: 10vh;
+    }
+    .selectedworks_project_button {
+      margin-right: 10vh;
+    }
+  }
+}
+
+.selectedworks_project_awards {
+  font: 400 1.4rem/140% 'Neue Montreal';
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  position: absolute;
+  text-align: left;
+  top: 5%;
+  left: 0;
+  span {
+    display: block;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 1.8vh;
+    top: 2vh;
+  }
+}
+
+.selectedworks_project_info {
+  font: 400 1.6rem/120% 'Neue Montreal';
+  text-transform: uppercase;
+  display: flex;
+  text-align: right;
+  padding-left: 5rem;
+  span:first-of-type {
+    text-align: left;
+    margin-right: 2.5rem;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 300ms ease-in-out;
+    position: relative;
+    &::after {
+      content: "";
+      display: block;
+      width: 0%;
+      height: 0.1rem;
+      position: absolute;
+      background: $color-accent1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 300ms ease-in-out;
+    }
+    &:hover {
+      color: $color-accent1;
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 2vh;
+    padding-left: 10vh;
+    span:first-of-type {
+      margin-right: 2.5vh;
+    }
+  }
+}
+
+.selectedworks_project_title {
+  font: 400 15rem/100% 'Neue Montreal';
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  margin: 2.5rem auto 5rem;
+  span {
+    font: 700 15rem/100% 'Formula Condensed';
+    letter-spacing: 0.015em;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 18vh;
+    margin: 3vh auto;
+    span {
+      font-size: 18vh;
+    }
+  }
+}
+
+.selectedworks_project_button {
+  all: unset;
+  cursor: pointer;
+  border: 0.1rem solid $color-accent1;
+  border-radius: 2.5rem;
+  box-sizing: border-box;
+  color: $color-accent1;
+  font: 300 2.8rem/100% 'Formula Condensed';
+  height: 5rem;
+  margin-left: 5rem;
+  padding: 1rem 2rem 0;
+  text-transform: uppercase;
+  transition: all 400ms ease;
+  &:hover {
+    box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-dirtywhite;
+  }
+  &:active {
+    box-shadow: none;
+    color: $color-dirtywhite;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 6vh;
+    padding: 1.5vh 2.5vh 0.5vh;
+    border-radius: 3vh;
+  }
+}
+// END SELECTEDWORKS SECTION
+
+// PROJECTPAGE
+.projectpage {
+  color: $color-dirtywhite;
+  position: relative;
+  padding: 4rem 5rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  > * { pointer-events: all;}
+  @media screen and (aspect-ratio > 1.75) {
+    padding: 4vh 5vh 5vh;
+  }
+}
+
+.projectpage_top {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 45rem;
+  p {
+    font: 400 1.6rem/120% 'Neue Montreal';
+    letter-spacing: 0.03em;
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    padding-left: 45vh;
+    p {
+      font-size: 2vh;
+      max-width: 100vh;
+    }
+  }
+}
+
+.projectpage_back {
+  position: absolute;
+  top: 5rem;
+  left: 5rem;
+  background: $color-fadedblack;
+  border: 1px solid $color-accent1;
+  border-radius: 2.5rem;
+  box-sizing: border-box;
+  color: $color-accent1;
+  cursor: pointer;
+  font: 300 2.8rem/100% 'Formula Condensed';
+  height: 5rem;
+  padding: 1rem 2rem 0;
+  transition: box-shadow 400ms ease, color 400ms ease;
+  &:hover {
+    box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-dirtywhite;
+  }
+  &:active {
+    box-shadow: none;
+    color: $color-dirtywhite;
+  }
+  transform: translateY(50%) scale(0.8);
+  opacity: 0;
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 6vh;
+    padding: 1.5vh 2.5vh 0.5vh;
+    border-radius: 3vh;
+    top: 5vh;
+    left: 5vh;
+  }
+}
+
+.projectpage h3 {
+  font: 400 6.4rem/100% 'Neue Montreal';
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-right: 5rem;
+  div:last-of-type span {
+    font: 700 6.4rem/100% 'Formula Condensed';
+    letter-spacing: 0.01em;
+  }
+  div {
+    overflow: hidden;
+    span {
+      display: inline-block;
+      transform: translateY(110%);
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 8vh;
+    margin-right: 10vh;
+    div:last-of-type span {
+      font-size: 8vh;
+    }
+  }
+}
+
+.projectpage_info {
+  font: 400 1.6rem/120% 'Neue Montreal';
+  text-transform: uppercase;
+  white-space: pre;
+  padding-top: 2rem;
+  div {
+    margin-bottom: 0.2rem;
+    overflow: hidden;
+    span, a {
+      transform: translateY(2rem);
+      display: inline-block;
+    }
+    span:first-of-type {
+      width: 9.5rem;
+    }
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 300ms ease-in-out;
+    position: relative;
+    &::after {
+      content: "";
+      display: block;
+      width: 0%;
+      height: 0.1rem;
+      position: absolute;
+      background: $color-accent1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 300ms ease-in-out;
+    }
+    &:hover {
+      color: $color-accent1;
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 2vh;
+    padding-top: 2vh;
+    div {
+      margin-bottom: 0.5vh;
+      span, a {
+        transform: translateY(2.5vh)
+      }
+      span:first-of-type {
+        width: 10vh;
+      }
+    }
+  }
+}
+
+.projectpage_carousel {
+  width: max-content;
+  height: 40rem;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  img {
+    transform: translateY(30%);
+    opacity: 0;
+    height: 100%;
+    width: 60rem;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 5rem;
+    border: 1px solid $color-dirtywhite;
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    height: 50vh;
+    img {
+      width: 75vh;
+      margin-right: 5vh;
+    }
+  }
+}
+
+.projectpage_carousel_nav {
+  transform: translateY(50%);
+  padding-left: 45rem;
+  opacity: 0;
+  button {
+    box-sizing: border-box;
+    font: 300 4.8rem/100% 'Formula Condensed';
+    color: $color-accent1;
+    border: 1px solid $color-accent1;
+    padding: 0.5rem 1.5rem 0;
+    border-radius: 50%;
+    margin: 0 2.5rem;
+    cursor: pointer;
+    transition: all 400ms ease;
+    &:hover {
+      box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+      color: $color-dirtywhite;
+    }
+    &:active {
+      box-shadow: none;
+      color: $color-dirtywhite;
+    }
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    padding-left: 40%;
+    button {
+      font-size: 6vh;
+      height: 6vh;
+      padding: 0.5vh 1.5vh 0;
+      border-radius: 3vh;
+    }
+  }
+}
+
+.projectpage_visit {
+  text-decoration: none;
+  position: absolute;
+  bottom: 5rem;
+  right: 5rem;
+  background: $color-accent1;
+  border: 1px solid $color-fadedblack;
+  border-radius: 2.5rem;
+  box-sizing: border-box;
+  color: $color-fadedblack;
+  cursor: pointer;
+  font: 300 2.8rem/100% 'Formula Condensed';
+  height: 5rem;
+  padding: 1.5rem 2rem 0;
+  transition: box-shadow 400ms ease, color 400ms ease, border 400ms ease, background 400ms ease;
+  transform: translateY(50%) scale(0.8);
+  opacity: 0;
+  &:hover {
+    box-shadow: 5px 5px 10px -5px $color-accent1, inset -5px -5px 25px -10px $color-accent1;
+    color: $color-accent1;
+    border: 1px solid $color-accent1;
+    background: $color-fadedblack
+  }
+  &:active {
+    box-shadow: none;
+    color: $color-accent1;
+    border: 1px solid $color-accent1;
+    background: $color-fadedblack
+  }
+  @media screen and (aspect-ratio > 1.75) {
+    font-size: 3.5vh;
+    height: 6vh;
+    padding: 1.5vh 2.5vh 0.5vh;
+    border-radius: 3vh;
+    bottom: 5vh;
+    right: 5vh;
+  }
+}
+// END PROJECT PAGE

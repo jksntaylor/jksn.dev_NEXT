@@ -10,6 +10,8 @@ import ProjectPage from '../components/ProjectPage'
 import { colors } from "../utils/constants"
 import { t_project } from '../utils/types'
 import { useMedia } from '../utils/hooks'
+// assets
+import '../styles/SelectedWorks.scss'
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -222,9 +224,8 @@ const SelectedWorks = () => {
 
     if (sectionOffset === 0 && r_wrapper.current.position.x !== wrapperOffsets.move) {
       r_wrapper.current.position.x = wrapperOffsets.move
-    } else if (sectionOffset > 0 && sectionOffset2 < 1) {
+    } else if (sectionOffset > 0 && sectionOffset2 < 1 && scrollData.delta > 0) {
       // section horizontal movement
-      // console.log(scrollData.scroll.current)
       r_wrapper.current.position.x = -wrapperOffsets.start * sectionOffset + wrapperOffsets.move - wrapperOffsets.start * sectionOffset2
 
       if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
