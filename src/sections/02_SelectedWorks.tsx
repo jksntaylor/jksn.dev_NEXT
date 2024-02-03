@@ -1,11 +1,12 @@
 // libraries
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { Html, useScroll, useTexture } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useSinglePrismicDocument } from "@prismicio/react"
 import gsap from 'gsap'
 // modules
 import { t_selectedWorksMaterial } from "../components/Materials"
+import { ScreenContext } from '../components/Providers'
 import ProjectPage from '../components/ProjectPage'
 import { colors } from "../utils/constants"
 import { t_project } from '../utils/types'
@@ -15,6 +16,7 @@ import '../styles/SelectedWorks.scss'
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
+  const screen = useContext(ScreenContext)
   const { viewport } = useThree()
   const { width, height, factor } = viewport.getCurrentViewport()
 
@@ -67,6 +69,7 @@ const SelectedWorks = () => {
     }
 
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
+
     if (r_projectOpen.current === i || i === -1) {
       // HIDE PROJECT PAGE
       container.style.overflow = 'hidden auto'
@@ -87,11 +90,13 @@ const SelectedWorks = () => {
       }, 1.9)
 
       const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_selectedWorksMaterial }
+
       gsap.to(image.position, {
         x: r_projectOpen.current % 2 ? -width * .3125 + width * .187 : width * .3125 - width * .187,
         duration: 2.15,
         ease: 'power2.inOut'
       })
+
       gsap.to(image.material, {
         u_progress: 0,
         duration: 2.15,
@@ -164,8 +169,9 @@ const SelectedWorks = () => {
   }, [toggleProject, handleMenuClick])
 
   // START IMAGE COMPONENT
-  const imageSizes = useMedia({ w: height * .632, h: height * .75 }, { w: width * 0.374, h: width * .444 }, { w: 0, h: 0 })
-  const imageOffset = useMedia(height * .92, height - width * .046, 0)
+  const imageSizes = useMedia({ w: height * .632, h: height * .75 }, { w: width * 0.374, h: width * .444 }, { w: width * .85, h: width * 1.009 })
+  const imageOffset = useMedia(height * .92, height - width * .046, height - width * .35)
+
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_selectedWorksMaterial>(null!)
     const r_mesh = useRef<THREE.Mesh>(null!)
@@ -189,9 +195,10 @@ const SelectedWorks = () => {
   const wrapperOffsets = useMedia(
     { start: width - height * .16, move: width - height * .08, end: width - height * .24 },
     { start: width * .915, move: width * .9575, end: width * .8725 },
-    { start: 0, move: 0, end: 0 }
+    { start: width, move: width, end: width }
   )
 
+  // sidebar is hidden on mobile so the zeros can stay, they're irrelevant
   const sidebarPosition = useMedia(height * .28, width * .135, 0)
 
   const sidebarWidths = useMedia(
@@ -212,7 +219,7 @@ const SelectedWorks = () => {
     { initial: '0px', end : '0px'}
   )
 
-  const projContainerHeight = useMedia((height * 0.92) * 10 * factor, (height - width * .046) * 10 * factor, 0)
+  const projContainerHeight = useMedia(height * 0.92, height - width * .046, height - width * .35 + 2/factor) * 10 * factor
   const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
 
   useFrame(() => {
@@ -231,14 +238,16 @@ const SelectedWorks = () => {
       if (r_counter1.current) r_counter1.current.style.transform = `translateY(${counterOffset * -50}%)`
       if (r_counter2.current) r_counter2.current.style.transform = `translateY(${projectsOffset * -90}%)`
 
-      r_sidebar.current.position.x = (-width / 2 + sidebarPosition) * sidebarOffset
-      r_sidebarText.current.style.width = `${(1 - sidebarOffset) * sidebarWidths.initial * factor + sidebarWidths.end * factor}px`
-      r_sidebarText.current.style.fontSize = `calc(${(1 - sidebarOffset)} * ${fontSize1.initial} + ${fontSize1.end})`
+      if (!screen.mobile) {
+        r_sidebar.current.position.x = (-width / 2 + sidebarPosition) * sidebarOffset
+        r_sidebarText.current.style.width = `${(1 - sidebarOffset) * sidebarWidths.initial * factor + sidebarWidths.end * factor}px`
+        r_sidebarText.current.style.fontSize = `calc(${(1 - sidebarOffset)} * ${fontSize1.initial} + ${fontSize1.end})`
 
-      if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `calc(${(1 - sidebarOffset)} * ${fontSize2.initial} + ${fontSize2.end})`
+        if (r_sidebarTextSpan.current) r_sidebarTextSpan.current.style.fontSize = `calc(${(1 - sidebarOffset)} * ${fontSize2.initial} + ${fontSize2.end})`
+      }
 
       if (r_projects.current) { // project "scrolling"
-        r_projects.current.position.x = (width * (1 - sidebarOffset) * .7125) + width * .1
+        if (!screen.mobile) r_projects.current.position.x = (width * (1 - sidebarOffset) * .7125) + width * .1
         r_delta.current = (r_projects.current.position.y - (projectsOffset * projContainerOffsetY)) / 100
         r_projects.current.position.y = projectsOffset * projContainerOffsetY
       }
@@ -247,24 +256,25 @@ const SelectedWorks = () => {
     }
   })
 
-  return <group ref={r_wrapper} position={[width * .9575, 0, 0]}>
+  return <group ref={r_wrapper} position={[wrapperOffsets.move, 0, 0]}>
     <group ref={r_top}>
       <Html
         center
         // transform
         // distanceFactor={3.4}
         className="selectedworks_top"
-        position={[-1/factor, height / 2 - useMedia(height * 0.04, width * .023, 0) + 1/factor, 0]}
+        position={[-1/factor, height / 2 - useMedia(height * 0.04, width * .023, width * .06) + 1/factor, 0]}
         portal={{ current: scrollData.fixed }}
-        zIndexRange={[5, 6]}
+        zIndexRange={[2, 3]}
         style={{
-          width: useMedia(width - height * 0.16, width * .915, 0) * factor,
-          height: useMedia(height * .08, width * .046, 0) * factor,
+          width: useMedia(width - height * 0.16, width * .915, width) * factor,
+          height: useMedia(height * .08, width * .046, width * .12) * factor,
           borderBottom: `1px solid ${colors.dirtyWhite}`
         }}
       >
-        <div className='section_number' style={{ width: useMedia(height * 0.08, width * .046, 0) * factor }}>02</div>
+        <div className='section_number' style={{ width: useMedia(height * 0.08, width * .046, width * .12) * factor }}>02</div>
         <div className="selectedworks_counter">
+          {screen.mobile && <p>Selected Works</p>}
           <div className="selectedworks_counter-mask">
             <div className="selectedworks_counter_column" ref={r_counter1}>01</div>
             <div className="selectedworks_counter_column" ref={r_counter2}>1234567890</div>
@@ -273,7 +283,7 @@ const SelectedWorks = () => {
         </div>
       </Html>
     </group>
-    <group ref={r_side}>
+    <group ref={r_side} visible={!screen.mobile}>
       <group ref={r_sidebar} position={[-1/factor, useMedia(-height * 0.04, -width * .023, 0) + 1/factor, 0]}>
         <Html
           center
@@ -281,7 +291,7 @@ const SelectedWorks = () => {
           // distanceFactor={3.4}
           className="selectedworks_sidebar"
           portal={{ current: scrollData.fixed }}
-          zIndexRange={[1, 2]}
+          zIndexRange={[0, 1]}
           ref={r_sidebarText}
           style={{
             width: useMedia(width - height * .16, width * .915, 0) * factor,
@@ -292,7 +302,7 @@ const SelectedWorks = () => {
         </Html>
       </group>
     </group>
-    <group ref={r_projects} position= {[width * .0575, 0, 0]}>
+    <group ref={r_projects} position= {[width * useMedia(.0575, .0575, 0), 0, 0]}>
       <Html
         center
         // transform
@@ -300,9 +310,9 @@ const SelectedWorks = () => {
         className="selectedworks_projects"
         ref={r_projectsInner}
         portal={{ current: scrollData.fixed }}
-        style={{ width: useMedia(width - height * 0.96, width * .625, 0) * factor, height: projContainerHeight }}
-        position={[0, -projContainerHeight/2/factor + height / 2 - useMedia(height * 0.08, width * .046, 0), 0]}
-        zIndexRange={[0, 100]} >
+        style={{ width: useMedia(width - height * 0.96, width * .625, width) * factor, height: projContainerHeight }}
+        position={[0, -projContainerHeight/2/factor + height / 2 - useMedia(height * 0.08, width * .046, width * .12), 0]}
+        zIndexRange={[0, 1]} >
         {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => {
           const { awards, client1, client2, year, role, project_link, project_link_text, project_title } = proj.case_study.data
           return <div className={`selectedworks_project selectedworks_project-${i%2?'right':'left'}`} key={i}>
@@ -318,7 +328,7 @@ const SelectedWorks = () => {
           </div>
         })}
       </Html>
-      <group position={[0, useMedia(-height * .04, -width * .023, 0), 0]} ref={r_projectsImages}>
+      <group position={[0, useMedia(-height * .04, -width * .023, width * .06), 0]} ref={r_projectsImages}>
         {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => <Image url={proj.case_study.data.cover_image.url} key={i} index={i}/>)}
       </group>
     </group>

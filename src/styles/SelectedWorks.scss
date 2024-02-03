@@ -12,6 +12,9 @@ $color-accent2: #32DEED;
     display: flex;
     justify-content: center;
     align-items: center;
+    @media screen and (aspect-ratio < 1) {
+      background: $color-fadedblack;
+    }
   }
 }
 
@@ -24,6 +27,15 @@ $color-accent2: #32DEED;
   margin-right: 2rem;
   background: $color-fadedblack;
   border-left: 1px solid $color-dirtywhite;
+  @media screen and (aspect-ratio < 1) {
+    margin-right: 2vw;
+    p {
+      color: $color-dirtywhite;
+      font: 400 5vw/100% 'Neue Montreal';
+      margin-right: auto;
+      margin-left: 2vw;
+    }
+  }
 }
 
 .selectedworks_counter-mask {
@@ -46,6 +58,14 @@ $color-accent2: #32DEED;
       font-size: 2.5vh;
     };
   }
+  @media screen and (aspect-ratio < 1) {
+    width: max-content;
+    font-size: 5vw;
+    height: 5vw;
+    span {
+      font-size: 4vw
+    }
+  }
 }
 
 .selectedworks_counter_column {
@@ -57,6 +77,9 @@ $color-accent2: #32DEED;
   }
   @media screen and (aspect-ratio > 1.75) {
     width: 2vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    width: 2.8vw;
   }
 }
 
@@ -74,6 +97,9 @@ $color-accent2: #32DEED;
     padding: 2vh;
     line-height: 90%;
   }
+  @media screen and (aspect-ratio < 1) {
+    display: none;
+  }
 }
 
 .selectedworks_projects {
@@ -90,6 +116,14 @@ $color-accent2: #32DEED;
   @media screen and (aspect-ratio > 1.75) {
     height: 92vh;
     padding-top: 15vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    height: calc(100dvh - 35vw);
+    padding: 0 7.5vw 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 }
 
@@ -112,6 +146,12 @@ $color-accent2: #32DEED;
       margin-right: 10vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    align-items: flex-end;
+    .selectedworks_project_button {
+      margin-right: unset;
+    }
+  }
 }
 
 .selectedworks_project_awards {
@@ -128,6 +168,9 @@ $color-accent2: #32DEED;
   @media screen and (aspect-ratio > 1.75) {
     font-size: 1.8vh;
     top: 2vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    display: none;
   }
 }
 
@@ -172,6 +215,9 @@ $color-accent2: #32DEED;
       margin-right: 2.5vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    display: none;
+  }
 }
 
 .selectedworks_project_title {
@@ -179,6 +225,7 @@ $color-accent2: #32DEED;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   margin: 2.5rem auto 5rem;
+  text-shadow: 0px 0px 2rem rgba(1, 1, 1, 0.6);
   span {
     font: 700 15rem/100% 'Formula Condensed';
     letter-spacing: 0.015em;
@@ -188,6 +235,14 @@ $color-accent2: #32DEED;
     margin: 3vh auto;
     span {
       font-size: 18vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 15.5vw;
+    margin: 10% 0 0;
+    text-shadow: 0px 0px 3vw rgba(1, 1, 1, 0.5);
+    span {
+      font-size: 15vw;
     }
   }
 }
@@ -218,6 +273,15 @@ $color-accent2: #32DEED;
     height: 6vh;
     padding: 1.5vh 2.5vh 0.5vh;
     border-radius: 3vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 6vw;
+    border-radius: 6vw;
+    border: 1px solid $color-accent1;
+    height: 11vw;
+    padding: 2vw 6vw 0;
+    background: $color-fadedblack;
+    margin-left: unset;
   }
 }
 // END SELECTEDWORKS SECTION

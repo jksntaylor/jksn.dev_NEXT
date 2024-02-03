@@ -1,11 +1,12 @@
 // libraries
-import { Suspense, lazy, useCallback, useEffect, useRef } from 'react'
+import { Suspense, lazy, useCallback, useContext, useEffect, useRef } from 'react'
 import { ScrollControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 // import { OrbitControls } from '@react-three/drei'
 // modules
-import './components/Materials'
 import { colors } from './utils/constants'
+import { ScreenContext } from './components/Providers'
+import './components/Materials'
 import Menu  from './components/Menu'
 import Landing from './sections/00_Landing'
 // lazy loaded modules
@@ -22,6 +23,7 @@ function App() {
 
   const resetTimer = useRef(setTimeout(() => {}))
   const r_cover = useRef<HTMLDivElement>(null!)
+  const screen = useContext(ScreenContext)
 
   const handleResize = useCallback(() => {
     r_cover.current.style.visibility = 'visible'
@@ -43,12 +45,12 @@ function App() {
       <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
         <color attach="background" args={[colors.fadedBlack]} />
         {/* <OrbitControls enableZoom={false}/> */}
-        <ScrollControls pages={10} damping={0.2}>
+        <ScrollControls pages={screen.mobile ? 15 : 10} damping={screen.mobile ? 0.1 : 0.2}>
           <Suspense fallback={null}>
             <Menu />
             <Landing />
             <Welcome />
-            {/* <SelectedWorks /> */}
+            <SelectedWorks />
             {/* <Experiments /> */}
             {/* <CallToAction /> */}
             {/* <Credits /> */}
