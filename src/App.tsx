@@ -47,7 +47,7 @@ function App() {
           <Suspense fallback={null}>
             <Menu />
             <Landing />
-            {/* <Welcome /> */}
+            <Welcome />
             {/* <SelectedWorks /> */}
             {/* <Experiments /> */}
             {/* <CallToAction /> */}

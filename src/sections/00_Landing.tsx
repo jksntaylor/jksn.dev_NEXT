@@ -56,7 +56,7 @@ const Landing = () => {
     letterSpacing: 0,
     maxWidth: 12,
     font: '/fonts/NeueMontreal400.woff',
-    scale: useMedia([height / 7, height / 7, 1], [width / 12.5, width / 12, 1], [width / 8.5, width / 8, 1]),
+    scale: useMedia([height / 7, height / 7, 1], [width / 12.5, width / 12, 1], [width / 8.7, width / 8, 1]),
     anchorX: 'left',
     anchorY: 'bottom'
   }
@@ -109,12 +109,12 @@ const Landing = () => {
 
   return <group ref={r_wrapper}>
     <mesh
-      position={[useMedia(height * 0.08, width * 0.0425, 0), useMedia(0, 0, width * .15), 0]}
+      position={[useMedia(height * 0.08, width * 0.0425, 0), useMedia(0, 0, width * .115), 0]}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onPointerMove={e => handlePointer(e)}
     >
-      <planeGeometry args={[useMedia(width - height * 0.16, width * 0.915, width), useMedia(height, height, height - width * .15), 64, 64]} />
+      <planeGeometry args={[useMedia(width - height * 0.16, width * 0.915, width), useMedia(height, height, height - width * .23), 64, 64]} />
       <landingMaterial ref={r_material} u_mouse={new Vector2(0.9, 0)} u_mouse_rad={screen.mobile ? 0 : 0.2} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
           <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
@@ -148,12 +148,12 @@ const Landing = () => {
       // transform
       // distanceFactor={3.4}
       wrapperClass="landing_content"
-      position={[useMedia(height * 0.08, width * 0.0425, -1/factor) + 1/factor, useMedia(0, 0, width * .075), 0.001]}
+      position={[useMedia(height * 0.08, width * 0.0425, -1/factor) + 1/factor, useMedia(0, 0, width * .115), 0.001]}
       portal={{ current: scrollData.fixed }}
-      zIndexRange={[2, 3]}
+      zIndexRange={[0, 1]}
       style={{
         width: useMedia(width - height * 0.16, width * 0.915, width + 2/factor) * factor - 2,
-        height: useMedia(height, height, height - width * .15) * factor
+        height: useMedia(height, height, height - width * .23) * factor
       }}
     >
       <div ref={r_slice1} className="landing_slice" style={{ transform: `translateX(120%)`}}>
@@ -177,7 +177,7 @@ const Landing = () => {
         center
         // transform
         // distanceFactor={3.4}
-        zIndexRange={[5, 6]}
+        zIndexRange={[2, 3]}
         wrapperClass="landing_arrow"
         portal={{ current: scrollData.fixed }}
         style={{ width: arrowSize * factor, height: arrowSize * factor}}

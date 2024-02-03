@@ -8,6 +8,9 @@ $color-accent2: #32DEED;
 .menu, .menu_drawer {
   border-right: 1px solid $color-dirtywhite;
   background: $color-fadedblack;
+  @media screen and (aspect-ratio < 1) {
+    border-right: none;
+  }
 }
 
 .menu {
@@ -77,7 +80,7 @@ $color-accent2: #32DEED;
   }
   @media screen and (aspect-ratio < 1) {
     > span {
-      font-size: 3vw;
+      font-size: 4vw;
       margin-bottom: 4vw;
       hr {
         width: 100%;
