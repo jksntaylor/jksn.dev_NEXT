@@ -298,6 +298,10 @@ $color-accent2: #32DEED;
   @media screen and (aspect-ratio > 1.75) {
     padding: 4vh 5vh 5vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    padding: 2vw 5vw;
+    justify-content: flex-start;
+  }
 }
 
 .projectpage_top {
@@ -315,6 +319,16 @@ $color-accent2: #32DEED;
     p {
       font-size: 2vh;
       max-width: 100vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    padding-left: unset;
+    flex-wrap: unset;
+    flex-direction: column;
+    p {
+      font-size: clamp(12px, 3.2vw, 3.2vw);
+      max-width: 100%;
+      margin-bottom: 2vw;
     }
   }
 }
@@ -351,6 +365,15 @@ $color-accent2: #32DEED;
     top: 5vh;
     left: 5vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 6vw;
+    border-radius: 5vw;
+    border: 1px solid $color-accent1;
+    height: 10vw;
+    padding: 2vw 6vw 0;
+    top: 3vw;
+    left: 5vw;
+  }
 }
 
 .projectpage h3 {
@@ -376,6 +399,15 @@ $color-accent2: #32DEED;
       font-size: 8vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 10vw;
+    width: max-content;
+    margin-left: auto;
+    margin-right: unset;
+    div:last-of-type span {
+      font-size: 10vw;
+    }
+  }
 }
 
 .projectpage_info {
@@ -387,7 +419,7 @@ $color-accent2: #32DEED;
     margin-bottom: 0.2rem;
     overflow: hidden;
     span, a {
-      transform: translateY(2rem);
+      transform: translateY(120%);
       display: inline-block;
     }
     span:first-of-type {
@@ -420,14 +452,22 @@ $color-accent2: #32DEED;
   }
   @media screen and (aspect-ratio > 1.75) {
     font-size: 2vh;
-    padding-top: 2vh;
+    padding-top: unset;
     div {
       margin-bottom: 0.5vh;
-      span, a {
-        transform: translateY(2.5vh)
-      }
       span:first-of-type {
         width: 10vh;
+      }
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 3.5vw;
+    padding-top: 2vw;
+    margin-bottom: 2vw;
+    div {
+      margin-bottom: 0.5vw;
+      span:first-of-type {
+        width: 20vw;
       }
     }
   }
@@ -454,6 +494,17 @@ $color-accent2: #32DEED;
     img {
       width: 75vh;
       margin-right: 5vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    width: 100vw;
+    margin-left: -5vw;
+    overflow: scroll;
+    height: 60vw;
+    padding: 0 5vw;
+    img {
+      width: 90vw;
+      margin-right: 2vw;
     }
   }
 }
@@ -489,6 +540,9 @@ $color-accent2: #32DEED;
       padding: 0.5vh 1.5vh 0;
       border-radius: 3vh;
     }
+  }
+  @media screen and (aspect-ratio < 1) {
+    display: none;
   }
 }
 
@@ -528,6 +582,15 @@ $color-accent2: #32DEED;
     border-radius: 3vh;
     bottom: 5vh;
     right: 5vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 6vw;
+    border-radius: 5vw;
+    border: 1px solid $color-fadedblack;
+    height: 10vw;
+    padding: 2.5vw 6vw 0;
+    bottom: 2vw;
+    right: 5vw;
   }
 }
 // END PROJECT PAGE

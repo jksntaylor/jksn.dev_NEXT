@@ -1,14 +1,16 @@
 // libraries
 import { Html, useScroll } from "@react-three/drei"
 import { useThree } from "@react-three/fiber"
-import { forwardRef, useCallback, useEffect, useRef } from "react"
+import { forwardRef, useCallback, useContext, useEffect, useRef } from "react"
 import gsap from "gsap"
 // modules
 import { useMedia } from "../utils/hooks"
 import { t_project, t_projectImages } from "../utils/types"
 import { t_selectedWorksMaterial } from "./Materials"
+import { ScreenContext } from "./Providers"
 
 const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
+  const screen = useContext(ScreenContext)
   const r_wrapper = useRef<HTMLDivElement>(null!)
   const r_title0 = useRef<HTMLSpanElement>(null!)
   const r_title1 = useRef<HTMLSpanElement>(null!)
@@ -28,10 +30,13 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
 
+  // moveCarousel function disabled on mobile, so 0 is fine
   const carouselOffset = useMedia({ width: 80, unit: 'vh' }, { width: 65, unit: 'rem' }, { width: 0, unit: 'vw'})
 
-  const moveCarousel = (direction: 'left' | 'right') => {
-    if (direction === 'right' && r_carouselIndex.current < 3 /* # of proj images - 1 */) {
+  const moveCarousel = useCallback((direction: 'left' | 'right') => {
+    if (screen.mobile) return
+
+    if (direction === 'right' && r_carouselIndex.current < 4 /* # of proj images - 1 */) {
       r_carouselIndex.current += 1
     } else if (direction === 'left' && r_carouselIndex.current > 0) {
       r_carouselIndex.current -= 1
@@ -41,12 +46,12 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       ease: 'expo.out',
       duration: 0.85,
     })
-  }
+  }, [carouselOffset.unit, carouselOffset.width, screen.mobile])
 
   const handleKey = useCallback((e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'a') moveCarousel('left')
     else if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'd') moveCarousel('right')
-  }, [])
+  }, [moveCarousel])
 
   const changeContent = (proj: t_project) => {
     const {
@@ -87,7 +92,9 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       changeContent(details.proj)
       // animate content in
       tl.current.kill()
-      tl.current = gsap.timeline({ defaults: { ease: 'expo.out' }}).to('.projectpage_back', {
+      tl.current = gsap.timeline({ defaults: { ease: 'expo.out' }}).to(r_wrapper.current, {
+        backgroundColor: `rgba(0, 0, 0, ${screen.mobile ? 0.75 : 0})`
+      }, 1.05).to('.projectpage_back', {
         opacity: 1,
         scale: 1,
         y: 0,
@@ -136,12 +143,12 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       scale: 0.8,
       opacity: 0,
       duration: 0.85
-    }).to([r_title0.current, r_title1.current], {
+    }, 0).to([r_title0.current, r_title1.current], {
       y: '110%',
       duration: 0.85,
       stagger: 0.2
     }, 0).to('.projectpage_info > div > *', {
-      y: '2rem',
+      y: '120%',
       duration: 0.35,
       stagger: 0.05
     }, 0.6).to(r_description.current, {
@@ -162,6 +169,8 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       scale: 0.8,
       opacity: 0,
       duration: 0.85
+    }, 1.25).to(r_wrapper.current, {
+      backgroundColor: 'rgba(0, 0, 0, 0)'
     }, 1.25)
   }
 
@@ -172,7 +181,11 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
     // scrollTo next index
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
-    container.scrollTo({ top: window.innerHeight * (2.6 + indices.next * 0.332) })
+
+    const topDistance = screen.mobile ?
+    window.innerHeight * 3.9 + (window.innerHeight * .498 * indices.next) : window.innerHeight * 2.6 + (window.innerHeight * 0.332 * indices.next)
+
+    container.scrollTo({ top: topDistance })
     container.style.overflow = 'hidden'
     // content switch
     setTimeout(() => {
@@ -187,7 +200,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
     // zoom image out
     tl.current.to(prevImage.position, {
-      x: indices.prev % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
+      x: screen.mobile ? 0 : indices.prev % 2 ? -width * 0.3125 + width * 0.187 : width * 0.3125 - width * 0.187,
       duration: 1.2,
       ease: 'power2.inOut'
     }, 0).to(prevImage.material, {
@@ -212,7 +225,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       stagger: 0.1,
       duration: 0.5
     }, 0.6).to(nextImage.position, {
-      x: -width / 2,
+      x: screen.mobile ? 0 : -width / 2,
       duration: 2.15,
       ease: 'power2.inOut'
     }, 1).to(nextImage.material, {
@@ -237,7 +250,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       stagger: 0.1,
       duration: 0.85
     }, 1.9)
-  }, [ref, width])
+  }, [ref, width, screen.mobile])
 
 
   useEffect(() => {
@@ -253,8 +266,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
     }
   }, [showProject, swapProject, handleKey])
 
-  return <group>
-    <Html
+  return <Html
       center
       // transform
       // distanceFactor={3.4}
@@ -262,9 +274,10 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       className="projectpage"
       ref={r_wrapper}
       portal={{ current: scrollData.fixed }}
+      position={[0, useMedia(0, 0, width * .115), 0]}
       style={{
-        height: height * factor,
-        width: width * 0.915 * factor,
+        height: useMedia(height, height, height - width * .23) * factor,
+        width: width * useMedia(0.915, 0.915, 1) * factor,
         pointerEvents: 'none',
         visibility: 'hidden'
       }}
@@ -301,7 +314,6 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
       </div>
       <a className="projectpage_visit" ref={r_visit} href="/" target='_blank' rel='noopener noreferrer'>VI<em>S</em>IT S<em>ITE</em> →</a>
     </Html>
-  </group>
 })
 
 export default ProjectPage

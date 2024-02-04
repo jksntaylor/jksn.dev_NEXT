@@ -91,11 +91,13 @@ const SelectedWorks = () => {
 
       const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_selectedWorksMaterial }
 
-      gsap.to(image.position, {
-        x: r_projectOpen.current % 2 ? -width * .3125 + width * .187 : width * .3125 - width * .187,
-        duration: 2.15,
-        ease: 'power2.inOut'
-      })
+      if (!screen.mobile) {
+        gsap.to(image.position, {
+          x: r_projectOpen.current % 2 ? -width * .3125 + width * .187 : width * .3125 - width * .187,
+          duration: 2.15,
+          ease: 'power2.inOut'
+        })
+      }
 
       gsap.to(image.material, {
         u_progress: 0,
@@ -109,7 +111,9 @@ const SelectedWorks = () => {
       // SHOW PROJECT PAGE
       setTimeout(() => {
         r_projectOpen.current = i
-        container.scrollTo({ top: window.innerHeight * 2.6 + (window.innerHeight * 0.332 * i) })
+        const topDistance = screen.mobile ? window.innerHeight * 3.9 + (window.innerHeight * .498 * i) : window.innerHeight * 2.6 + (window.innerHeight * 0.332 * i)
+
+        container.scrollTo({ top: topDistance })
         window.dispatchEvent(new CustomEvent('showProject', { detail: { proj: home?.data.case_studies[i].case_study.data, i: i }}))
 
         projectTL.current.kill()
@@ -122,19 +126,21 @@ const SelectedWorks = () => {
           duration: .5,
           ease: 'expo.inOut'
         }, .4).to(r_projectsInner.current, {
-          x: width * .915 * factor,
+          x: screen.mobile ? width * factor : width * .915 * factor,
           duration: 1.85,
           ease: 'expo.inOut'
         }, .2)
 
         const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_selectedWorksMaterial }
 
-        gsap.to(image.position, {
-          x: -width / 2 - width * 0.05,
-          duration: 2.15,
-          ease: 'power2.inOut',
-          delay: .5
-        })
+        if (!screen.mobile) {
+          gsap.to(image.position, {
+            x: -width / 2 - width * 0.05,
+            duration: 2.15,
+            ease: 'power2.inOut',
+            delay: .5
+          })
+        }
         gsap.to(image.material, {
           u_progress: 1,
           duration: 2.15,
@@ -147,7 +153,7 @@ const SelectedWorks = () => {
         window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       }, 0);
     }
-  }, [factor, width, home])
+  }, [factor, width, home, screen.mobile])
 
   const handleMenuClick = useCallback((i: number) => {
     if (r_projectOpen.current === i) return
