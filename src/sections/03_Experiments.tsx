@@ -1,11 +1,12 @@
 import { useSinglePrismicDocument } from "@prismicio/react"
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { Html, useScroll, useTexture } from "@react-three/drei"
-import { useEffect, useRef } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { Vector2 } from "three"
 import gsap from "gsap"
 // modules
 import { t_experimentsMaterial } from "../components/Materials"
+import { ScreenContext } from "../components/Providers"
 import { t_experiment } from "../utils/types"
 import { useMedia } from "../utils/hooks"
 import { colors } from "../utils/constants"
@@ -16,6 +17,7 @@ import '../styles/Experiments.scss'
 const Experiments = () => {
   const { height, width, factor } = useThree().viewport.getCurrentViewport()
   const scrollData = useScroll()
+  const screen = useContext(ScreenContext)
 
   const r_wrapper = useRef<THREE.Group>(null!)
   const r_sidebar = useRef<THREE.Group>(null!)
@@ -25,13 +27,14 @@ const Experiments = () => {
 
   const [experiments] = useSinglePrismicDocument('experiments')
 
-  const innerHeight = useMedia(height * .92, height - width * .046, 0)
+  const innerHeight = useMedia(height * .92, height - width * .046, height - width * .35)
   const wrapperOffsets = useMedia(
     { start: width - height * .16, move: width - height * .08 },
     { start: width * .915, move: width * .9575 },
-    { start: 0, move: 0 }
+    { start: width, move: width }
   )
 
+  // hidden on mobile
   const sidebarOpts = useMedia(
     { start: height * .48, end: height * .15 + 1/factor, posX: height * .319 },
     { start: width * .3, end: width * .06 + 1/factor, posX: width * 0.1925 },
@@ -47,7 +50,7 @@ const Experiments = () => {
   const experimentsPosition = useMedia(
     { start: -width/2 + height * .84, offset: height * .67 + (innerHeight * .6 * 5 - width)},
     { start: -width/2 + width * .331 + height * .3, offset: (height - width * .046) * 2 },
-    { start: 0, offset: 0 },
+    { start: -width/2 + innerHeight * .3 , offset: innerHeight * 3 - width },
   )
 
   useFrame(() => {
@@ -60,11 +63,10 @@ const Experiments = () => {
       r_wrapper.current.position.x = wrapperOffsets.move
     } else if (sectionRange > 0 && sectionRange2 < 1) {
       r_wrapper.current.position.x = -wrapperOffsets.start * sectionRange + wrapperOffsets.move - wrapperOffsets.start * sectionRange2
-      if (r_sidebar.current) {
+      if (r_sidebar.current && !screen.mobile) {
         r_sidebarInner.current.style.width = `${(sidebarOpts.end + (1 - sidebarRange) * (sidebarOpts.start - sidebarOpts.end)) * factor}px`
         r_sidebarInner.current.children[0].style.transform = `scaleX(${fontScale.start - sidebarRange * (fontScale.start - fontScale.end)})`
         r_sidebarInner.current.children[0].style.fontWeight = `${700 - sidebarRange * 200}`
-
         r_sidebar.current.position.x = -width/2 + sidebarOpts.posX - (sidebarOpts.start - sidebarOpts.end) / 2 * sidebarRange
       }
 
@@ -83,11 +85,13 @@ const Experiments = () => {
     const texture = useTexture(url)
 
     const handlePointerEnter = () => {
+      if (screen.mobile) return
       gsap.to(r_mat.current, { u_mouse_rad: 0.3, duration: 0.85 })
       gsap.to(r_link.current.children[0], { y: 0, ease: 'expo.out' })
     }
 
     const handlePointerLeave = () => {
+      if (screen.mobile) return
       gsap.to(r_mat.current, { u_mouse_rad: 0.0, duration: 0.85 })
       gsap.to(r_link.current.children[0], { y: '110%', ease: 'expo.out' })
     }
@@ -146,20 +150,21 @@ const Experiments = () => {
       // distanceFactor={3.4}
       className="experiments_top"
       portal={{ current: scrollData.fixed }}
-      position={[useMedia(-1/factor, 0, 0), height / 2 - useMedia(height * .04, width * .023, 0) + 1/factor, 0]}
+      position={[useMedia(-1/factor, 0, 0), height / 2 - useMedia(height * .04, width * .023, width * .06) + 1/factor, 0]}
       style={{
-        width: useMedia(width - height * .16, width * .915, 0) * factor,
-        height: useMedia(height * .08, width * .046, 0) * factor,
+        width: useMedia(width - height * .16, width * .915, width) * factor,
+        height: useMedia(height * .08, width * .046, width * .12) * factor,
         borderBottom: `1px solid ${colors.dirtyWhite}`
       }}
       zIndexRange={[5, 6]}
     >
-      <div className='section_number' style={{ width: useMedia(height * .15, width * 0.06, 0) * factor }}>03</div>
+      <div className='section_number' style={{ width: useMedia(height * .15, width * 0.06, width * .12) * factor }}>03</div>
       <div className="section_title">Experiments</div>
     </Html>
     <group
       position={[-width/2 + useMedia(height * .319, width * 0.1925, 0), useMedia(-height * .04, -width * .023, 0), 0.001]}
       ref={r_sidebar}
+      visible={!screen.mobile}
     >
       <Html
         center
@@ -179,7 +184,7 @@ const Experiments = () => {
     </group>
     <group ref={r_experiments} position={[
       experimentsPosition.start,
-      useMedia(-height * .04, -width * .023, 0),
+      useMedia(-height * .04, -width * .023, width * .055),
       0
       ]}>
       {experiments && experiments.data.experiments.map((exp: t_experiment, i: number) => {

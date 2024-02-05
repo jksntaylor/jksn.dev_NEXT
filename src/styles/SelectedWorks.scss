@@ -106,6 +106,9 @@ $color-accent2: #32DEED;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  @media screen and (aspect-ratio < 1) {
+    border-right: 1px solid $color-dirtywhite;
+  }
 }
 
 .selectedworks_project {

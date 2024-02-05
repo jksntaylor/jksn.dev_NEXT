@@ -32,6 +32,12 @@ $color-accent2: #32DEED;
       margin-right: 3vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    .section_title {
+      font-size: 5vw;
+      margin-right: 2vw;
+    }
+  }
 }
 
 .experiments_side {
@@ -42,6 +48,9 @@ $color-accent2: #32DEED;
   border-bottom: none;
   @media screen and (aspect-ratio > 1.75) {
     padding: 3vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    display: none;
   }
 }
 
@@ -78,6 +87,15 @@ $color-accent2: #32DEED;
   @media screen and (aspect-ratio > 1.75) {
     a {
       font-size: 6vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    a {
+      // font-size: 4.5vh;
+      font-size: calc((100dvh - 35vw) * .065);
+      span {
+        transform: none;
+      }
     }
   }
 }

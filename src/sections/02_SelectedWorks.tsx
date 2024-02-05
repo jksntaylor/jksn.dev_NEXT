@@ -316,7 +316,7 @@ const SelectedWorks = () => {
         className="selectedworks_projects"
         ref={r_projectsInner}
         portal={{ current: scrollData.fixed }}
-        style={{ width: useMedia(width - height * 0.96, width * .625, width) * factor, height: projContainerHeight }}
+        style={{ width: useMedia(width - height * 0.96, width * .625, width + 2/factor) * factor, height: projContainerHeight }}
         position={[0, -projContainerHeight/2/factor + height / 2 - useMedia(height * 0.08, width * .046, width * .12), 0]}
         zIndexRange={[0, 1]} >
         {home && home.data.case_studies.map((proj: { case_study: { data: t_project}}, i: number) => {
