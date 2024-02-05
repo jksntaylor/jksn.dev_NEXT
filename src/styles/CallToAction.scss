@@ -50,6 +50,17 @@ $color-accent2: #32DEED;
       border-radius: 3vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    padding: 5vw 15vw;
+    p {
+      font-size: 4vw;
+      margin-bottom: 6vw;
+    }
+    button {
+      font-size: 6vw;
+      height: 6vw;
+    }
+  }
 }
 
 .motto_slices {
@@ -68,6 +79,11 @@ $color-accent2: #32DEED;
   @media screen and (aspect-ratio > 1.75) {
     .landing_slice {
       height: calc((100% - 8vh) / 3 + 1px);
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    .landing_slice {
+      height: calc((100% - 11vw) / 5);
     }
   }
 }
@@ -98,6 +114,12 @@ $color-accent2: #32DEED;
     .section_title {
       padding-right: 3vh;
       font-size: 3vh;
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    .section_title {
+      padding-right: 2vw;
+      font-size: 5vw;
     }
   }
 }

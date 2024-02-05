@@ -13,7 +13,7 @@ import Landing from './sections/00_Landing'
 const Welcome = lazy(() => import('./sections/01_Welcome'))
 const SelectedWorks = lazy(() => import('./sections/02_SelectedWorks'))
 const Experiments = lazy(() => import('./sections/03_Experiments'))
-// const CallToAction = lazy(() => import('./sections/04_CallToAction'))
+const CallToAction = lazy(() => import('./sections/04_CallToAction'))
 // const Credits = lazy(() => import('./sections/05_Credits'))
 // styles
 import cover from './assets/images/resize_cover.webp'
@@ -52,7 +52,7 @@ function App() {
             <Welcome />
             <SelectedWorks />
             <Experiments />
-            {/* <CallToAction /> */}
+            <CallToAction />
             {/* <Credits /> */}
           </Suspense>
         </ScrollControls>

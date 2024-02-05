@@ -78,7 +78,7 @@ const Landing = () => {
       r_wrapper.current.position.x = -sectionDistance * sectionOffset
       r_material.current.u_time += delta
 
-      r_arrowInner.current.style.transform = `scale(${Math.min(sliceOffset + 1, 1.4)}) `
+      r_arrowInner.current.style.transform = `${screen.mobile ? 'rotate(90deg)' : ''} scale(${Math.min(sliceOffset + 1, 1.4)}) `
       if (r_arrowInner.current.parentElement) r_arrowInner.current.parentElement.style.transform = `rotate(${-360 * sliceOffset}deg)`
 
       r_arrow.current.position.x = width / 2 - arrowPadding - arrowOffset[0] * sliceOffset
