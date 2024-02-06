@@ -15,8 +15,8 @@ import Star from "../assets/svg/star"
 
 const Menu = () => {
   const scrollData = useScroll()
-  const { camera, viewport } = useThree()
-  const { height, width, factor } = viewport.getCurrentViewport(camera, [0, 0, 0])
+  const { viewport } = useThree()
+  const { height, width, factor } = viewport.getCurrentViewport()
 
   const r_drawerWrapper = useRef<THREE.Group>(null!)
   const r_drawer = useRef<HTMLDivElement>(null!)
@@ -310,7 +310,7 @@ const Menu = () => {
         // distanceFactor={3.4}
         ref={r_drawer}
         className="menu_drawer"
-        zIndexRange={[8, 9]}
+        zIndexRange={[9, 10]}
         portal={{ current: scrollData.fixed }}
 
         style={{
@@ -410,7 +410,7 @@ const Menu = () => {
       // transform
       // distanceFactor={3.4}
       className="menu"
-      zIndexRange={[10, 11]}
+      zIndexRange={[11, 12]}
       portal={{ current: scrollData.fixed }}
       position={[useMedia(-width / 2 + height * 0.05, -width/2 + width * 0.03 - 2/factor, 0), useMedia(0, 0, -height/2 + width * .075), 0.001]}
       style={{
