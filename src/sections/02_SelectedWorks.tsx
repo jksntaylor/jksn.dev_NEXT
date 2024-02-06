@@ -126,7 +126,7 @@ const SelectedWorks = () => {
           duration: .5,
           ease: 'expo.inOut'
         }, .4).to(r_projectsInner.current, {
-          x: screen.mobile ? width * factor : width * .915 * factor,
+          x: screen.mobile ? width * factor : screen.desktop ? width * .915 * factor : (width - height * .16) * factor,
           duration: 1.85,
           ease: 'expo.inOut'
         }, .2)
