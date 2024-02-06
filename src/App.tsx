@@ -46,9 +46,9 @@ function App() {
         <color attach="background" args={[colors.fadedBlack]} />
         {/* <OrbitControls enableZoom={false}/> */}
         <ScrollControls pages={screen.mobile ? 15 : 10} damping={screen.mobile ? 0.1 : 0.2}>
+          <Menu />
+          <Landing />
           <Suspense fallback={null}>
-            <Menu />
-            <Landing />
             <Welcome />
             <SelectedWorks />
             <Experiments />
