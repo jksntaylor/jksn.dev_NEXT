@@ -20,7 +20,7 @@ const Credits = () => {
   const wrapperOffset = useMedia(
     { start: width/2 + height * .4, move: height * .8 },
     { start: width/2 + width * .4575/2, move: width * 0.4575 },
-    { start: 0, move: 0 },
+    { start: width, move: width },
   )
 
   useFrame(() => {
@@ -39,7 +39,7 @@ const Credits = () => {
     window.dispatchEvent(new CustomEvent('toggleProject', { detail: i }))
   }
 
-  return <group ref={r_wrapper} position={[width/2 + useMedia(height * .4, width * .4575/2, 0), 0, 0]}>
+  return <group ref={r_wrapper} position={[width/2 + useMedia(height * .4, width * .4575/2, width/2), 0, 0]}>
     <Html
       center
       // transform
@@ -47,13 +47,14 @@ const Credits = () => {
       className="credits"
       zIndexRange={[3, 4]}
       portal={{ current: scrollData.fixed }}
+      position={[0, useMedia(0, 0, width * .115), 0]}
       style={{
-        width: useMedia(height * .8, width * 0.4575, 0) * factor,
-        height: height * factor
+        width: useMedia(height * .8, width * 0.4575, width) * factor,
+        height: useMedia(height, height, height - width * .22) * factor
       }}
     >
-      <div className="credits_top" style={{ height: useMedia(height * .08, width * 0.046, 0) * factor }}>
-        <div className="section_number" style={{ width: useMedia(height * .08, width * 0.046, 0) * factor }}>05</div>
+      <div className="credits_top" style={{ height: useMedia(height * .08, width * 0.046, width * .12) * factor }}>
+        <div className="section_number" style={{ width: useMedia(height * .08, width * 0.046, width * .12) * factor }}>05</div>
         <p>Credits</p>
       </div>
       <div className="credits_bottom">

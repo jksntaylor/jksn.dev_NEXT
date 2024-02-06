@@ -36,6 +36,12 @@ $color-accent2: #32DEED;
       font-size: 3vh;
     }
   }
+  @media screen and (aspect-ratio < 1) {
+    p {
+      font-size: 5vw;
+      margin-right: 2vw;
+    }
+  }
 }
 
 .credits_bottom {
@@ -49,7 +55,9 @@ $color-accent2: #32DEED;
   padding: 2rem;
   @media screen and (aspect-ratio > 1.75) {
     padding: 2vh;
-    // flex-direction: row;
+  }
+  @media screen and (aspect-ratio < 1) {
+    padding: 5vw 2vw;
   }
 }
 
@@ -88,6 +96,10 @@ $color-accent2: #32DEED;
   @media screen and (aspect-ratio > 1.75) {
     font-size: 5vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    font-size: clamp(16px, 8vw, 4dvh);
+    margin-bottom: 0.5dvh;
+  }
 }
 
 .credits_contributors {
@@ -104,6 +116,9 @@ $color-accent2: #32DEED;
     margin-bottom: 5vh;
     margin-right: 5vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    margin-top: 2vw;
+  }
 }
 
 .credits_role {
@@ -114,6 +129,10 @@ $color-accent2: #32DEED;
     font-size: 3vh;
     margin-bottom: 1vh;
   }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 5vw;
+    margin-bottom: 2vw;
+  }
 }
 
 .credits_name {
@@ -123,6 +142,9 @@ $color-accent2: #32DEED;
   margin-bottom: 1rem;
   @media screen and (aspect-ratio > 1.75) {
     font-size: 3.5vh;
+  }
+  @media screen and (aspect-ratio < 1) {
+    font-size: 7vw;
   }
 }
 
@@ -145,6 +167,14 @@ $color-accent2: #32DEED;
       margin-right: 1vh;
       svg {
         height: 5vh;
+      }
+    }
+  }
+  @media screen and (aspect-ratio < 1) {
+    a {
+      margin-right: 3vw;
+      svg {
+        height: 8vw;
       }
     }
   }
