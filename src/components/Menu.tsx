@@ -58,17 +58,52 @@ const Menu = () => {
     r_contactOpen.current = !r_contactOpen.current
   }, [])
 
+  const drawerOffset = useMedia({ x: height * .05, y: 0 }, { x: width * .03, y: 0 }, { x: 0, y: width * .08 - 1/factor })
+
   const toggleMenu = useCallback(() => {
     const container = document.querySelector('main > div > div > div') as HTMLDivElement
     if (!r_menuOpen.current) {
       container.style.overflow = 'hidden'
-      menuTL.current.play()
+      menuTL.current.kill()
+      menuTL.current = gsap.timeline().to(r_path1.current, {
+        y: '200%',
+        opacity: 0,
+        duration: 0.5
+      }, 0).to(r_path3.current, {
+        y: '-200%',
+        opacity: 0,
+        duration: 0.5
+      }, 0).to(r_path2.current, {
+        strokeDasharray: '100% 0%',
+        duration: 0.5
+      }, 0).to(r_path2b.current, {
+        opacity: 1,
+        duration: 0.5
+      }, 0).to(r_path2.current, {
+        rotate: -75,
+        scaleX: 1.2,
+        duration: 0.75,
+        transformOrigin: 'center',
+        ease: 'expo.inOut'
+      }, 0.25).to(r_path2b.current, {
+        rotate: -165,
+        scaleX: 1.2,
+        duration: 0.75,
+        transformOrigin: 'center',
+        ease: 'expo.inOut'
+      }, 0.25).to(r_drawerWrapper.current.position, {
+        x: drawerOffset.x,
+        y: drawerOffset.y,
+        duration: 0.75,
+        ease: 'expo.inOut'
+      }, 0.25)
     } else {
       container.style.overflow = 'hidden auto'
       menuTL.current.reverse()
+      if (r_contactOpen.current) toggleContact()
     }
     r_menuOpen.current = !r_menuOpen.current
-  }, [])
+  }, [toggleContact, drawerOffset.x, drawerOffset.y])
 
   const handleToggleContact = useCallback(() => {
     toggleContact()
@@ -85,64 +120,49 @@ const Menu = () => {
     }
   }, [toggleContact, toggleMenu])
 
-  const drawerWidth = useMedia(width - height * 0.16, width * 0.915 , 0)
+  // const drawerWidth = useMedia(width - height * 0.16, width * 0.915 , 0)
   const drawerHeight = useMedia(0, 0, height - width * .15)
-  const drawerOffset = useMedia({ x: height * .05, y: 0 }, { x: width * .03, y: 0 }, { x: 0, y: width * .08 - 1/factor })
 
   useEffect(() => {
-    setTimeout(() => {
-      menuTL.current.to([r_path1.current, r_path2.current, r_path3.current], {
-        strokeDashoffset: "+=100%",
-        stagger: 0.1,
-        duration: 0.35,
-        ease: 'power2.inOut'
-      }).to(r_path1.current, {
-        y: '200%',
-        opacity: 0,
-        duration: 0.5
-      }, 0.6).to(r_path3.current, {
-        y: '-200%',
-        opacity: 0,
-        duration: 0.5
-      }, 0.6).to(r_path2.current, {
-        strokeDasharray: '100% 0%',
-        duration: 0.5
-      }, 0.6).to(r_path2b.current, {
-        opacity: 1,
-        duration: 0.5
-      }, 0.6).to(r_path2.current, {
-        rotate: -75,
-        scaleX: 1.2,
-        duration: 0.75,
-        transformOrigin: 'center',
-        ease: 'expo.inOut'
-      }, 0.85).to(r_path2b.current, {
-        rotate: -165,
-        scaleX: 1.2,
-        duration: 0.75,
-        transformOrigin: 'center',
-        ease: 'expo.inOut'
-      }, 0.85).to(r_drawerWrapper.current.position, {
-        x: drawerOffset.x,
-        y: drawerOffset.y,
-        duration: 0.75,
-        ease: 'expo.inOut'
-      }, 0.85)
-    }, 100);
       window.addEventListener('keydown', e => handleEscape(e))
       window.addEventListener('toggleContact', (handleToggleContact) as EventListener)
     return () => {
       window.removeEventListener('keydown', e => handleEscape(e))
       window.removeEventListener('toggleContact', (handleToggleContact) as EventListener)
     }
-  }, [menuTL, factor, height, width, drawerWidth, drawerOffset, handleEscape, handleToggleContact])
+  }, [handleEscape, handleToggleContact])
 
   const mouseEnter = () => {
-    if (!r_menuOpen.current) menuTL.current.tweenTo(0.55)
+    if (!r_menuOpen.current) {
+      gsap.to([r_path1.current, r_path2.current, r_path3.current], {
+        strokeDashoffset: "+=100%",
+        stagger: 0.1,
+        duration: 0.35,
+        ease: 'power2.inOut'
+      })
+    }
   }
 
   const mouseLeave = () => {
-    if (!r_menuOpen.current) menuTL.current.tweenTo(0)
+    if (!r_menuOpen.current) {
+      gsap.to(r_path1.current, {
+        strokeDashoffset: '20%',
+        duration: 0.35,
+        delay: 0.2,
+        ease: 'power2.inOut'
+      })
+      gsap.to(r_path2.current, {
+        strokeDashoffset: '40%',
+        duration: 0.35,
+        delay: 0.1,
+        ease: 'power2.inOut'
+      })
+      gsap.to(r_path3.current, {
+        strokeDashoffset: '60%',
+        duration: 0.35,
+        ease: 'power2.inOut'
+      })
+    }
   }
 
   const handleLinkClick = (index: number) => {
@@ -153,7 +173,7 @@ const Menu = () => {
   // START MenuLink COMPONENT
   const MenuLink: React.FC<{
     str: string,
-    projIndex: number,
+    projIndex: number | string,
     altColor?: boolean
   }> = ({str, projIndex, altColor }) => {
 
@@ -217,16 +237,34 @@ const Menu = () => {
       animate()
     }, [animate])
 
-    return <div
-      ref={r_link}
-      className="menu_link"
-      onMouseEnter={e => handleMouseEnter(e)}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={e => handleMouseMove(e)}
-      onClick={() => handleLinkClick(projIndex)}
-    >
-      {generateString(str)}
-    </div>
+    if (typeof projIndex === 'number') {
+      return <div
+        ref={r_link}
+        className="menu_link"
+        onMouseEnter={e => handleMouseEnter(e)}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={e => handleMouseMove(e)}
+        onClick={() => handleLinkClick(projIndex)}
+      >
+        {generateString(str)}
+      </div>
+    } else {
+      return <div
+        ref={r_link}
+        className="menu_link"
+        onMouseEnter={e => handleMouseEnter(e)}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={e => handleMouseMove(e)}
+      >
+        <a
+          href={projIndex}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {generateString(str)}
+        </a>
+      </div>
+    }
   }
   // END MenuLink COMPONENT
 
@@ -299,11 +337,11 @@ const Menu = () => {
           <div className="menu_links-experiments">
             <span>EXPERIMENTS<hr/></span>
             <div className="menu_links-flex">
-              <MenuLink projIndex={0} str="GRanD&nbsp;PriX" altColor/>
-              <MenuLink projIndex={1} str="DisTOrtioN" />
-              <MenuLink projIndex={2} str="WatEr&nbsp;RiPplEs" altColor/>
-              <MenuLink projIndex={3} str="CaR&nbsp;CatWalK" />
-              <MenuLink projIndex={4} str="POrtaL" altColor/>
+              <MenuLink projIndex="https://experiments.jksn.dev/grand-prix" str="GRanD&nbsp;PriX" altColor/>
+              <MenuLink projIndex="https://experiments.jksn.dev/distortion" str="DisTOrtioN" />
+              <MenuLink projIndex="https://experiments.jksn.dev/ripples" str="WatEr&nbsp;RiPplEs" altColor/>
+              <MenuLink projIndex="https://experiments.jksn.dev/car-catwalk" str="CaR&nbsp;CatWalK" />
+              <MenuLink projIndex="https://experiments.jksn.dev/portal" str="POrtaL" altColor/>
             </div>
           </div>
           <button className="menu_opencontact" onClick={toggleContact}>LET'<em>S</em> T<em>A</em>LK →</button>
