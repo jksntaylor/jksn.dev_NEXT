@@ -153,7 +153,7 @@ const SelectedWorks = () => {
         window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       }, 0);
     }
-  }, [factor, width, home, screen.mobile])
+  }, [factor, width, height, home, screen.mobile, screen.desktop])
 
   const handleMenuClick = useCallback((i: number) => {
     if (r_projectOpen.current === i) return

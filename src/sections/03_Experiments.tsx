@@ -61,6 +61,7 @@ const Experiments = () => {
 
     if (sectionRange === 0 && r_wrapper.current.position.x !== wrapperOffsets.move) {
       r_wrapper.current.position.x = wrapperOffsets.move
+      r_experiments.current.position.x = experimentsPosition.start
     } else if (sectionRange > 0 && sectionRange2 < 1) {
       r_wrapper.current.position.x = -wrapperOffsets.start * sectionRange + wrapperOffsets.move - wrapperOffsets.start * sectionRange2
       if (r_sidebar.current && !screen.mobile) {
@@ -75,6 +76,7 @@ const Experiments = () => {
       r_shift.current = .45 - (contentRange * .45)
     } else if (sectionRange2 === 1 && r_wrapper.current.position.x !== -wrapperOffsets.start) {
       r_wrapper.current.position.x = -wrapperOffsets.start
+      r_experiments.current.position.x = experimentsPosition.start - experimentsPosition.offset
     }
   })
 
