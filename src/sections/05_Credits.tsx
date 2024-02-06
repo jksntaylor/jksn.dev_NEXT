@@ -62,12 +62,12 @@ const Credits = () => {
           <div className="credits_project_link" onClick={() => handleClick(0)}>Tiktok Top Moments</div>
           <div className="credits_project_link" onClick={() => handleClick(1)}>RRE Ventures</div>
           <div className="credits_project_link" onClick={() => handleClick(2)}>Genies</div>
-          <div className="credits_project_link" onClick={() => handleClick(3)}>Source 7</div>
-          <div className="credits_project_link" onClick={() => handleClick(4)}>Realtime Robotics</div>
-          <div className="credits_project_link" onClick={() => handleClick(5)}>Levi's 501 Day</div>
-          <div className="credits_project_link" onClick={() => handleClick(6)}>Source 7</div>
-          <div className="credits_project_link" onClick={() => handleClick(7)}>Huge Inc</div>
-          <div className="credits_project_link" onClick={() => handleClick(8)}>Bitski</div>
+          <div className="credits_project_link" onClick={() => handleClick(3)}>Realtime Robotics</div>
+          <div className="credits_project_link" onClick={() => handleClick(4)}>Levi's 501 Day</div>
+          <div className="credits_project_link" onClick={() => handleClick(5)}>Source 7</div>
+          <div className="credits_project_link" onClick={() => handleClick(6)}>Huge Inc</div>
+          <div className="credits_project_link" onClick={() => handleClick(7)}>Bitski</div>
+          <div className="credits_project_link" onClick={() => handleClick(8)}>Brainbase</div>
           <div className="credits_project_link" onClick={() => handleClick(9)}>Introvoke</div>
         </div>
         <div className="credits_contributors">
