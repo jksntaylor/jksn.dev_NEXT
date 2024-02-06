@@ -90,8 +90,8 @@ const CallToAction = () => {
         <div className="section_number" style={{ width: useMedia(height * .08, width * .046, width * .12) * factor }}>04</div>
         <p className="section_title">Contact</p>
       </div>
-      <div className="motto_cta"  style={{ height: useMedia(height * .92, height - width * 0.046, 0) / 2 * factor }}>
-        <p>I encourage the clients I partner with to push the<br/>bounds of web technologies wherever possible.<br/><br/>Ready to get started? </p>
+      <div className="motto_cta"  style={{ height: useMedia(height * .92, height - width * 0.046, height - width * .35) / 2 * factor }}>
+        <p>I encourage the clients I partner with to push the {!screen.mobile && <br/>}bounds of web technologies wherever possible.<br/><br/>Ready to get started? </p>
         <button onClick={handleClick}>LET'<em>S</em> T<em>A</em>LK →</button>
       </div>
       <div ref={r_slice1} className="landing_slice">
@@ -111,14 +111,14 @@ const CallToAction = () => {
       </div>
     </Html>
 
-    <mesh ref={r_sphere} position={[width / 2 - sphereSize.position, height / 2 - height * 0.6, 0]}>
+    <mesh ref={r_sphere} position={[width / 2 - sphereSize.position, height / 2 - useMedia(height * .6, height * .6, height * .52), 0]}>
       <icosahedronGeometry args={[sphereSize.rad, 128]} />
       <sphereMaterial ref={r_mat} />
     </mesh>
     <Text3D
       ref={r_text}
-      position={[-width/2, height / 2 - height * .25, useMedia(-height * .2, -height * .15, 0)]}
-      size={useMedia(height * .25, height * .25, width * .17)}
+      position={[-width/2 + useMedia(0, 0, width * .03), height / 2 - useMedia(height * .25, height * .25, width * .4), useMedia(-height * .2, -height * .15, -width * .05)]}
+      size={useMedia(height * .25, height * .25, width * .16)}
       rotation={[Math.PI * 0.005, useMedia(Math.PI * 0.005, 0, 0), 0]}
       lineHeight={.7}
       letterSpacing={.05}
@@ -133,7 +133,7 @@ const CallToAction = () => {
         resolution={1024}
         mirror={1}
         depthScale={1}
-        reflectorOffset={useMedia(-0.2, -0.2, -1)}
+        reflectorOffset={useMedia(-0.2, -0.2, -0.5)}
         envMapIntensity={0.15}
       />
     </Text3D>

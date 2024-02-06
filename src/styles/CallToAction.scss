@@ -51,14 +51,22 @@ $color-accent2: #32DEED;
     }
   }
   @media screen and (aspect-ratio < 1) {
-    padding: 5vw 15vw;
+    padding: 5vw;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     p {
-      font-size: 4vw;
+      font-size: 6vw;
+      line-height: 90%;
       margin-bottom: 6vw;
     }
     button {
       font-size: 6vw;
-      height: 6vw;
+      height: 10vw;
+      border-radius: 5vw;
+      padding: 2.5vw 5vw 1vw;
+      width: max-content;
     }
   }
 }
