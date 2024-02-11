@@ -47,7 +47,7 @@ $color-accent2: #32DEED;
   width: 100%;
   color: $color-dirtywhite;
   padding: 4rem 5rem 5rem 5rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding: 5vh;
     display: flex;
     justify-content: space-between;
@@ -71,7 +71,7 @@ $color-accent2: #32DEED;
       margin-left: 1.5rem;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     height: 100%;
     > span {
       font-size: 3vh;
@@ -91,7 +91,7 @@ $color-accent2: #32DEED;
 }
 
 .menu_links-projects {
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     width: 75%;
     margin-right: 3%;
     height: 70%;
@@ -121,7 +121,7 @@ $color-accent2: #32DEED;
   align-items: flex-start;
   flex-wrap: wrap;
   height: 80%;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     width: 100%;
   }
 }
@@ -134,7 +134,7 @@ $color-accent2: #32DEED;
   width: max-content;
   margin: 0.5rem 0;
   cursor: pointer;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 6.5vh;
     margin: 1vh 0;
     letter-spacing: 0;
@@ -169,7 +169,7 @@ $color-accent2: #32DEED;
     box-shadow: none;
     color: $color-dirtywhite;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     right: 5vh;
     bottom: 5vh;
     font-size: 3.5vh;
@@ -218,7 +218,7 @@ $color-accent2: #32DEED;
       animation-direction: reverse;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 2.2vh;
     width: 6vh;
     padding: 2vh 1.5vh;
@@ -263,7 +263,7 @@ $color-accent2: #32DEED;
   display: flex;
   justify-content: space-between;
   border-top: 1px solid $color-dirtywhite;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     width: calc(100% - 6vh);
     padding: 5vh;
   }
@@ -289,7 +289,7 @@ form {
   border-bottom: 0.3rem solid $color-accent1;
   width: max-content;
   margin-bottom: 5rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 8vh;
     border-bottom: 0.5vh solid $color-accent1;
   }
@@ -322,7 +322,7 @@ form {
       border-bottom: 1px solid $color-accent1;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     margin-bottom: 3vh;
     label {
       margin-right: 2vh;
@@ -398,7 +398,7 @@ form {
       }
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     margin-bottom: 3vh;
     label {
       font-size: 3vh;
@@ -482,7 +482,7 @@ form {
       outline: 0.2rem solid $color-accent1;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     margin-bottom: 3vh;
     label {
       font-size: 3vh;
@@ -537,7 +537,7 @@ form {
       color: $color-dirtywhite;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     button {
       font-size: 3.5vh;
       height: 6vh;
@@ -564,7 +564,7 @@ form {
   letter-spacing: 0.03em;
   transform: translateY(-10%);
   opacity: 0;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     top: 5vh;
     left: 5vh;
     font-size: 4vh;
@@ -589,7 +589,7 @@ form {
 .email_heading {
   font: 300 4rem/120% 'Formula Condensed';
   margin-bottom: 2rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 5vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -619,7 +619,7 @@ form {
       transform: translateX(1rem);
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 4vh;
     svg {
       margin-left: 3vh;

@@ -91,7 +91,7 @@ const CallToAction = () => {
         <p className="section_title">Contact</p>
       </div>
       <div className="motto_cta"  style={{ height: useMedia(height * .92, height - width * 0.046, height - width * .35) / 2 * factor }}>
-        <p>I encourage the clients I partner with to push the {!screen.mobile && <br/>}bounds of web technologies wherever possible.<br/><br/>Ready to get started? </p>
+        <p>I encourage the clients I partner with to push the bounds of web technologies wherever possible.<br/><br/>Ready to get started? </p>
         <button onClick={handleClick}>LET'<em>S</em> T<em>A</em>LK →</button>
       </div>
       <div ref={r_slice1} className="landing_slice">

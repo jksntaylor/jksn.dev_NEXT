@@ -127,7 +127,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
         duration: 0.85
       }, 2.4)
     }
-  }, [])
+  }, [screen.mobile])
 
   const hideProject = () => {
     // animate content out
@@ -255,12 +255,12 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
   useEffect(() => {
     window.addEventListener('hideProject', hideProject)
-    window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
+    window.addEventListener('keyup', (e: KeyboardEvent) => handleKey(e))
     window.addEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
     window.addEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
     return () => {
       window.removeEventListener('hideProject', hideProject)
-      window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
+      window.removeEventListener('keyup', (e: KeyboardEvent) => handleKey(e))
       window.removeEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
       window.removeEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
     }

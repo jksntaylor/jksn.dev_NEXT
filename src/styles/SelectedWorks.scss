@@ -51,7 +51,7 @@ $color-accent2: #32DEED;
     color: $color-dirtywhiteHalf;
     font-size: 1.5rem;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3.5vh;
     height: 3vh;
     span {
@@ -75,7 +75,7 @@ $color-accent2: #32DEED;
   &:first-of-type {
     text-align: right;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     width: 2vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -93,7 +93,7 @@ $color-accent2: #32DEED;
     font: 800 23.5rem/100% 'Formula Condensed';
     letter-spacing: 0.01em;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding: 2vh;
     line-height: 90%;
   }
@@ -116,7 +116,7 @@ $color-accent2: #32DEED;
   height: calc(100dvh - 4.6vw);
   position: relative;
   padding-top: 20%;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     height: 92vh;
     padding-top: 15vh;
   }
@@ -141,7 +141,7 @@ $color-accent2: #32DEED;
     margin-left: unset;
     margin-right: 5rem;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     .selectedworks_project_info {
       padding-right: 10vh;
     }
@@ -168,7 +168,7 @@ $color-accent2: #32DEED;
   span {
     display: block;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 1.8vh;
     top: 2vh;
   }
@@ -211,7 +211,7 @@ $color-accent2: #32DEED;
       }
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 2vh;
     padding-left: 10vh;
     span:first-of-type {
@@ -233,11 +233,11 @@ $color-accent2: #32DEED;
     font: 700 15rem/100% 'Formula Condensed';
     letter-spacing: 0.015em;
   }
-  @media screen and (aspect-ratio > 1.75) {
-    font-size: 18vh;
+  @media screen and (aspect-ratio > 1.6) {
+    font-size: 17vh;
     margin: 3vh auto;
     span {
-      font-size: 18vh;
+      font-size: 17vh;
     }
   }
   @media screen and (aspect-ratio < 1) {
@@ -271,7 +271,7 @@ $color-accent2: #32DEED;
     box-shadow: none;
     color: $color-dirtywhite;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3.5vh;
     height: 6vh;
     padding: 1.5vh 2.5vh 0.5vh;
@@ -298,7 +298,7 @@ $color-accent2: #32DEED;
   flex-direction: column;
   justify-content: space-between;
   > * { pointer-events: all;}
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding: 4vh 5vh 5vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -317,7 +317,7 @@ $color-accent2: #32DEED;
     transform: translateY(50%);
     opacity: 0;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding-left: 45vh;
     p {
       font-size: 2vh;
@@ -360,7 +360,7 @@ $color-accent2: #32DEED;
   }
   transform: translateY(50%) scale(0.8);
   opacity: 0;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3.5vh;
     height: 6vh;
     padding: 1.5vh 2.5vh 0.5vh;
@@ -395,7 +395,7 @@ $color-accent2: #32DEED;
       transform: translateY(110%);
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 8vh;
     margin-right: 10vh;
     div:last-of-type span {
@@ -453,7 +453,7 @@ $color-accent2: #32DEED;
       }
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 2vh;
     padding-top: unset;
     div {
@@ -492,7 +492,7 @@ $color-accent2: #32DEED;
     margin-right: 5rem;
     border: 1px solid $color-dirtywhite;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     height: 50vh;
     img {
       width: 75vh;
@@ -535,7 +535,7 @@ $color-accent2: #32DEED;
       color: $color-dirtywhite;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding-left: 40%;
     button {
       font-size: 6vh;
@@ -578,7 +578,7 @@ $color-accent2: #32DEED;
     border: 1px solid $color-accent1;
     background: $color-fadedblack
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3.5vh;
     height: 6vh;
     padding: 1.5vh 2.5vh 0.5vh;

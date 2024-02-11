@@ -37,7 +37,7 @@ $color-accent2: #32DEED;
       color: $color-dirtywhite;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding: 5vh 15vh;
     p {
       font-size: 4vh;
@@ -84,7 +84,7 @@ $color-accent2: #32DEED;
       padding: 6rem 3rem 0 0;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     .landing_slice {
       height: calc((100% - 8vh) / 3 + 1px);
     }
@@ -118,7 +118,7 @@ $color-accent2: #32DEED;
     letter-spacing: -0.075rem;
     color: $color-dirtywhite;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     .section_title {
       padding-right: 3vh;
       font-size: 3vh;

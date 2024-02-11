@@ -31,7 +31,7 @@ $color-accent2: #32DEED;
     letter-spacing: -0.075rem;
     color: $color-dirtywhite;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     p {
       font-size: 3vh;
     }
@@ -53,7 +53,7 @@ $color-accent2: #32DEED;
   align-items: flex-start;
   flex-grow: 1;
   padding: 2rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding: 2vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -93,7 +93,7 @@ $color-accent2: #32DEED;
       width: 100%;
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 5vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -103,7 +103,7 @@ $color-accent2: #32DEED;
 }
 
 .credits_contributors {
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     display: flex;
     justify-content: space-between;
   }
@@ -111,7 +111,7 @@ $color-accent2: #32DEED;
 
 .credits_contributor {
   margin-top: 2rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     margin-top: unset;
     margin-bottom: 5vh;
     margin-right: 5vh;
@@ -125,7 +125,7 @@ $color-accent2: #32DEED;
   font: 400 2.5rem/120% 'Neue Montreal';
   display: block;
   margin-bottom: 1rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3vh;
     margin-bottom: 1vh;
   }
@@ -140,7 +140,7 @@ $color-accent2: #32DEED;
   text-transform: uppercase;
   display: block;
   margin-bottom: 1rem;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3.5vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -162,7 +162,7 @@ $color-accent2: #32DEED;
       }
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     a {
       margin-right: 1vh;
       svg {

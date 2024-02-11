@@ -48,7 +48,7 @@ main {
   color: $color-dirtywhite;
   font: 400 2.5rem/100% 'Neue Montreal';
   letter-spacing: -0.03em;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     font-size: 3vh;
   }
   @media screen and (aspect-ratio < 1) {

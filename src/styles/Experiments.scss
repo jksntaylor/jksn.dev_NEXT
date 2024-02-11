@@ -26,7 +26,7 @@ $color-accent2: #32DEED;
     letter-spacing: -0.075rem;
     color: $color-dirtywhite;
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     .section_title {
       font-size: 3vh;
       margin-right: 3vh;
@@ -46,7 +46,7 @@ $color-accent2: #32DEED;
   background: $color-fadedblack;
   border: 1px solid $color-dirtywhite;
   border-bottom: none;
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     padding: 3vh;
   }
   @media screen and (aspect-ratio < 1) {
@@ -84,7 +84,7 @@ $color-accent2: #32DEED;
       transform: translateY(110%);
     }
   }
-  @media screen and (aspect-ratio > 1.75) {
+  @media screen and (aspect-ratio > 1.6) {
     a {
       font-size: 6vh;
     }

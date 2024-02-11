@@ -79,7 +79,8 @@ const SelectedWorks = () => {
         defaults: { ease: 'expo.out' },
         onComplete: () => { r_projectOpen.current = -1 }
       }).to(r_projectsInner.current, {
-        x: 0,
+        x: screen.fullWidth ? -(width - height * .96)/2 * factor : 0,
+        // width - height * 0.96, width * .625
         duration: 1.85
       }, 1.5).to(r_top.current.position, {
         y: 0,
@@ -111,7 +112,7 @@ const SelectedWorks = () => {
       // SHOW PROJECT PAGE
       setTimeout(() => {
         r_projectOpen.current = i
-        const topDistance = screen.mobile ? window.innerHeight * 3.9 + (window.innerHeight * .498 * i) : window.innerHeight * 2.6 + (window.innerHeight * 0.332 * i)
+        const topDistance = screen.mobile ? window.innerHeight * 3.9 + (window.innerHeight * .498 * i) : window.innerHeight * 2.6 + (window.innerHeight * 0.3325 * i)
 
         container.scrollTo({ top: topDistance })
         window.dispatchEvent(new CustomEvent('showProject', { detail: { proj: home?.data.case_studies[i].case_study.data, i: i }}))
@@ -153,7 +154,7 @@ const SelectedWorks = () => {
         window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       }, 0);
     }
-  }, [factor, width, height, home, screen.mobile, screen.desktop])
+  }, [factor, width, height, home, screen.mobile, screen.desktop, screen.fullWidth])
 
   const handleMenuClick = useCallback((i: number) => {
     if (r_projectOpen.current === i) return
