@@ -21,7 +21,7 @@ $color-accent2: #32DEED;
     align-items: center;
     justify-content: center;
     margin-bottom: 60%;
-    @media screen and (aspect-ratio > 1.6) {
+    @media screen and (aspect-ratio > 1.8) {
       margin-bottom: 40vh;
     }
   }
@@ -75,7 +75,7 @@ $color-accent2: #32DEED;
     text-transform: uppercase;
     text-align: right;
   }
-  @media screen and (aspect-ratio > 1.6) {
+  @media screen and (aspect-ratio > 1.8) {
     width: 62vh;
     padding: 4vh;
     span {

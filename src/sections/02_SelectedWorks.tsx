@@ -79,7 +79,8 @@ const SelectedWorks = () => {
         defaults: { ease: 'expo.out' },
         onComplete: () => { r_projectOpen.current = -1 }
       }).to(r_projectsInner.current, {
-        x: screen.fullWidth ? -(width - height * .96)/2 * factor : 0,
+        x: 0,
+        // x: screen.fullWidth ? -(width - height * .96)/2 * factor : 0,
         // width - height * 0.96, width * .625
         duration: 1.85
       }, 1.5).to(r_top.current.position, {
