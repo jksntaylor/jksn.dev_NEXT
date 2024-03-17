@@ -18,6 +18,7 @@ const Credits = lazy(() => import('./sections/05_Credits'))
 // styles
 import cover from './assets/images/resize_cover.webp'
 import './styles/App.scss'
+import Preloader from './components/Preloader'
 
 function App() {
 
@@ -61,6 +62,7 @@ function App() {
     <div className='resize_cover' ref={r_cover} style={{ visibility: 'hidden' }}>
       <img src={cover} alt="resizing cover" width="1000px" height="1000px"/>
     </div>
+    <Preloader />
   </main>
 }
 
