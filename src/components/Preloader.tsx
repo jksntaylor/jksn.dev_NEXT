@@ -16,7 +16,7 @@ const Preloader = () => {
       },
       onStart: () => { r_num.current.innerHTML = '53%' },
       defaults: {
-        duration: 1.4,
+        duration: 0.6,
         ease: 'expo.out'
       }
     }).to(r_bar.current, {
@@ -27,7 +27,7 @@ const Preloader = () => {
     }).to(r_wrapper.current, {
       x: screen.mobile ? '0' : '100%',
       y: screen.mobile ? '100%' : '0',
-      duration: 0.6,
+      duration: 0.4,
       onComplete: () => { r_wrapper.current.hidden = true }
     })
   }
@@ -40,7 +40,7 @@ const Preloader = () => {
       },
       onStart: () => { r_num.current.innerHTML = '18%' },
       defaults: {
-        duration: 1.2,
+        duration: 0.6,
         ease: 'expo.out'
       }
     }).to(r_bar.current, {
@@ -56,7 +56,7 @@ const Preloader = () => {
       width: '95%',
     }).to(r_wrapper.current, {
       x: '100%',
-      duration: 0.6,
+      duration: 0.4,
       onComplete: () => { r_wrapper.current.hidden = true }
     })
   }
@@ -70,7 +70,7 @@ const Preloader = () => {
       }
     }).to(r_num.current, {
       opacity: 1,
-      duration: 1.2
+      duration: 0.8
     }, 0.8)
   }, [])
 

@@ -6,7 +6,7 @@ export const ScreenContext = createContext({
   mobile: false
 })
 
-const ScreenProvider: React.FC<{children?: React.ReactNode}> = ({ children }) => {
+export const ScreenProvider: React.FC<{children?: React.ReactNode}> = ({ children }) => {
 
   const aspectRatio = useRef(window.innerWidth / window.innerHeight)
   const [screen, setScreen] = useState({
@@ -36,4 +36,26 @@ const ScreenProvider: React.FC<{children?: React.ReactNode}> = ({ children }) =>
   </ScreenContext.Provider>
 }
 
-export default ScreenProvider
+
+export const DebugContext = createContext({
+  debug: false
+})
+
+export const DebugProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+
+  const [debug, setDebug] = useState(false)
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if(e.key === 'y' || e.key === 'Y') {
+      setDebug(prev => !prev)
+    }
+  }
+  useEffect(() => {
+    window.addEventListener('keydown', e => handleKeyDown(e))
+    return () => window.removeEventListener('keydown', e => handleKeyDown(e))
+  }, [])
+
+  return <DebugContext.Provider value={{debug}}>
+    {children}
+  </DebugContext.Provider>
+} 

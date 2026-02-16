@@ -36,7 +36,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   const moveCarousel = useCallback((direction: 'left' | 'right') => {
     if (screen.mobile) return
 
-    if (direction === 'right' && r_carouselIndex.current < 4 /* # of proj images - 1 */) {
+    if (direction === 'right' && r_carouselIndex.current < 3 /* # of proj images - 1 */) {
       r_carouselIndex.current += 1
     } else if (direction === 'left' && r_carouselIndex.current > 0) {
       r_carouselIndex.current -= 1

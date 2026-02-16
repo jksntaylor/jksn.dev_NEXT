@@ -351,7 +351,7 @@ const Menu = () => {
           <div>
             <span>Available for Freelance</span>
             <span>JACKSON TAYLOR</span>
-            <span>April 2024</span>
+            <span>March 2026</span>
           </div>
           <Star />
         </div>

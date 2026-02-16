@@ -3,6 +3,7 @@
   src: url('./FormulaCondensed-Variable.ttf') format('truetype');
   font-weight: 100 800;
   font-display: swap;
+  ascent-override: 118%;
 }
 
 @font-face {
@@ -18,4 +19,11 @@
   font-style: italic;
   src: url('./NeueMontreal600-I.woff2') format('woff2');
   font-display: swap;
+}
+
+@font-face {
+  font-family: Frama;
+  src: url('./PPFramaText-Variable.woff2') format('woff2');
+  font-weight: 100 800;
+  font-display: swap;;
 }

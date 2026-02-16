@@ -13,6 +13,7 @@ import { t_project } from '../utils/types'
 import { useMedia } from '../utils/hooks'
 // assets
 import '../styles/SelectedWorks.scss'
+import { Group, Mesh } from 'three'
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -37,17 +38,17 @@ const SelectedWorks = () => {
   })
 
   // Refs for animation
-  const r_wrapper = useRef<THREE.Group>(null!)
-  const r_top = useRef<THREE.Group>(null!)
+  const r_wrapper = useRef<Group>(null!)
+  const r_top = useRef<Group>(null!)
   const r_counter1 = useRef<HTMLDivElement>(null!)
   const r_counter2 = useRef<HTMLDivElement>(null!)
-  const r_side = useRef<THREE.Group>(null!)
-  const r_sidebar = useRef<THREE.Group>(null!)
+  const r_side = useRef<Group>(null!)
+  const r_sidebar = useRef<Group>(null!)
   const r_sidebarText = useRef<HTMLDivElement>(null!)
   const r_sidebarTextSpan = useRef<HTMLSpanElement>(null!)
-  const r_projects = useRef<THREE.Group>(null!)
+  const r_projects = useRef<Group>(null!)
   const r_projectsInner = useRef<HTMLDivElement>(null!)
-  const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_selectedWorksMaterial })[] }>(null!);
+  const r_projectsImages = useRef<Group & { children: (Mesh & { material: t_selectedWorksMaterial })[] }>(null!);
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)
@@ -91,7 +92,7 @@ const SelectedWorks = () => {
         duration: .85
       }, 1.9)
 
-      const image = r_projectsImages.current.children[r_projectOpen.current] as THREE.Mesh & { material: t_selectedWorksMaterial }
+      const image = r_projectsImages.current.children[r_projectOpen.current] as Mesh & { material: t_selectedWorksMaterial }
 
       if (!screen.mobile) {
         gsap.to(image.position, {
@@ -133,7 +134,7 @@ const SelectedWorks = () => {
           ease: 'expo.inOut'
         }, .2)
 
-        const image = r_projectsImages.current.children[i] as THREE.Mesh & { material: t_selectedWorksMaterial }
+        const image = r_projectsImages.current.children[i] as Mesh & { material: t_selectedWorksMaterial }
 
         if (!screen.mobile) {
           gsap.to(image.position, {
@@ -182,7 +183,7 @@ const SelectedWorks = () => {
 
   const Image: React.FC<{url: string, index: number }> = ({ url, index }) => {
     const r_mat = useRef<t_selectedWorksMaterial>(null!)
-    const r_mesh = useRef<THREE.Mesh>(null!)
+    const r_mesh = useRef<Mesh>(null!)
     const texture = useTexture(url)
 
     const posX = useMedia((width - height * .96)/2 - height * 0.316, width * .1255, 0)
@@ -202,7 +203,7 @@ const SelectedWorks = () => {
 
   const wrapperOffsets = useMedia(
     { start: width - height * .16, move: width - height * .08, end: width - height * .24 },
-    { start: width * .915, move: width * .9575, end: width * .8725 },
+    { start: width * .92, move: width * .9575, end: width * .8725 },
     { start: width, move: width, end: width }
   )
 
@@ -231,10 +232,10 @@ const SelectedWorks = () => {
   const projContainerOffsetY = useMemo(() => ((projContainerHeight / 10) * 9) / factor, [projContainerHeight, factor])
 
   useFrame(() => {
-    const sectionOffset = scrollData.range(.1784, .05)
+    const sectionOffset = scrollData.range(.194, .05)
     const sidebarOffset = scrollData.range(.2284, .025)
-    const projectsOffset = scrollData.range(.26, .3)
-    const counterOffset = scrollData.range(.525, .035) // just for counter first column (0 - 1)
+    const projectsOffset = scrollData.range(.255, .3)
+    const counterOffset = scrollData.range(.525, .03) // just for counter first column (0 - 1)
     const sectionOffset2 = scrollData.range(.56, .05)
 
     if (sectionOffset === 0 && r_wrapper.current.position.x !== wrapperOffsets.move) {
@@ -271,11 +272,11 @@ const SelectedWorks = () => {
         // transform
         // distanceFactor={3.4}
         className="selectedworks_top"
-        position={[-1/factor, height / 2 - useMedia(height * 0.04, width * .023, width * .06) + 1/factor, 0]}
+        position={[0, height / 2 - useMedia(height * 0.04, width * .023, width * .06) + 1/factor, 0]}
         portal={{ current: scrollData.fixed }}
         zIndexRange={[2, 3]}
         style={{
-          width: useMedia(width - height * 0.16, width * .915, width) * factor,
+          width: useMedia(width - height * 0.16, width * .92, width) * factor,
           height: useMedia(height * .08, width * .046, width * .12) * factor,
           borderBottom: `1px solid ${colors.dirtyWhite}`
         }}
@@ -292,7 +293,7 @@ const SelectedWorks = () => {
       </Html>
     </group>
     <group ref={r_side} visible={!screen.mobile}>
-      <group ref={r_sidebar} position={[-1/factor, useMedia(-height * 0.04, -width * .023, 0) + 1/factor, 0]}>
+      <group ref={r_sidebar} position={[0, useMedia(-height * 0.04, -width * .023, 0) + 1/factor, 0]}>
         <Html
           center
           // transform

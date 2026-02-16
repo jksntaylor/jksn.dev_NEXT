@@ -1,7 +1,7 @@
 export const colors = {
   dirtyWhite: '#F0E6E6',
-  dirtyWhiteHalftone: '#757575',
-  fadedBlack: "#010101",
+  dirtyWhiteHalftone: '#ABABAB',
+  fadedBlack: "#191919",
   darkModeAccent_2: '#FF2647', // red
   darkModeAccent: '#32DEED', // blue
 }
