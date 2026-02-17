@@ -45,7 +45,7 @@ const LandingMaterial = shaderMaterial({
 
     // mouse mask
     float cursor_distance = distance(vec2(v_uv.x, v_uv.y / u_aspect), vec2(u_mouse.x, u_mouse.y / u_aspect));
-    float strength = smoothstep(u_mouse_rad, u_mouse_rad - .15, cursor_distance);
+    float strength = smoothstep(u_mouse_rad, u_mouse_rad - .05, cursor_distance);
     float offX = v_uv.x + sin(v_uv.y + u_time * .1);
     float offY = v_uv.y - u_time * 0.01 - cos(u_time * 0.001) * 0.1;
 
@@ -53,9 +53,9 @@ const LandingMaterial = shaderMaterial({
     float mask = smoothstep(0.05, 1., strength * (n + 1.) * 0.75) * (1. - distance(v_uv, u_mouse) * 5.);
 
     // text distortion
-    vec4 texture0 = texture2D(u_texture, distortUV(uv, uv2, 0.001 + mask * 0.2));
-    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.005 + mask * 0.2));
-    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.006 + mask * 0.2));
+    vec4 texture0 = texture2D(u_texture, distortUV(uv, uv2, 0.001 + mask * 0.15));
+    vec4 texture1 = texture2D(u_texture, distortUV(uv, uv2, 0.005 + mask * 0.15));
+    vec4 texture2 = texture2D(u_texture, distortUV(uv, uv2, -0.005 + mask * 0.15));
     vec4 color;
 
     // color blending
@@ -72,9 +72,16 @@ const LandingMaterial = shaderMaterial({
     color.g = min(color.g, 0.902);
     color.b = min(color.b, 0.902);
 
-    vec4 color2 = vec4(vec3(mask), 1.);
+    vec4 color2 = vec4(vec3(mask), 1.) * 3.0;
 
-    gl_FragColor = color;
+    vec4 finalColor = mix(color2, color, 0.95);
+    if (finalColor.r < 0.03 && finalColor.b < 0.03) {
+      finalColor.r = 0.03;
+      finalColor.g = 0.03;
+      finalColor.b = 0.03;
+    }
+
+    gl_FragColor = finalColor;
   }
 `)
 

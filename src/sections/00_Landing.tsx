@@ -1,8 +1,8 @@
 // libraries
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { Html, PerspectiveCamera, RenderTexture, Text, useScroll } from "@react-three/drei"
-import { useContext, useRef } from "react"
-import { Vector2 } from 'three'
+import { useContext, useMemo, useRef } from "react"
+import { Group, Vector2, Vector3 } from 'three'
 import gsap from "gsap"
 // modules
 import { t_landingMaterial } from "../components/Materials.ts"
@@ -23,8 +23,8 @@ const Landing = () => {
   const r_material = useRef<t_landingMaterial>(null!)
   const r_mouse = useRef({ target: new Vector2(1, 0), current: new Vector2(1, 0) })
   // wrapper ref
-  const r_wrapper = useRef<THREE.Group>(null!)
-  const r_arrow = useRef<THREE.Group>(null!)
+  const r_wrapper = useRef<Group>(null!)
+  const r_arrow = useRef<Group>(null!)
   const r_arrowInner = useRef<SVGGElement>(null!)
   // distorted text lines
   const r_text1 = useRef<typeof Text>(null!)
@@ -38,28 +38,6 @@ const Landing = () => {
   const r_slice4 = useRef<HTMLDivElement>(null!)
   const r_slice5 = useRef<HTMLDivElement>(null!)
   const r_slices = [r_slice1, r_slice2, r_slice3, r_slice4, r_slice5]
-
-  const textOptions: {
-    fillOpacity: number
-    color: string
-    lineHeight: number
-    letterSpacing: number
-    maxWidth: number
-    font: string
-    scale: [x: number, y: number, z: number]
-    anchorX: "left"
-    anchorY: "bottom"
-  } = {
-    fillOpacity: 1,
-    color: colors.dirtyWhite,
-    lineHeight: 1,
-    letterSpacing: 0,
-    maxWidth: 12,
-    font: '/fonts/NeueMontreal400.woff',
-    scale: useMedia([height / 7, height / 7, 1], [width / 12.5, width / 12, 1], [width / 8.7, width / 8, 1]),
-    anchorX: 'left',
-    anchorY: 'bottom'
-  }
 
   const sectionDistance = useMedia(width - height * 0.16, width * 0.915, width)
   const arrowSize = useMedia(width * 0.097, width * 0.097, width * 0.3)
@@ -107,6 +85,35 @@ const Landing = () => {
     if (e.uv) r_mouse.current.target.set(e.uv?.x, e.uv.y)
   }
 
+  const textOpts: {
+    anchorX: "left",
+    anchorY: "middle"
+  } = useMemo(() => {
+    return {
+      anchorX: "left",
+      anchorY: "middle",
+      color: colors.dirtyWhite,
+      fillOpacity: 1,
+      font: '/fonts/NeueMontreal400.woff',
+      letterSpacing: 0.04,
+      outlineWidth: 0.03,
+      outlineColor: colors.dirtyWhite,
+      scale: new Vector3(width * 0.065, height * 0.09, 0.75)
+    }
+  }, [width, height])
+
+  const menuWidth = useMemo(() => {
+    return screen.fullWidth ? width * 0.1 : screen.desktop ? width * 0.08 : width
+  }, [screen, width])
+
+  const text = useMemo(() => {
+    return {
+      x: -(width - menuWidth)/2,
+      y: height / 2,
+      factor: height * 0.088
+    }
+  }, [width, height])
+
   return <group ref={r_wrapper}>
     <mesh
       position={[useMedia(height * 0.08, width * 0.0425, 0), useMedia(0, 0, width * .115), 0]}
@@ -117,29 +124,39 @@ const Landing = () => {
       <planeGeometry args={[useMedia(width - height * 0.16, width * 0.915, width), useMedia(height, height, height - width * .23), 64, 64]} />
       <landingMaterial ref={r_material} u_mouse={new Vector2(0.9, 0)} u_mouse_rad={screen.mobile ? 0 : 0.2} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
-          <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75} />
-          <color attach="background" args={[colors.fadedBlack]} />
           <Text
-            ref={r_text1}
-            {...textOptions}
-            position={[-width / 2 + 0.1, -height / 2 + useMedia(height / 7 * 2, width / 12 * 2, width / 8 * 3) + 0.1, 0]}
-          >HEY, I'M JACKSON {!screen.mobile && 'TAYLOR'}</Text>
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 1, 0]}
+          >JACKSON TAYLOR IS
+          </Text>
           <Text
-            ref={r_text2}
-            {...textOptions}
-            position={[-width / 2 + 0.1, -height / 2 + useMedia(height / 7, width / 12, width / 8 * 2) + 0.1, 0]}
-          >A CREATIVE DEV{!screen.mobile && 'ELOPER'}</Text>
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 2, 0]}
+          >A CREATIVE DEVELOPER</Text>
           <Text
-            ref={r_text3}
-            {...textOptions}
-            position={[-width / 2 + 0.1, -height / 2 + useMedia(0, 0, width / 8) + 0.1, 0]}
-          >BASED {screen.mobile ? 'OUT OF' : 'IN'} {!screen.mobile && 'SALT LAKE CITY'}</Text>
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 3, 0]}
+          >WITH AN EMPHASIS</Text>
           <Text
-            visible={screen.mobile}
-            ref={r_text4}
-            {...textOptions}
-            position={[-width/2 + 0.1, -height/2 + 0.1, 0]}
-          >SALT LAKE CITY</Text>
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 4, 0]}
+          >IN INTERACTIVE WEB</Text>
+          <Text
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 5, 0]}
+          >ANIMATIONS, MOTION</Text>
+          <Text
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 6, 0]}
+          >DESIGN, & 3D ONLINE</Text>
+          <Text
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 7, 0]}
+          >EXPERIENCES</Text>
+          <Text
+            {...textOpts}
+            position={[text.x, text.y - text.factor * 9, 0]}
+          >BASED IN ALASKA</Text>
         </RenderTexture>
       </landingMaterial>
     </mesh>
