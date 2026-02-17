@@ -12,13 +12,14 @@ import { lerp } from "../utils/functions"
 import '../styles/Menu.scss'
 import Email from "../assets/svg/email"
 import Star from "../assets/svg/star"
+import { Group } from "three"
 
 const Menu = () => {
   const scrollData = useScroll()
   const { viewport } = useThree()
   const { height, width, factor } = viewport.getCurrentViewport()
 
-  const r_drawerWrapper = useRef<THREE.Group>(null!)
+  const r_drawerWrapper = useRef<Group>(null!)
   const r_drawer = useRef<HTMLDivElement>(null!)
   const r_path1 = useRef<SVGPathElement>(null!)
   const r_path2 = useRef<SVGPathElement>(null!)

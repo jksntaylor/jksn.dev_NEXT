@@ -1,6 +1,6 @@
 // libraries
 import { ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { Html, PerspectiveCamera, RenderTexture, Text, useScroll } from "@react-three/drei"
+import { Html, RenderTexture, Text, useScroll } from "@react-three/drei"
 import { useContext, useMemo, useRef } from "react"
 import { Group, Vector2, Vector3 } from 'three'
 import gsap from "gsap"
@@ -27,10 +27,10 @@ const Landing = () => {
   const r_arrow = useRef<Group>(null!)
   const r_arrowInner = useRef<SVGGElement>(null!)
   // distorted text lines
-  const r_text1 = useRef<typeof Text>(null!)
-  const r_text2 = useRef<typeof Text>(null!)
-  const r_text3 = useRef<typeof Text>(null!)
-  const r_text4 = useRef<typeof Text>(null!)
+  // const r_text1 = useRef<typeof Text>(null!)
+  // const r_text2 = useRef<typeof Text>(null!)
+  // const r_text3 = useRef<typeof Text>(null!)
+  // const r_text4 = useRef<typeof Text>(null!)
   // "lets build something new" slices
   const r_slice1 = useRef<HTMLDivElement>(null!)
   const r_slice2 = useRef<HTMLDivElement>(null!)
