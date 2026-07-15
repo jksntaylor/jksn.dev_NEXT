@@ -1,0 +1,18 @@
+$color-dirtywhite: #F0E6E6;
+$color-dirtywhiteHalf: #757575;
+$color-fadedblack: #191919;
+$color-accent1: rgb(255, 38, 71);
+$color-accent2: #32DEED;
+
+.cursor {
+  z-index: 100;
+  background-color: rgba(255, 38, 71, 0.6);
+  border: 1px solid $color-accent1;
+  border-radius: 100em;
+  width: 2vw;
+  height: 2vw;
+  transition: background-color .375s cubic-bezier(.625, .05, 0, 1), height .375s cubic-bezier(.625, .05, 0, 1), width .375s cubic-bezier(.625, .05, 0, 1);
+  position: fixed;
+  inset: 0% auto auto 0%;
+  pointer-events: none;
+}

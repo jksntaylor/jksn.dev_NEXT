@@ -13,6 +13,7 @@ import { t_project } from '../utils/types'
 import { useMedia } from '../utils/hooks'
 // assets
 import '../styles/SelectedWorks.scss'
+import { Group, Mesh } from 'three'
 
 const SelectedWorks = () => {
   const scrollData = useScroll()
@@ -37,17 +38,17 @@ const SelectedWorks = () => {
   })
 
   // Refs for animation
-  const r_wrapper = useRef<THREE.Group>(null!)
-  const r_top = useRef<THREE.Group>(null!)
+  const r_wrapper = useRef<Group>(null!)
+  const r_top = useRef<Group>(null!)
   const r_counter1 = useRef<HTMLDivElement>(null!)
   const r_counter2 = useRef<HTMLDivElement>(null!)
-  const r_side = useRef<THREE.Group>(null!)
-  const r_sidebar = useRef<THREE.Group>(null!)
+  const r_side = useRef<Group>(null!)
+  const r_sidebar = useRef<Group>(null!)
   const r_sidebarText = useRef<HTMLDivElement>(null!)
   const r_sidebarTextSpan = useRef<HTMLSpanElement>(null!)
-  const r_projects = useRef<THREE.Group>(null!)
+  const r_projects = useRef<Group>(null!)
   const r_projectsInner = useRef<HTMLDivElement>(null!)
-  const r_projectsImages = useRef<THREE.Group & { children: (THREE.Mesh & { material: t_selectedWorksMaterial })[] }>(null!);
+  const r_projectsImages = useRef<Group & { children: (Mesh & { material: t_selectedWorksMaterial })[] }>(null!);
 
   const r_delta = useRef(0)
   const r_projectOpen = useRef(-1)

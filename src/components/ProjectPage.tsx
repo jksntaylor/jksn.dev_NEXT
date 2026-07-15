@@ -36,7 +36,7 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
   const moveCarousel = useCallback((direction: 'left' | 'right') => {
     if (screen.mobile) return
 
-    if (direction === 'right' && r_carouselIndex.current < 4 /* # of proj images - 1 */) {
+    if (direction === 'right' && r_carouselIndex.current < 3 /* # of proj images - 1 */) {
       r_carouselIndex.current += 1
     } else if (direction === 'left' && r_carouselIndex.current > 0) {
       r_carouselIndex.current -= 1
@@ -255,12 +255,12 @@ const ProjectPage = forwardRef<t_projectImages>((_, ref) => {
 
   useEffect(() => {
     window.addEventListener('hideProject', hideProject)
-    window.addEventListener('keyup', (e: KeyboardEvent) => handleKey(e))
+    window.addEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
     window.addEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
     window.addEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
     return () => {
       window.removeEventListener('hideProject', hideProject)
-      window.removeEventListener('keyup', (e: KeyboardEvent) => handleKey(e))
+      window.removeEventListener('keydown', (e: KeyboardEvent) => handleKey(e))
       window.removeEventListener('swapProject', ((e: CustomEvent) => swapProject(e.detail)) as EventListener)
       window.removeEventListener('showProject', ((e: CustomEvent) => showProject(e.detail)) as EventListener)
     }

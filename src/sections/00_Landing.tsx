@@ -98,21 +98,25 @@ const Landing = () => {
       letterSpacing: 0.04,
       outlineWidth: 0.03,
       outlineColor: colors.dirtyWhite,
-      scale: new Vector3(width * 0.065, height * 0.09, 0.75)
+      scale: new Vector3(screen.mobile ? width * 0.1 : width * 0.065, screen.mobile ? height * 0.1 : height * 0.09, 0.75)
     }
-  }, [width, height])
+  }, [width, height, screen])
 
   const menuWidth = useMemo(() => {
     return screen.fullWidth ? width * 0.1 : screen.desktop ? width * 0.08 : width
   }, [screen, width])
 
   const text = useMemo(() => {
-    return {
+    return screen.mobile ? {
+      x: -width / 2.2,
+      y: 0,
+      factor: height * 0.088
+    } : {
       x: -(width - menuWidth)/2,
       y: height / 2,
       factor: height * 0.088
     }
-  }, [width, height])
+  }, [width, height, screen])
 
   return <group ref={r_wrapper}>
     <mesh
@@ -124,39 +128,68 @@ const Landing = () => {
       <planeGeometry args={[useMedia(width - height * 0.16, width * 0.915, width), useMedia(height, height, height - width * .23), 64, 64]} />
       <landingMaterial ref={r_material} u_mouse={new Vector2(0.9, 0)} u_mouse_rad={screen.mobile ? 0 : 0.2} u_aspect={width / height}>
         <RenderTexture attach="u_texture">
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 1, 0]}
-          >JACKSON TAYLOR IS
-          </Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 2, 0]}
-          >A CREATIVE DEVELOPER</Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 3, 0]}
-          >WITH AN EMPHASIS</Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 4, 0]}
-          >IN INTERACTIVE WEB</Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 5, 0]}
-          >ANIMATIONS, MOTION</Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 6, 0]}
-          >DESIGN, & 3D ONLINE</Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 7, 0]}
-          >EXPERIENCES</Text>
-          <Text
-            {...textOpts}
-            position={[text.x, text.y - text.factor * 9, 0]}
-          >BASED IN ALASKA</Text>
+          {screen.mobile ? <>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 1, 0]}
+            >JACKSON TAYLOR
+            </Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 2, 0]}
+            >IS A CREATIVE</Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 3, 0]}
+            >
+              DEVELOPER AND
+            </Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 4, 0]}
+            >
+              PHOTOGRAPHER
+            </Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 5, 0]}
+            >BASED IN ALASKA</Text>
+          </> : <>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 1, 0]}
+            >JACKSON TAYLOR IS
+            </Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 2, 0]}
+            >A CREATIVE DEVELOPER</Text>
+              <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 3, 0]}
+              >WITH AN EMPHASIS</Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 4, 0]}
+              >IN INTERACTIVE WEB</Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 5, 0]}
+              >ANIMATIONS, MOTION</Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 6, 0]}
+              >DESIGN, & 3D ONLINE</Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 7, 0]}
+              >EXPERIENCES</Text>
+            <Text
+              {...textOpts}
+              position={[text.x, text.y - text.factor * 9, 0]}
+            >BASED IN ALASKA</Text>
+          </>}
+          
         </RenderTexture>
       </landingMaterial>
     </mesh>

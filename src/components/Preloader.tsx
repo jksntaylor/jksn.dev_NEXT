@@ -14,13 +14,13 @@ const Preloader = () => {
       onComplete: () => {
         tl.kill()
       },
-      onStart: () => { r_num.current.innerHTML = '53%' },
+      onStart: () => { r_num.current.innerHTML = '63%' },
       defaults: {
-        duration: 1.4,
+        duration: 0.8,
         ease: 'expo.out'
       }
     }).to(r_bar.current, {
-      width: '60%',
+      width: '65%',
       onComplete: () => { r_num.current.innerHTML = '100%' }
     }).to(r_bar.current, {
       width: '95%'
@@ -38,16 +38,13 @@ const Preloader = () => {
         tl.kill()
         window.sessionStorage.setItem('firstPreloaderRan', 'true')
       },
-      onStart: () => { r_num.current.innerHTML = '18%' },
+      onStart: () => { r_num.current.innerHTML = '27%' },
       defaults: {
         duration: 1.2,
         ease: 'expo.out'
       }
     }).to(r_bar.current, {
       width: '20%',
-      onComplete: () => { r_num.current.innerHTML = '42%' }
-    }).to(r_bar.current, {
-      width: '50%',
       onComplete: () => { r_num.current.innerHTML = '71%' }
     }).to(r_bar.current, {
       width: '70%',
@@ -70,8 +67,8 @@ const Preloader = () => {
       }
     }).to(r_num.current, {
       opacity: 1,
-      duration: 1.2
-    }, 0.8)
+      duration: 0.6
+    }, 0.6)
   }, [])
 
   return <div ref={r_wrapper} className="preloader__wrapper">

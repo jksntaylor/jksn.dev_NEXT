@@ -19,6 +19,7 @@ const Credits = lazy(() => import('./sections/05_Credits'))
 import cover from './assets/images/resize_cover.webp'
 import './styles/App.scss'
 import Preloader from './components/Preloader'
+import Cursor from './components/Cursor'
 
 function App() {
 
@@ -43,7 +44,7 @@ function App() {
 
   return <main>
     <Suspense fallback={null}>
-      <Canvas gl={{ antialias: true }} dpr={[1, 2]}>
+      <Canvas gl={{ antialias: true }} dpr={Math.min(window.devicePixelRatio, 2)}>
         <color attach="background" args={[colors.fadedBlack]} />
         {/* <OrbitControls enableZoom={false}/> */}
         <ScrollControls pages={screen.mobile ? 15 : 10} damping={screen.mobile ? 0.1 : 0.2}>
@@ -59,6 +60,7 @@ function App() {
         </ScrollControls>
       </Canvas>
     </Suspense>
+    <Cursor />
     <div className='resize_cover' ref={r_cover} style={{ visibility: 'hidden' }}>
       <img src={cover} alt="resizing cover" width="1000px" height="1000px"/>
     </div>

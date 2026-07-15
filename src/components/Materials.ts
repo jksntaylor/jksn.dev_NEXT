@@ -75,10 +75,10 @@ const LandingMaterial = shaderMaterial({
     vec4 color2 = vec4(vec3(mask), 1.) * 3.0;
 
     vec4 finalColor = mix(color2, color, 0.95);
-    if (finalColor.r < 0.03 && finalColor.b < 0.03) {
-      finalColor.r = 0.03;
-      finalColor.g = 0.03;
-      finalColor.b = 0.03;
+    if (finalColor.r < 0.1 && finalColor.b < 0.1) {
+      finalColor.r = 0.1;
+      finalColor.g = 0.1;
+      finalColor.b = 0.1;
     }
 
     gl_FragColor = finalColor;
@@ -106,7 +106,7 @@ const SelectedWorksMaterial = shaderMaterial({
 
   void main() {
     vec4 pos = vec4(position, 1.0);
-    pos.y -= u_delta * sin(uv.x * 50.) * 100.;
+    pos.y -= u_delta * sin(uv.x * 3.14159) * 200.;
 
     float angle = u_progress * 3.14159 / 2.;
     float wave = cos(angle);
@@ -124,7 +124,7 @@ const SelectedWorksMaterial = shaderMaterial({
 
   void main() {
     float angle = 1.8;
-    vec2 offset = u_delta * vec2(cos(angle), sin(angle)) * 10.;
+    vec2 offset = u_delta * vec2(cos(angle), sin(angle)) * 20.;
     float r = texture2D(u_texture, v_uv + offset).r;
     vec2 gb = texture2D(u_texture, v_uv - offset).gb;
     vec4 color = vec4(r, gb, 1.0);
