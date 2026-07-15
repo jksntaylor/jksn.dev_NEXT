@@ -13,7 +13,7 @@ const Borealis: React.FC<{}> = () => {
   const scrollData = useScroll()
   const materialRef = useRef<BorealisMaterialUniformsType>(null)
   const { viewport } = useThree()
-  const { width, height, factor } = viewport.getCurrentViewport()
+  const { width, height } = viewport.getCurrentViewport()
   const mouse = useRef({ current: new Vector2(0, 0), target: new Vector2(0, 0)})
   
   useFrame((_state, delta) => {
